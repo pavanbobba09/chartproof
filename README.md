@@ -120,8 +120,8 @@ backend/
   app.py              # FastAPI entry (GET /health)
   schemas.py          # DATA_SPEC pydantic models
   rules/              # Deterministic criteria engine (no LLM)
-  pipeline/           # LangGraph nodes (planned)
-  index/              # Chroma build (planned)
+  pipeline/           # LangGraph intake → evidence → rules (composer next)
+  index/              # Chroma chunking, build, retrieve
   tests/
 data/
   criteria/sepsis.yaml
