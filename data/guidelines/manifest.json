@@ -1,0 +1,32 @@
+{
+  "sources": [
+    {
+      "source_id": "icd10cm_guidelines_fy2026_summary",
+      "title": "ICD-10-CM Official Guidelines for Coding and Reporting (summary for demo)",
+      "url": "https://www.cms.gov/medicare/coding-billing/icd-10-codes",
+      "license_note": "Official guidelines are public U.S. government materials. This repo stores an educational summary in our own words, not a full PDF reprint.",
+      "file": "icd10cm_coding_summary.md"
+    },
+    {
+      "source_id": "sepsis3_summary",
+      "title": "Sepsis-3 clinical criteria summary (demo encoding reference)",
+      "url": "https://jamanetwork.com/journals/jama/fullarticle/2492881",
+      "license_note": "Educational paraphrase informed by Singer et al., JAMA 2016. Not a substitute for the original paper. Not for clinical use.",
+      "file": "sepsis3_summary.md"
+    },
+    {
+      "source_id": "glim_summary",
+      "title": "GLIM malnutrition criteria summary (stretch-goal reference)",
+      "url": "https://www.clinicalnutritionjournal.com/",
+      "license_note": "Short educational summary in our own words for future malnutrition criteria. Not for clinical use.",
+      "file": "glim_summary.md"
+    },
+    {
+      "source_id": "kdigo_aki_summary",
+      "title": "KDIGO AKI criteria summary (stretch-goal reference)",
+      "url": "https://kdigo.org/guidelines/acute-kidney-injury/",
+      "license_note": "Short educational summary in our own words for future AKI criteria. Not for clinical use.",
+      "file": "kdigo_aki_summary.md"
+    }
+  ]
+}

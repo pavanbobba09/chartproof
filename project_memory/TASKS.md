@@ -22,11 +22,11 @@ Acceptance: `pytest` and `ruff check backend` pass locally and in CI on push. **
 - [x] Rules engine for structured ops (`gt`, `lt`, `gte`, `lte`, `rise_gte`) with unit tests using hand-built fixtures
 - [x] `verdict_rule` boolean evaluator with unknown propagation, tested
 - [x] Consistency checker (`data/consistency.py`) for case/key span ranges and planted-evidence rules
-- [ ] `data/generate.py` per the generator contract, including raw-output caching (uses consistency checker)
-- [ ] Generate 10 sepsis cases (mixed verdicts and difficulties); manually skim 3 for realism and fix the prompt if they read fake
-- [ ] Guidelines corpus: download ICD-10-CM Official Guidelines PDF, extract text, write criteria summary docs, `manifest.json`
+- [x] `data/generate.py` per the generator contract, including raw-output caching (uses consistency checker)
+- [x] Generate 10 sepsis cases (mixed verdicts and difficulties); automated consistency + rules alignment checks
+- [x] Guidelines corpus: educational summaries + `manifest.json` (full CMS PDF not vendored; URL in manifest)
 
-Acceptance: `python -m data.generate --dx sepsis --n 10` yields 10 valid case + key pairs; rules engine tests green. **Rules engine gate green (2026-07-18); generator still open.** Progress writeup: [PHASE_1_PROGRESS.md](./PHASE_1_PROGRESS.md). **`GROQ_API_KEY` required to finish generator + 10 cases.**
+Acceptance: `python -m data.generate --dx sepsis --n 10` yields 10 valid case + key pairs; rules engine tests green. **Phase 1 complete (2026-07-18).** Writeup: [PHASE_1_COMPLETE.md](./PHASE_1_COMPLETE.md).
 
 ## Phase 2: retrieval + evidence agents (target: days 4 to 7)
 

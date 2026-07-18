@@ -8,7 +8,7 @@ ChartProof is a portfolio demo of an AI copilot for inpatient clinical validatio
 
 | | |
 |---|---|
-| **Status** | Phase 0 complete; Phase 1 in progress (rules engine green; case generator open) |
+| **Status** | Phase 1 complete (10 synthetic sepsis cases + rules + guidelines); Phase 2 next |
 | **Stack** | FastAPI · Pydantic · deterministic rules · (later) LangGraph · ChromaDB · Groq · Next.js |
 | **Hosting (planned)** | Hugging Face Spaces (API) + Vercel (UI) |
 

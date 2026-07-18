@@ -28,7 +28,7 @@
 |-------------------|----------------------|-----|
 | Phase 0 | **No** (until generator) | Scaffold is local-only |
 | Phase 1 (rules only) | **Yes** for case generation | `data/generate.py` uses Groq free tier |
-| Phase 1 (full, with cases) | Optional for Phase 2 retrieval | Index/retrieval can run offline; live evidence agents may use LLM |
+| Phase 1 (full) | Optional for Phase 2 index | Index/retrieval offline; evidence agents may use LLM |
 | Phase 2 | **Yes** for Phase 3 | Composer + LLM verdict use Groq |
 | Phase 3 | **Yes** for Phase 4 | Smoke/full eval + LLM-judge faithfulness |
 | Phase 4 | **Yes** for Phase 5 demo | Live "run fresh analysis" on HF Space |
@@ -50,7 +50,7 @@ Default model: `GROQ_MODEL=llama-3.3-70b-versatile` (verify still free-tier when
 | Phase | Status | Note |
 |-------|--------|------|
 | 0 Scaffold | Complete | [PHASE_0_COMPLETE.md](./PHASE_0_COMPLETE.md) |
-| 1 Criteria + synthetic data | In progress | [PHASE_1_PROGRESS.md](./PHASE_1_PROGRESS.md) |
+| 1 Criteria + synthetic data | Complete | [PHASE_1_COMPLETE.md](./PHASE_1_COMPLETE.md) |
 | 2 Retrieval + evidence | Not started | — |
 | 3 Composer + QA | Not started | — |
 | 4 UI + evals | Not started | — |
