@@ -30,13 +30,13 @@ Acceptance: `python -m data.generate --dx sepsis --n 10` yields 10 valid case + 
 
 ## Phase 2: retrieval + evidence agents (target: days 4 to 7)
 
-- [ ] `backend/index/build.py` builds Chroma collections per the chunking spec; idempotent rebuild
-- [ ] Retrieval wrapper returning spans with metadata and verbatim span text
-- [ ] Evidence agent node: for each narrative criterion, gather FOR and AGAINST evidence, answer yes/no/unclear with spans
-- [ ] LangGraph wiring: intake -> evidence -> rules, trace persisted under `runs/`
-- [ ] Golden test: on one hand-checked case, the agent finds the planted infection span
+- [x] `backend/index/build.py` builds Chroma collections per the chunking spec; idempotent rebuild
+- [x] Retrieval wrapper returning spans with metadata and verbatim span text
+- [x] Evidence agent node: for each narrative criterion, gather FOR and AGAINST evidence, answer yes/no/unclear with spans
+- [x] LangGraph wiring: intake -> evidence -> rules, trace persisted under `runs/`
+- [x] Golden test: on one hand-checked case, the agent finds the planted infection span
 
-Acceptance: one case runs end to end through evidence + rules and the trace file shows correct spans with real line numbers.
+Acceptance: one case runs end to end through evidence + rules and the trace file shows correct spans with real line numbers. **Phase 2 complete (2026-07-18).** Writeup: [PHASE_2_COMPLETE.md](./PHASE_2_COMPLETE.md).
 
 ## Phase 3: composer + QA gate (target: days 8 to 10)
 

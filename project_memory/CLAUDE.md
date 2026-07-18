@@ -40,6 +40,7 @@ Data and index:
 ```
 python -m data.generate --dx sepsis --n 10          # generate cases + answer keys
 python -m backend.index.build --data data --out .chroma
+python -c "from backend.pipeline import run_partial_pipeline; print(run_partial_pipeline('sepsis_001')['rules_verdict'])"
 ```
 
 Quality gates:
