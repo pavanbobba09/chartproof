@@ -71,7 +71,7 @@ Chart generator (Groq)          Reference corpus (public PDFs)
 ### Setup
 
 ```bash
-git clone <your-repo-url> ChartProof
+git clone https://github.com/pavanbobba09/chartproof.git ChartProof
 cd ChartProof
 
 python3.11 -m venv .venv
