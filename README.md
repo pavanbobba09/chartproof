@@ -8,7 +8,7 @@ ChartProof is a portfolio demo of an AI copilot for inpatient clinical validatio
 
 | | |
 |---|---|
-| **Status** | Phase 2 complete (Chroma index, evidence agents, LangGraph intake→evidence→rules); Phase 3 next |
+| **Status** | Phase 3 complete (composer, QA gate, audit API, precomputed results); Phase 4 next |
 | **Stack** | FastAPI · Pydantic · deterministic rules · (later) LangGraph · ChromaDB · Groq · Next.js |
 | **Hosting (planned)** | Hugging Face Spaces (API) + Vercel (UI) |
 
@@ -54,14 +54,15 @@ Chart generator (Groq)          Reference corpus (public PDFs)
 - 10 sepsis cases + answer keys under `data/cases` and `data/keys`
 - Guidelines educational corpus + `manifest.json`
 - Chroma index + span retrieval (`python -m backend.index.build`)
-- Evidence agents + LangGraph partial pipeline (intake → evidence → rules)
+- Evidence agents + full LangGraph pipeline (through compose + QA)
+- Citation-safe rationale letters and `needs_review` QA gate
+- Audit API: `GET /cases`, `GET/POST /audit/{case_id}` (+ precomputed bank)
 - Unit tests + ruff + GitHub Actions CI (lint + pytest)
 
 **Not yet**
 
 - Full 30-case bank (10 now; expand later)
-- Composer, QA gate, audit API
-- Next.js UI, full eval harness, live deploy
+- Next.js audit/training UI, full eval harness, live deploy
 
 ---
 
@@ -160,6 +161,8 @@ project_memory/       # Specs, tasks, phase completion logs
 | [project_memory/PHASE_1_COMPLETE.md](project_memory/PHASE_1_COMPLETE.md) | Phase 1 log |
 | [project_memory/PHASE_0_1_AUDIT.md](project_memory/PHASE_0_1_AUDIT.md) | Pre-Phase-2 requirements audit |
 | [project_memory/PHASE_2_COMPLETE.md](project_memory/PHASE_2_COMPLETE.md) | Phase 2 work log |
+| [project_memory/PHASE_3_COMPLETE.md](project_memory/PHASE_3_COMPLETE.md) | Phase 3 work log |
+| [project_memory/FEATURES.md](project_memory/FEATURES.md) | Feature inventory (what is built) |
 | [project_memory/DEPLOYMENT.md](project_memory/DEPLOYMENT.md) | CI, HF Spaces, Vercel |
 | [project_memory/CLAUDE.md](project_memory/CLAUDE.md) | Implementer operating rules |
 
@@ -189,8 +192,8 @@ Copy `.env.example` to `.env`. Never commit real secrets.
 | 0 | Scaffold | `ruff` + `pytest` (**done**) |
 | 1 | Criteria, rules, synthetic cases | Generator + 10 cases (**done**) |
 | 2 | Retrieval + evidence agents | One case E2E with real spans (**done**) |
-| 3 | Composer + QA gate | Zero invalid citations (**next**) |
-| 4 | UI + evals | Smoke eval thresholds |
+| 3 | Composer + QA gate | Zero invalid citations (**done**) |
+| 4 | UI + evals | Smoke eval thresholds (**next**) |
 | 5 | Deploy + demo | Live link works from a phone |
 
 ---

@@ -1,7 +1,4 @@
-"""LangGraph partial pipeline: intake → evidence → rules.
-
-Phase 2 ends before composer/QA. Full audit API comes in Phase 3.
-"""
+"""LangGraph audit pipeline: intake → evidence → rules → compose → qa_gate."""
 
 from __future__ import annotations
 
@@ -12,11 +9,19 @@ from langgraph.graph import END, StateGraph
 
 from backend.config import CASES_DIR, CHROMA_DIR, CRITERIA_DIR
 from backend.index.build import get_client
+from backend.pipeline.compose import compose_from_state
 from backend.pipeline.evidence import run_evidence_agents
+from backend.pipeline.qa import qa_gate
 from backend.pipeline.traces import new_trace_id, save_trace
 from backend.rules.engine import RulesResult, evaluate_case
 from backend.rules.loader import load_criteria
-from backend.schemas import Case, CriteriaFile
+from backend.schemas import (
+    AuditResult,
+    Case,
+    CriteriaFile,
+    CriterionResult,
+    EvidenceItem,
+)
 
 
 class PipelineState(TypedDict, total=False):
@@ -27,6 +32,9 @@ class PipelineState(TypedDict, total=False):
     evidence_findings: list[dict[str, Any]]
     rules_result: dict[str, Any]
     rules_verdict: str | None
+    compose_result: dict[str, Any]
+    qa_result: dict[str, Any]
+    audit_result: dict[str, Any]
     trace_id: str
     error: str | None
     chroma_dir: str
@@ -79,7 +87,6 @@ def node_rules(state: PipelineState) -> PipelineState:
     case = Case.model_validate(state["case"])
     criteria = CriteriaFile.model_validate(state["criteria"])
     answers = state.get("narrative_answers") or {}
-    # cast to TriState-compatible strings
     result: RulesResult = evaluate_case(
         case,
         criteria,
@@ -104,7 +111,87 @@ def node_rules(state: PipelineState) -> PipelineState:
     }
 
 
+def node_compose(state: PipelineState) -> PipelineState:
+    case = Case.model_validate(state["case"])
+    criteria = CriteriaFile.model_validate(state["criteria"])
+    chroma = state.get("chroma_dir")
+    composed = compose_from_state(
+        case,
+        criteria,
+        state.get("evidence_findings") or [],
+        state.get("rules_result") or {},
+        use_guidelines=True,
+        chroma_dir=chroma,
+    )
+    return {**state, "compose_result": composed}
+
+
+def node_qa(state: PipelineState) -> PipelineState:
+    rules = state.get("rules_result") or {}
+    composed = state.get("compose_result") or {}
+    unclear = sum(
+        1
+        for c in rules.get("criteria") or []
+        if c.get("result") == "unclear"
+    )
+    evidence = composed.get("evidence") or []
+    qa = qa_gate(
+        rules_verdict=rules.get("verdict"),
+        llm_verdict=composed.get("llm_verdict"),
+        dropped_sentences=int(composed.get("dropped_sentences") or 0),
+        unclear_criteria=unclear,
+        evidence_count=len(evidence),
+    )
+
+    # Map criteria_results with evidence_ids
+    evidence_items = [EvidenceItem.model_validate(e) for e in evidence]
+    by_crit: dict[str, list[str]] = {}
+    for e in evidence_items:
+        by_crit.setdefault(e.criterion_id, []).append(e.evidence_id)
+
+    criteria_results: list[CriterionResult] = []
+    for c in rules.get("criteria") or []:
+        cid = c["criterion_id"]
+        criteria_results.append(
+            CriterionResult(
+                criterion_id=cid,
+                result=c["result"],
+                method=c.get("method") or "unknown",
+                evidence_ids=by_crit.get(cid, []),
+            )
+        )
+
+    # Re-render letter header status if QA forced needs_review
+    letter = composed.get("letter_markdown") or ""
+    if qa["status"] == "needs_review" and "Status: completed" in letter:
+        letter = letter.replace("Status: completed", "Status: needs_review", 1)
+
+    rules_v = rules.get("verdict")
+    llm_v = composed.get("llm_verdict")
+    audit = AuditResult(
+        case_id=state["case_id"],
+        status=qa["status"],
+        verdict=qa["verdict"],
+        confidence=qa["confidence"],
+        rules_verdict=rules_v if rules_v in ("supported", "not_supported") else None,
+        llm_verdict=llm_v if llm_v in ("supported", "not_supported") else None,
+        criteria_results=criteria_results,
+        evidence=evidence_items,
+        letter_markdown=letter,
+        dropped_sentences=int(composed.get("dropped_sentences") or 0),
+        source="live",
+        trace_id=state.get("trace_id"),
+    )
+    return {
+        **state,
+        "qa_result": qa,
+        "audit_result": audit.model_dump(mode="json"),
+        "compose_result": {**composed, "letter_markdown": letter},
+    }
+
+
 def build_partial_graph():
+    """Phase 2 graph (through rules)."""
     g = StateGraph(PipelineState)
     g.add_node("intake", node_intake)
     g.add_node("evidence", node_evidence)
@@ -113,6 +200,23 @@ def build_partial_graph():
     g.add_edge("intake", "evidence")
     g.add_edge("evidence", "rules")
     g.add_edge("rules", END)
+    return g.compile()
+
+
+def build_full_graph():
+    """Phase 3 full audit graph."""
+    g = StateGraph(PipelineState)
+    g.add_node("intake", node_intake)
+    g.add_node("evidence", node_evidence)
+    g.add_node("rules", node_rules)
+    g.add_node("compose", node_compose)
+    g.add_node("qa_gate", node_qa)
+    g.set_entry_point("intake")
+    g.add_edge("intake", "evidence")
+    g.add_edge("evidence", "rules")
+    g.add_edge("rules", "compose")
+    g.add_edge("compose", "qa_gate")
+    g.add_edge("qa_gate", END)
     return g.compile()
 
 
@@ -136,6 +240,35 @@ def run_partial_pipeline(
         "evidence_findings": final.get("evidence_findings"),
         "rules_result": final.get("rules_result"),
         "rules_verdict": final.get("rules_verdict"),
+    }
+    if persist_trace:
+        path = save_trace(final["trace_id"], payload)
+        payload["trace_path"] = str(path)
+    return payload
+
+
+def run_full_pipeline(
+    case_id: str,
+    *,
+    persist_trace: bool = True,
+    chroma_dir: str | Path | None = None,
+) -> dict[str, Any]:
+    """Run full audit pipeline through QA gate."""
+    graph = build_full_graph()
+    init: PipelineState = {"case_id": case_id}
+    if chroma_dir is not None:
+        init["chroma_dir"] = str(chroma_dir)
+    final: PipelineState = graph.invoke(init)
+    payload = {
+        "trace_id": final.get("trace_id"),
+        "case_id": case_id,
+        "pipeline": "intake->evidence->rules->compose->qa_gate",
+        "narrative_answers": final.get("narrative_answers"),
+        "evidence_findings": final.get("evidence_findings"),
+        "rules_result": final.get("rules_result"),
+        "compose_result": final.get("compose_result"),
+        "qa_result": final.get("qa_result"),
+        "audit_result": final.get("audit_result"),
     }
     if persist_trace:
         path = save_trace(final["trace_id"], payload)

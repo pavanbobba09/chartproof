@@ -40,13 +40,13 @@ Acceptance: one case runs end to end through evidence + rules and the trace file
 
 ## Phase 3: composer + QA gate (target: days 8 to 10)
 
-- [ ] Composer node with the evidence-ID constraint enforced in code (drop uncited sentences, log drops)
-- [ ] Rationale letter template: finding, evidence citations, guideline references (source_id + section), review disclaimer
-- [ ] QA gate: rules vs LLM comparison, confidence score, `needs_review` forcing logic, unit tests for each trigger
-- [ ] `POST /audit/{case_id}` and `GET /audit/{case_id}` with result caching to disk
-- [ ] Precompute and commit cached results for all bundled cases (`data/precomputed/`)
+- [x] Composer node with the evidence-ID constraint enforced in code (drop uncited sentences, log drops)
+- [x] Rationale letter template: finding, evidence citations, guideline references (source_id + section), review disclaimer
+- [x] QA gate: rules vs LLM comparison, confidence score, `needs_review` forcing logic, unit tests for each trigger
+- [x] `POST /audit/{case_id}` and `GET /audit/{case_id}` with result caching to disk
+- [x] Precompute and commit cached results for all bundled cases (`data/precomputed/`)
 
-Acceptance: full pipeline on 10 cases produces determinations with zero invalid citations; at least one disagreement case lands in `needs_review`.
+Acceptance: full pipeline on 10 cases produces determinations with zero invalid citations; at least one disagreement case lands in `needs_review`. **Phase 3 complete (2026-07-18).** Writeup: [PHASE_3_COMPLETE.md](./PHASE_3_COMPLETE.md).
 
 ## Phase 4: UI + evals (target: days 11 to 14)
 

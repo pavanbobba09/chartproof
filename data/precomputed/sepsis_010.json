@@ -1,0 +1,177 @@
+{
+  "case_id": "sepsis_010",
+  "status": "completed",
+  "verdict": "supported",
+  "confidence": 0.7999999999999999,
+  "rules_verdict": "supported",
+  "llm_verdict": "supported",
+  "criteria_results": [
+    {
+      "criterion_id": "infection",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ]
+    },
+    {
+      "criterion_id": "lactate_elevated",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E7"
+      ]
+    },
+    {
+      "criterion_id": "hypotension",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E8"
+      ]
+    },
+    {
+      "criterion_id": "vasopressors",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E5",
+        "E6"
+      ]
+    },
+    {
+      "criterion_id": "creatinine_rise",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "thrombocytopenia",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E9"
+      ]
+    },
+    {
+      "criterion_id": "altered_mentation",
+      "result": "unclear",
+      "method": "narrative",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "organ_dysfunction",
+      "result": "met",
+      "method": "any_of",
+      "evidence_ids": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E1",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "Labs: lactate 1.2 mmol/L, creatinine 1.1 mg/dL. Patient is being treated with antibiotics for a suspected respiratory infection. The patient's condition is being monitored closely for signs of sepsis. The patient's platelet count is 250 x 10^9/L."
+    },
+    {
+      "evidence_id": "E2",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "The patient's platelet count is 220 x 10^9/L. The patient is still being treated with antibiotics for the suspected respiratory infection. There is no evidence of organ dysfunction at this time. The patient's condition will continue to be monitored closely."
+    },
+    {
+      "evidence_id": "E3",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 7,
+        "line_end": 10
+      },
+      "text": "The patient was diagnosed with a respiratory infection, but sepsis was not supported due to lack of organ dysfunction. The patient will follow up with their primary care physician in 1 week. Nursing: patient tolerating oral intake as ordered. Nursing: skin warm and dry; no new rashes documented."
+    },
+    {
+      "evidence_id": "E4",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient was discharged home after a 2-day hospital stay. The patient's condition had improved, with resolution of fever and cough. Labs: lactate 1.0 mmol/L, creatinine 1.0 mg/dL. The patient's vital signs were stable at discharge, with a temperature of 37 C and MAP 95 mmHg."
+    },
+    {
+      "evidence_id": "E5",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "The patient's vital signs were stable at discharge, with a temperature of 37 C and MAP 95 mmHg. The patient's platelet count was 230 x 10^9/L at discharge. The patient did not require vasopressors during the hospital stay. The patient was diagnosed with a respiratory infection, but sepsis was not supported due to lack of organ dysfunction."
+    },
+    {
+      "evidence_id": "E6",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 7,
+        "line_end": 10
+      },
+      "text": "The patient's platelet count is 250 x 10^9/L. The patient is not requiring vasopressors at this time. Nursing: patient tolerating oral intake as ordered. Nursing: skin warm and dry; no new rashes documented."
+    },
+    {
+      "evidence_id": "E7",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Labs: lactate 1.2 mmol/L, creatinine 1.1 mg/dL."
+    },
+    {
+      "evidence_id": "E8",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Vital signs: temperature 38.5 C, MAP 85 mmHg."
+    },
+    {
+      "evidence_id": "E9",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 7,
+        "line_end": 7
+      },
+      "text": "The patient's platelet count is 250 x 10^9/L."
+    }
+  ],
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_010 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is supported, primarily based on E1 (infection): Labs - lactate 1\n\n## Evidence\n| # | For/Against | Source | Lines | Excerpt |\n|---|-------------|--------|-------|---------|\n| E1 | for | history_and_physical 2022-01-01 | 4-7 | Labs: lactate 1.2 mmol/L, creatinine 1.1 mg/dL. Patient is being treated with antibiotics for a suspected respiratory in |\n| E2 | for | progress_note 2022-01-02 | 4-7 | The patient's platelet count is 220 x 10^9/L. The patient is still being treated with antibiotics for the suspected resp |\n| E3 | for | discharge_summary 2022-01-03 | 7-10 | The patient was diagnosed with a respiratory infection, but sepsis was not supported due to lack of organ dysfunction. T |\n| E4 | for | discharge_summary 2022-01-03 | 1-4 | Patient was discharged home after a 2-day hospital stay. The patient's condition had improved, with resolution of fever  |\n| E5 | for | discharge_summary 2022-01-03 | 4-7 | The patient's vital signs were stable at discharge, with a temperature of 37 C and MAP 95 mmHg. The patient's platelet c |\n| E6 | for | history_and_physical 2022-01-01 | 7-10 | The patient's platelet count is 250 x 10^9/L. The patient is not requiring vasopressors at this time. Nursing: patient t |\n| E7 | against | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 1.2 mmol/L, creatinine 1.1 mg/dL. |\n| E8 | against | history_and_physical 2022-01-01 | 3-3 | Vital signs: temperature 38.5 C, MAP 85 mmHg. |\n| E9 | against | history_and_physical 2022-01-01 | 7-7 | The patient's platelet count is 250 x 10^9/L. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Sepsis coding notes (high level)). Findings that affect payment grouping must be supported by chart indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "dropped_sentences": 0,
+  "source": "precomputed",
+  "trace_id": "run_sepsis_010_20260718T175941Z"
+}

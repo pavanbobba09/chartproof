@@ -1,5 +1,5 @@
-"""LangGraph audit pipeline (Phase 2: intake → evidence → rules)."""
+"""LangGraph audit pipeline."""
 
-from backend.pipeline.graph import run_partial_pipeline
+from backend.pipeline.graph import run_full_pipeline, run_partial_pipeline
 
-__all__ = ["run_partial_pipeline"]
+__all__ = ["run_full_pipeline", "run_partial_pipeline"]
