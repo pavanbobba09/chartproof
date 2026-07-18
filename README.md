@@ -50,11 +50,14 @@ Chart generator (Groq)          Reference corpus (public PDFs)
 - Pydantic schemas (cases, answer keys, spans, audit/training contracts)
 - Sepsis criteria YAML + deterministic rules engine (no LLM)
 - Case/key consistency checker
+- Groq synthetic generator (`python -m data.generate --dx sepsis --n 10`)
+- 10 sepsis cases + answer keys under `data/cases` and `data/keys`
+- Guidelines educational corpus + `manifest.json`
 - Unit tests + ruff + GitHub Actions CI (lint + pytest)
 
 **Not yet**
 
-- Groq case generator and 30-case bank
+- Full 30-case bank (10 now; expand later)
 - Retrieval, LangGraph pipeline, composer, QA gate
 - Next.js UI, full eval harness, live deploy
 
@@ -150,7 +153,7 @@ project_memory/       # Specs, tasks, phase completion logs
 | [project_memory/LOOP_PLAN.md](project_memory/LOOP_PLAN.md) | Build → measure → fix loop |
 | [project_memory/PHASE_LOGS.md](project_memory/PHASE_LOGS.md) | Phase writeups + when Groq is needed |
 | [project_memory/PHASE_0_COMPLETE.md](project_memory/PHASE_0_COMPLETE.md) | Phase 0 log |
-| [project_memory/PHASE_1_PROGRESS.md](project_memory/PHASE_1_PROGRESS.md) | Phase 1 progress |
+| [project_memory/PHASE_1_COMPLETE.md](project_memory/PHASE_1_COMPLETE.md) | Phase 1 log |
 | [project_memory/DEPLOYMENT.md](project_memory/DEPLOYMENT.md) | CI, HF Spaces, Vercel |
 | [project_memory/CLAUDE.md](project_memory/CLAUDE.md) | Implementer operating rules |
 
@@ -178,8 +181,8 @@ Copy `.env.example` to `.env`. Never commit real secrets.
 | Phase | Focus | Gate |
 |-------|--------|------|
 | 0 | Scaffold | `ruff` + `pytest` — **done** |
-| 1 | Criteria, rules, synthetic cases | Generator + rules tests |
-| 2 | Retrieval + evidence agents | One case E2E with real spans |
+| 1 | Criteria, rules, synthetic cases | Generator + 10 cases — **done** |
+| 2 | Retrieval + evidence agents | One case E2E with real spans — **next** |
 | 3 | Composer + QA gate | Zero invalid citations |
 | 4 | UI + evals | Smoke eval thresholds |
 | 5 | Deploy + demo | Live link works from a phone |
