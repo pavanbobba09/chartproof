@@ -24,7 +24,14 @@
         "The patient was started on antibiotics and admitted to the hospital for further management.",
         "The patient's MAP has been stable, ranging from 80-100 mmHg.",
         "The patient's creatinine level was rechecked 24 hours later and was 1.1 mg/dL.",
-        "The patient's platelet count has been stable, ranging from 150-200 10^9/L."
+        "The patient's platelet count has been stable, ranging from 150-200 10^9/L.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate."
       ]
     },
     {
@@ -38,7 +45,15 @@
         "The patient's platelet count was rechecked and was 180 10^9/L.",
         "The patient's MAP has remained stable, ranging from 80-100 mmHg.",
         "The patient is being considered for discharge to a skilled nursing facility.",
-        "The patient's condition has improved, and the patient is no longer requiring vasopressors."
+        "The patient's condition has improved, and the patient is no longer requiring vasopressors.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available."
       ]
     },
     {
@@ -51,7 +66,16 @@
         "The patient's lactate level was normal at discharge, 1.0 mmol/L.",
         "The patient's creatinine level was stable at discharge, 1.1 mg/dL.",
         "The patient's platelet count was normal at discharge, 200 10^9/L.",
-        "The patient's MAP was stable at discharge, ranging from 80-100 mmHg."
+        "The patient's MAP was stable at discharge, ranging from 80-100 mmHg.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available.",
+        "Plan: continue current monitoring and supportive care."
       ]
     }
   ],

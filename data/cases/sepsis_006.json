@@ -24,7 +24,14 @@
         "The patient is alert and oriented, but appears mildly distressed.",
         "Lab results: lactate 1.8 mmol/L, creatinine 1.2 mg/dL, platelets 150 x 10^9/L.",
         "Chest X-ray shows a small infiltrate in the left lower lobe.",
-        "The patient is started on antibiotics and oxygen therapy."
+        "The patient is started on antibiotics and oxygen therapy.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate."
       ]
     },
     {
@@ -38,7 +45,15 @@
         "The patient is still on antibiotics and oxygen therapy.",
         "The patient's condition is stable, but we will continue to monitor for signs of sepsis.",
         "Vital signs: MAP is 80 mmHg, which is within normal limits.",
-        "The patient's urine output is adequate, with 1.5 liters output in the past 24 hours."
+        "The patient's urine output is adequate, with 1.5 liters output in the past 24 hours.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available."
       ]
     },
     {
@@ -51,7 +66,16 @@
         "Creatinine level is 1.0 mg/dL, platelets are 160 x 10^9/L.",
         "The patient is being discharged home on oral antibiotics.",
         "The patient is advised to follow up with their primary care physician in 1 week.",
-        "The patient's vital signs are stable, with a blood pressure of 120/80 mmHg and a heart rate of 80 bpm."
+        "The patient's vital signs are stable, with a blood pressure of 120/80 mmHg and a heart rate of 80 bpm.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available.",
+        "Plan: continue current monitoring and supportive care."
       ]
     }
   ],

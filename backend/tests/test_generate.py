@@ -14,6 +14,15 @@ from data.generate import (
 )
 
 
+def _pad_lines(lines: list[str], n: int = 15) -> list[str]:
+    out = list(lines)
+    i = 0
+    while len(out) < n:
+        out.append(f"Additional synthetic note line {i + 1} for length compliance.")
+        i += 1
+    return out
+
+
 def test_plan_specs_balance() -> None:
     specs = plan_specs("sepsis", 6)
     assert len(specs) == 6
@@ -52,32 +61,38 @@ def test_parse_and_consistency_fixture() -> None:
                     "doc_id": "hp",
                     "doc_type": "history_and_physical",
                     "date": "2026-01-03",
-                    "lines": [
-                        "CC: fever and dysuria.",
-                        "Lactate 1.3 mmol/L, MAP 76 mmHg, afebrile after fluids.",
-                        "UTI suspected; ceftriaxone started.",
-                        "No vasopressors. Mental status clear.",
-                        "Assessment: sepsis ruled out clinically; simple UTI.",
-                    ],
+                    "lines": _pad_lines(
+                        [
+                            "CC: fever and dysuria.",
+                            "Lactate 1.3 mmol/L, MAP 76 mmHg, afebrile after fluids.",
+                            "UTI suspected; ceftriaxone started.",
+                            "No vasopressors. Mental status clear.",
+                            "Assessment: sepsis ruled out clinically; simple UTI.",
+                        ]
+                    ),
                 },
                 {
                     "doc_id": "pn_01",
                     "doc_type": "progress_note",
                     "date": "2026-01-04",
-                    "lines": [
-                        "HD2: afebrile, MAP stable 70s.",
-                        "Creatinine 0.9 then 1.0, no significant rise.",
-                        "Platelets 210. Continues antibiotics.",
-                    ],
+                    "lines": _pad_lines(
+                        [
+                            "HD2: afebrile, MAP stable 70s.",
+                            "Creatinine 0.9 then 1.0, no significant rise.",
+                            "Platelets 210. Continues antibiotics.",
+                        ]
+                    ),
                 },
                 {
                     "doc_id": "ds",
                     "doc_type": "discharge_summary",
                     "date": "2026-01-06",
-                    "lines": [
-                        "Discharge diagnosis listed sepsis by coding query.",
-                        "Clinical course consistent with UTI without organ dysfunction.",
-                    ],
+                    "lines": _pad_lines(
+                        [
+                            "Discharge diagnosis listed sepsis by coding query.",
+                            "Clinical course consistent with UTI without organ dysfunction.",
+                        ]
+                    ),
                 },
             ],
             "labs": [

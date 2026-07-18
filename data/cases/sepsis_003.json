@@ -24,7 +24,14 @@
         "Patient is suspected to have pneumonia and possible sepsis.",
         "Will start antibiotics and monitor vitals and labs closely.",
         "Patient's platelet count is 80 10^9/L.",
-        "Patient is on vasopressors to maintain blood pressure."
+        "Patient is on vasopressors to maintain blood pressure.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate."
       ]
     },
     {
@@ -38,7 +45,15 @@
         "Patient's mental status has deteriorated, and he is now confused.",
         "Will continue to monitor vitals and labs closely and consider changing antibiotics.",
         "Patient's platelet count is 70 10^9/L.",
-        "Patient is still on vasopressors to maintain blood pressure."
+        "Patient is still on vasopressors to maintain blood pressure.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available."
       ]
     },
     {
@@ -52,7 +67,15 @@
         "Vital signs: temperature 37.0 C, MAP 80 mmHg.",
         "Patient's condition has improved, and he is being discharged.",
         "Patient's platelet count is 100 10^9/L.",
-        "Patient is no longer on vasopressors."
+        "Patient is no longer on vasopressors.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available."
       ]
     }
   ],

@@ -24,7 +24,14 @@
         "Patient is being treated with antibiotics for a suspected respiratory infection.",
         "The patient's condition is being monitored closely for signs of sepsis.",
         "The patient's platelet count is 250 x 10^9/L.",
-        "The patient is not requiring vasopressors at this time."
+        "The patient is not requiring vasopressors at this time.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate."
       ]
     },
     {
@@ -39,7 +46,14 @@
         "The patient is still being treated with antibiotics for the suspected respiratory infection.",
         "There is no evidence of organ dysfunction at this time.",
         "The patient's condition will continue to be monitored closely.",
-        "The patient's creatinine level has not changed significantly over the past 24 hours."
+        "The patient's creatinine level has not changed significantly over the past 24 hours.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate."
       ]
     },
     {
@@ -54,7 +68,14 @@
         "The patient's platelet count was 230 x 10^9/L at discharge.",
         "The patient did not require vasopressors during the hospital stay.",
         "The patient was diagnosed with a respiratory infection, but sepsis was not supported due to lack of organ dysfunction.",
-        "The patient will follow up with their primary care physician in 1 week."
+        "The patient will follow up with their primary care physician in 1 week.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate."
       ]
     }
   ],

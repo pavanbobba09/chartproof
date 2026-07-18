@@ -51,7 +51,8 @@ Default model: `GROQ_MODEL=llama-3.3-70b-versatile` (verify still free-tier when
 |-------|--------|------|
 | 0 Scaffold | Complete | [PHASE_0_COMPLETE.md](./PHASE_0_COMPLETE.md) |
 | 1 Criteria + synthetic data | Complete | [PHASE_1_COMPLETE.md](./PHASE_1_COMPLETE.md) |
-| 2 Retrieval + evidence | Not started | — |
-| 3 Composer + QA | Not started | — |
-| 4 UI + evals | Not started | — |
-| 5 Deploy + demo | Not started | — |
+| 0+1 joint audit | Complete | [PHASE_0_1_AUDIT.md](./PHASE_0_1_AUDIT.md) |
+| 2 Retrieval + evidence | Not started | (pending) |
+| 3 Composer + QA | Not started | (pending) |
+| 4 UI + evals | Not started | (pending) |
+| 5 Deploy + demo | Not started | (pending) |

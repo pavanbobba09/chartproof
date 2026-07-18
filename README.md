@@ -134,12 +134,14 @@ project_memory/       # Specs, tasks, phase completion logs
 
 ## Hard rules
 
-1. **Synthetic data only** — no real patient data, no EHR/MIMIC.
-2. **Auditor-assist framing** — drafts and `needs_review`; humans decide.
-3. **Citation or drop** — uncited composer claims are stripped in code (planned pipeline).
-4. **Rules stay deterministic** — no LLM inside `backend/rules/`.
-5. **Secrets via env only** — never commit `.env` or API keys.
-6. **Answer keys stay server-side** — only training grade endpoint may reveal key content after submit.
+1. **Synthetic data only**: no real patient data, no EHR/MIMIC.
+2. **Auditor-assist framing**: drafts and `needs_review`; humans decide.
+3. **Citation or drop**: uncited composer claims are stripped in code (planned pipeline).
+4. **Rules stay deterministic**: no LLM inside `backend/rules/`.
+5. **Secrets via env only**: never commit `.env` or API keys.
+6. **Answer keys stay server-side**: only training grade endpoint may reveal key content after submit.
+
+**Known v1 limitations:** no auth or multi-tenancy (public demo); sepsis only; criteria are simplified educational encodings.
 
 ---
 
@@ -154,6 +156,7 @@ project_memory/       # Specs, tasks, phase completion logs
 | [project_memory/PHASE_LOGS.md](project_memory/PHASE_LOGS.md) | Phase writeups + when Groq is needed |
 | [project_memory/PHASE_0_COMPLETE.md](project_memory/PHASE_0_COMPLETE.md) | Phase 0 log |
 | [project_memory/PHASE_1_COMPLETE.md](project_memory/PHASE_1_COMPLETE.md) | Phase 1 log |
+| [project_memory/PHASE_0_1_AUDIT.md](project_memory/PHASE_0_1_AUDIT.md) | Pre-Phase-2 requirements audit |
 | [project_memory/DEPLOYMENT.md](project_memory/DEPLOYMENT.md) | CI, HF Spaces, Vercel |
 | [project_memory/CLAUDE.md](project_memory/CLAUDE.md) | Implementer operating rules |
 
@@ -180,9 +183,9 @@ Copy `.env.example` to `.env`. Never commit real secrets.
 
 | Phase | Focus | Gate |
 |-------|--------|------|
-| 0 | Scaffold | `ruff` + `pytest` — **done** |
-| 1 | Criteria, rules, synthetic cases | Generator + 10 cases — **done** |
-| 2 | Retrieval + evidence agents | One case E2E with real spans — **next** |
+| 0 | Scaffold | `ruff` + `pytest` (**done**) |
+| 1 | Criteria, rules, synthetic cases | Generator + 10 cases (**done**) |
+| 2 | Retrieval + evidence agents | One case E2E with real spans (**next**) |
 | 3 | Composer + QA gate | Zero invalid citations |
 | 4 | UI + evals | Smoke eval thresholds |
 | 5 | Deploy + demo | Live link works from a phone |

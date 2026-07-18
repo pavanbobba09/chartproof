@@ -24,7 +24,14 @@
         "Laboratory results: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L.",
         "The patient is being treated with antibiotics for a suspected respiratory infection.",
         "A sepsis workup has been initiated.",
-        "The patient's condition is being closely monitored."
+        "The patient's condition is being closely monitored.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate."
       ]
     },
     {
@@ -39,7 +46,14 @@
         "Platelet count is 220 10^9/L, which is within normal limits.",
         "The patient is still receiving antibiotics for the suspected respiratory infection.",
         "The sepsis workup is ongoing.",
-        "The patient's condition is being closely monitored."
+        "The patient's condition is being closely monitored.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate."
       ]
     },
     {
@@ -53,7 +67,15 @@
         "Creatinine levels were stable, with a slight elevation on day 2.",
         "The patient was discharged home in stable condition.",
         "The sepsis workup did not reveal any evidence of organ dysfunction.",
-        "The patient is to follow up with their primary care physician in 1 week."
+        "The patient is to follow up with their primary care physician in 1 week.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available."
       ]
     }
   ],

@@ -8,6 +8,15 @@ from backend.schemas import AnswerKey, Case
 from data.consistency import ConsistencyError, assert_consistent, check_case_key_consistency
 
 
+def _pad_lines(lines: list[str], n: int = 15) -> list[str]:
+    out = list(lines)
+    i = 0
+    while len(out) < n:
+        out.append(f"Additional synthetic note line {i + 1} for length compliance.")
+        i += 1
+    return out
+
+
 def _valid_pair() -> tuple[Case, AnswerKey]:
     case = Case.model_validate(
         {
@@ -20,13 +29,38 @@ def _valid_pair() -> tuple[Case, AnswerKey]:
                     "doc_id": "hp",
                     "doc_type": "history_and_physical",
                     "date": "2026-01-03",
-                    "lines": [
-                        "Chief complaint: fever.",
-                        "Lactate 1.4 mmol/L, MAP 78.",
-                        "Infection: UTI suspected, antibiotics started.",
-                        "No organ dysfunction noted.",
-                    ],
-                }
+                    "lines": _pad_lines(
+                        [
+                            "Chief complaint: fever.",
+                            "Lactate 1.4 mmol/L, MAP 78.",
+                            "Infection: UTI suspected, antibiotics started.",
+                            "No organ dysfunction noted.",
+                        ]
+                    ),
+                },
+                {
+                    "doc_id": "pn_01",
+                    "doc_type": "progress_note",
+                    "date": "2026-01-04",
+                    "lines": _pad_lines(
+                        [
+                            "HD2: afebrile, MAP stable.",
+                            "Continues antibiotics for UTI.",
+                            "No vasopressors.",
+                        ]
+                    ),
+                },
+                {
+                    "doc_id": "ds",
+                    "doc_type": "discharge_summary",
+                    "date": "2026-01-06",
+                    "lines": _pad_lines(
+                        [
+                            "Discharge: UTI without organ dysfunction.",
+                            "Coding listed sepsis for review.",
+                        ]
+                    ),
+                },
             ],
             "labs": [
                 {
@@ -90,3 +124,12 @@ def test_missing_against_for_not_supported() -> None:
     ] * 2  # two for, zero against
     issues = check_case_key_consistency(case, key)
     assert any("against" in i for i in issues)
+
+
+def test_short_document_flagged() -> None:
+    case, key = _valid_pair()
+    # Shrink first document below DATA_SPEC minimum
+    short = case.documents[0].model_copy(update={"lines": ["too short"]})
+    case = case.model_copy(update={"documents": [short, *case.documents[1:]]})
+    issues = check_case_key_consistency(case, key)
+    assert any("15 to 60 lines" in i for i in issues)

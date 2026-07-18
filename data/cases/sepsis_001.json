@@ -25,7 +25,13 @@
         "Laboratory results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L.",
         "Patient is being treated with broad-spectrum antibiotics and vasopressors for hypotension.",
         "A diagnosis of sepsis is suspected due to the presence of infection and organ dysfunction.",
-        "The patient will be closely monitored for any changes in his condition."
+        "The patient will be closely monitored for any changes in his condition.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed."
       ]
     },
     {
@@ -39,7 +45,15 @@
         "Creatinine level has risen to 1.5 mg/dL, indicating a significant increase in the past 24 hours.",
         "Platelet count has decreased to 70 10^9/L, indicating thrombocytopenia.",
         "Patient is being evaluated for potential sources of infection, including the lungs and abdomen.",
-        "Broad-spectrum antibiotics are being continued, and the patient is being closely monitored for any changes in his condition."
+        "Broad-spectrum antibiotics are being continued, and the patient is being closely monitored for any changes in his condition.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available."
       ]
     },
     {
@@ -51,7 +65,17 @@
         "He was treated with broad-spectrum antibiotics and vasopressors for hypotension.",
         "The patient's condition improved, and he was discharged to a rehabilitation facility.",
         "Laboratory results at discharge: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L.",
-        "The patient will require ongoing monitoring and treatment for his underlying conditions."
+        "The patient will require ongoing monitoring and treatment for his underlying conditions.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available.",
+        "Plan: continue current monitoring and supportive care.",
+        "Plan: reassess clinical trajectory on next rounds."
       ]
     }
   ],

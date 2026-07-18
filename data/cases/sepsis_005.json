@@ -23,7 +23,15 @@
         "Labs: lactate 2.2 mmol/L, creatinine 1.2 mg/dL, platelets 120 10^9/L.",
         "Patient is being treated with antibiotics for a suspected pneumonia.",
         "Chest X-ray shows bilateral infiltrates.",
-        "Patient is being closely monitored for signs of sepsis."
+        "Patient is being closely monitored for signs of sepsis.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available."
       ]
     },
     {
@@ -37,7 +45,15 @@
         "Patient is being started on vasopressors to support blood pressure.",
         "Patient's mental status is altered, with a Glasgow Coma Scale score of 12.",
         "Patient is being evaluated for sepsis.",
-        "Patient's family is being updated on his condition."
+        "Patient's family is being updated on his condition.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available."
       ]
     },
     {
@@ -51,7 +67,15 @@
         "Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 150 10^9/L.",
         "Vital signs: temperature 37 C, MAP 80 mmHg, HR 90 bpm.",
         "Patient was discharged home with follow-up appointments.",
-        "Patient's family was educated on signs of sepsis and when to seek medical attention."
+        "Patient's family was educated on signs of sepsis and when to seek medical attention.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available."
       ]
     }
   ],

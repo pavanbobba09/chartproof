@@ -24,7 +24,14 @@
         "Physical exam reveals bilateral lung crackles and decreased breath sounds.",
         "Patient is being treated with broad-spectrum antibiotics and vasopressors.",
         "Suspected sepsis due to pneumonia.",
-        "Plan: continue antibiotics, monitor lactate and creatinine levels, and titrate vasopressors as needed."
+        "Plan: continue antibiotics, monitor lactate and creatinine levels, and titrate vasopressors as needed.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate."
       ]
     },
     {
@@ -38,7 +45,15 @@
         "Patient is being treated with continued antibiotics and vasopressors.",
         "Plan: continue to monitor labs and vital signs, consider adding additional antibiotics if necessary.",
         "Patient's condition remains critical, but stable.",
-        "Will continue to monitor for signs of organ dysfunction."
+        "Will continue to monitor for signs of organ dysfunction.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available."
       ]
     },
     {
@@ -52,7 +67,15 @@
         "Vital signs: MAP 70 mmHg, temperature 36.8 C.",
         "Patient's condition improved significantly during his hospital stay.",
         "He was discharged home on oral antibiotics with follow-up appointments scheduled.",
-        "Final diagnosis: sepsis due to pneumonia."
+        "Final diagnosis: sepsis due to pneumonia.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available."
       ]
     }
   ],

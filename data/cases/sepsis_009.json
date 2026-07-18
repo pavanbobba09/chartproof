@@ -25,7 +25,13 @@
         "Patient is suspected to have sepsis and will be started on broad-spectrum antibiotics.",
         "Will monitor vital signs and lab results closely.",
         "Patient's MAP is 60 mmHg, which is concerning for hypotension.",
-        "Will consider starting vasopressors if blood pressure does not improve."
+        "Will consider starting vasopressors if blood pressure does not improve.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed."
       ]
     },
     {
@@ -40,7 +46,14 @@
         "Vasopressors have been started to support blood pressure.",
         "Patient's altered mentation is a concern, with a Glasgow Coma Scale score of 12.",
         "Will continue to monitor patient's condition closely and adjust treatment as needed.",
-        "Patient's labs and vitals will be checked regularly to assess for any signs of improvement or deterioration."
+        "Patient's labs and vitals will be checked regularly to assess for any signs of improvement or deterioration.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate."
       ]
     },
     {
@@ -53,7 +66,16 @@
         "Patient's platelet count increased to 100 10^9/L, and blood pressure improved to 100/60 mmHg.",
         "Patient was weaned off vasopressors and was able to be extubated.",
         "Patient's altered mentation improved, with a Glasgow Coma Scale score of 15.",
-        "Patient was discharged home with follow-up appointments with primary care and infectious disease specialists."
+        "Patient was discharged home with follow-up appointments with primary care and infectious disease specialists.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available.",
+        "Plan: continue current monitoring and supportive care."
       ]
     }
   ],

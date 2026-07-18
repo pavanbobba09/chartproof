@@ -16,6 +16,17 @@ def check_case_key_consistency(case: Case, key: AnswerKey) -> list[str]:
     if case.case_id != key.case_id:
         issues.append(f"case_id mismatch: case={case.case_id!r} key={key.case_id!r}")
 
+    n_docs = len(case.documents)
+    if n_docs < 3 or n_docs > 6:
+        issues.append(f"case must have 3 to 6 documents, found {n_docs}")
+
+    for doc in case.documents:
+        n_lines = len(doc.lines)
+        if n_lines < 15 or n_lines > 60:
+            issues.append(
+                f"document {doc.doc_id!r} must have 15 to 60 lines, found {n_lines}"
+            )
+
     doc_by_id = {d.doc_id: d for d in case.documents}
     for pe in key.planted_evidence:
         doc = doc_by_id.get(pe.doc_id)

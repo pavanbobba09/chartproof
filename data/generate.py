@@ -159,14 +159,16 @@ Return JSON with exactly this shape:
 }}
 
 Rules:
-- 3 to 5 documents, 15 to 40 lines each. Line numbers are 1-based positions in the lines array.
+- REQUIRED: 3 to 5 documents, EACH with 15 to 40 lines (count carefully; short notes will be rejected).
+- Line numbers are 1-based positions in the lines array.
 - Notes must mention labs/vitals that exist in the labs and vitals tables.
 - Clinician notes may mention sepsis or suspected sepsis (billing context) even when not_supported.
-- For supported: infection documented AND clear organ dysfunction (e.g. lactate > 2.0, MAP < 65, creatinine rise >= 0.3, platelets < 100, or vasopressors).
-- For not_supported: infection may be present, but NO true organ dysfunction (normal lactate, stable MAP, no vasopressors, no significant creatinine rise, normal platelets).
+- For supported: infection documented AND clear organ dysfunction (e.g. lactate > 2.0, MAP < 65, creatinine rise >= 0.3, platelets < 100, or vasopressors given).
+- For not_supported: infection may be present, but NO true organ dysfunction (normal lactate <= 2.0, MAP >= 65, explicitly no vasopressors, no significant creatinine rise, platelets >= 100). Do not invent vasopressor use.
 - Include at least 2 planted_evidence spans with accurate line_start/line_end pointing at real lines.
 - Provide at least two creatinine values ~24h apart when referencing creatinine trend.
-- Use only synthetic content. No real PHI.
+- Provide multiple lab/vital rows over time when clinically relevant.
+- Use only synthetic content. No real PHI. No em dashes.
 """.strip()
 
 

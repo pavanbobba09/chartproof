@@ -25,7 +25,13 @@
         "Patient is started on empiric antibiotics for suspected pneumonia.",
         "Sepsis is considered in the differential diagnosis.",
         "Patient is to be monitored closely for signs of organ dysfunction.",
-        "Follow-up labs and vitals will be obtained in 24 hours."
+        "Follow-up labs and vitals will be obtained in 24 hours.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed."
       ]
     },
     {
@@ -40,7 +46,14 @@
         "No signs of organ dysfunction are noted at this time.",
         "Patient is to continue with current treatment and monitoring.",
         "Follow-up labs and vitals will be obtained in 24 hours.",
-        "Sepsis is still considered in the differential diagnosis, but no clear evidence is seen."
+        "Sepsis is still considered in the differential diagnosis, but no clear evidence is seen.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate."
       ]
     },
     {
@@ -53,7 +66,16 @@
         "Patient's condition improved, and he was discharged home.",
         "Final diagnosis: pneumonia, not sepsis.",
         "Patient is to follow up with primary care in 1 week.",
-        "No further treatment is needed at this time."
+        "No further treatment is needed at this time.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available.",
+        "Plan: continue current monitoring and supportive care."
       ]
     }
   ],
