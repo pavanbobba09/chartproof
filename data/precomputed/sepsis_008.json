@@ -2,9 +2,9 @@
   "case_id": "sepsis_008",
   "status": "needs_review",
   "verdict": null,
-  "confidence": 0.09999999999999998,
-  "rules_verdict": null,
-  "llm_verdict": "not_supported",
+  "confidence": 0.5,
+  "rules_verdict": "not_supported",
+  "llm_verdict": "supported",
   "criteria_results": [
     {
       "criterion_id": "infection",
@@ -14,7 +14,10 @@
         "E1",
         "E2",
         "E3",
-        "E4"
+        "E4",
+        "E7",
+        "E8",
+        "E9"
       ]
     },
     {
@@ -30,12 +33,13 @@
       "result": "not_met",
       "method": "structured",
       "evidence_ids": [
-        "E6"
+        "E6",
+        "E12"
       ]
     },
     {
       "criterion_id": "vasopressors",
-      "result": "unclear",
+      "result": "not_met",
       "method": "narrative",
       "evidence_ids": []
     },
@@ -53,15 +57,18 @@
     },
     {
       "criterion_id": "altered_mentation",
-      "result": "unclear",
+      "result": "not_met",
       "method": "narrative",
       "evidence_ids": []
     },
     {
       "criterion_id": "organ_dysfunction",
-      "result": "unclear",
+      "result": "not_met",
       "method": "any_of",
-      "evidence_ids": []
+      "evidence_ids": [
+        "E10",
+        "E11"
+      ]
     }
   ],
   "evidence": [
@@ -130,10 +137,76 @@
         "line_end": 3
       },
       "text": "Vital signs: temperature 38.5 C, blood pressure 120/80 mmHg, heart rate 100 bpm."
+    },
+    {
+      "evidence_id": "E7",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "text": "Patient is started on empiric antibiotics for suspected pneumonia."
+    },
+    {
+      "evidence_id": "E8",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 7,
+        "line_end": 7
+      },
+      "text": "Sepsis is considered in the differential diagnosis."
+    },
+    {
+      "evidence_id": "E9",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Patient's condition is stable, and antibiotics are continued."
+    },
+    {
+      "evidence_id": "E10",
+      "side": "against",
+      "criterion_id": "organ_dysfunction",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 8,
+        "line_end": 8
+      },
+      "text": "Patient is to be monitored closely for signs of organ dysfunction."
+    },
+    {
+      "evidence_id": "E11",
+      "side": "against",
+      "criterion_id": "organ_dysfunction",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9/L."
+    },
+    {
+      "evidence_id": "E12",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Vitals: MAP 80 mmHg, temperature 38.2 C."
     }
   ],
-  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_008 | Status: needs_review | Draft for auditor review\n\n## Determination\nDraft determination is not_supported, primarily based on E5 (lactate_elevated): Labs - lactate 1\n\n## Evidence\n| # | For/Against | Source | Lines | Excerpt |\n|---|-------------|--------|-------|---------|\n| E1 | for | history_and_physical 2022-01-01 | 4-7 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. Physical exam reveals bilateral lung crackles and  |\n| E2 | for | discharge_summary 2022-01-05 | 1-4 | Patient was treated for pneumonia with empiric antibiotics. Labs and vitals were monitored closely, and no signs of orga |\n| E3 | for | progress_note 2022-01-02 | 1-4 | Patient remains febrile with a temperature of 38.2 C. Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9 |\n| E4 | for | progress_note 2022-01-02 | 4-7 | Patient's condition is stable, and antibiotics are continued. No signs of organ dysfunction are noted at this time. Pati |\n| E5 | against | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. |\n| E6 | against | history_and_physical 2022-01-01 | 3-3 | Vital signs: temperature 38.5 C, blood pressure 120/80 mmHg, heart rate 100 bpm. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Sepsis coding notes (high level)). Findings that affect payment grouping must be supported by chart indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E2, E3, E4, E5, E6.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_008 | Status: needs_review | Draft for auditor review\n\n## Determination\nDraft determination is supported, primarily based on E1 (infection): Labs - lactate 1\n\n## Evidence\n| # | For/Against | Source | Lines | Excerpt |\n|---|-------------|--------|-------|---------|\n| E1 | for | history_and_physical 2022-01-01 | 4-7 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. Physical exam reveals bilateral lung crackles and  |\n| E2 | for | discharge_summary 2022-01-05 | 1-4 | Patient was treated for pneumonia with empiric antibiotics. Labs and vitals were monitored closely, and no signs of orga |\n| E3 | for | progress_note 2022-01-02 | 1-4 | Patient remains febrile with a temperature of 38.2 C. Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9 |\n| E4 | for | progress_note 2022-01-02 | 4-7 | Patient's condition is stable, and antibiotics are continued. No signs of organ dysfunction are noted at this time. Pati |\n| E5 | against | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. |\n| E6 | against | history_and_physical 2022-01-01 | 3-3 | Vital signs: temperature 38.5 C, blood pressure 120/80 mmHg, heart rate 100 bpm. |\n| E7 | for | history_and_physical 2022-01-01 | 6-6 | Patient is started on empiric antibiotics for suspected pneumonia. |\n| E8 | for | history_and_physical 2022-01-01 | 7-7 | Sepsis is considered in the differential diagnosis. |\n| E9 | for | progress_note 2022-01-02 | 4-4 | Patient's condition is stable, and antibiotics are continued. |\n| E10 | against | history_and_physical 2022-01-01 | 8-8 | Patient is to be monitored closely for signs of organ dysfunction. |\n| E11 | against | progress_note 2022-01-02 | 2-2 | Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9/L. |\n| E12 | against | progress_note 2022-01-02 | 3-3 | Vitals: MAP 80 mmHg, temperature 38.2 C. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Sepsis coding notes (high level)). Findings that affect payment grouping must be supported by chart indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E11, E12, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
   "dropped_sentences": 0,
   "source": "precomputed",
-  "trace_id": "run_sepsis_008_20260718T180352Z"
+  "trace_id": "run_sepsis_008_20260718T181342Z"
 }

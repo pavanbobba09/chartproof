@@ -78,7 +78,52 @@ def build_evidence_catalog(
                 if len(items) >= 3:
                     break
 
+    # Extra keyword scan: surface more chart lines for recall (still real spans)
+    for cid, res in breakdown.items():
+        if res not in ("met", "not_met"):
+            continue
+        side = "for" if res == "met" else "against"
+        for span, text in _find_all_metric_mentions(case, cid, limit=3):
+            _add(side, cid, span, text)
+
     return items
+
+
+def _find_all_metric_mentions(
+    case: Case, criterion_id: str, *, limit: int = 3
+) -> list[tuple[EvidenceSpan, str]]:
+    keywords = {
+        "lactate_elevated": ("lactate",),
+        "hypotension": ("map", "hypotens", "blood pressure", "mmhg"),
+        "creatinine_rise": ("creatinine",),
+        "thrombocytopenia": ("platelet",),
+        "infection": (
+            "infection",
+            "antibiotic",
+            "uti",
+            "pneumonia",
+            "culture",
+            "sepsis",
+        ),
+        "vasopressors": ("vasopressor", "pressor", "norepinephrine", "levophed"),
+        "organ_dysfunction": ("organ dysfunction", "lactate", "map"),
+        "altered_mentation": ("mental", "confused", "gcs", "alert and oriented"),
+    }
+    kws = keywords.get(criterion_id, (criterion_id.replace("_", " "),))
+    found: list[tuple[EvidenceSpan, str]] = []
+    for doc in case.documents:
+        for i, line in enumerate(doc.lines, start=1):
+            low = line.lower()
+            if any(k in low for k in kws):
+                found.append(
+                    (
+                        EvidenceSpan(doc_id=doc.doc_id, line_start=i, line_end=i),
+                        line,
+                    )
+                )
+                if len(found) >= limit:
+                    return found
+    return found
 
 
 def _find_metric_mention(case: Case, criterion_id: str) -> tuple[EvidenceSpan, str]:

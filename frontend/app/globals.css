@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased;
+}
+
+.line-highlight {
+  @apply bg-amber-200 ring-2 ring-amber-400;
+}
+
+.line-selected {
+  @apply bg-violet-100 ring-1 ring-violet-400;
+}
+
+.prose-letter h1 {
+  @apply text-xl font-semibold text-brand-900 mb-2;
+}
+.prose-letter h2 {
+  @apply text-lg font-semibold mt-4 mb-2 text-slate-800;
+}
+.prose-letter table {
+  @apply w-full text-sm border-collapse my-2;
+}
+.prose-letter th,
+.prose-letter td {
+  @apply border border-slate-200 px-2 py-1 text-left;
+}
+.prose-letter p {
+  @apply my-2 leading-relaxed;
+}

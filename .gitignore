@@ -37,9 +37,10 @@ frontend/dist/
 *.swp
 *.swo
 
-# Eval outputs (keep thresholds; ignore generated reports if desired)
-# evals/out/ is generated; allow committing results.md later if useful
-evals/out/
+# Eval outputs: keep results.md for README; ignore other generated artifacts
+evals/out/*
+!evals/out/results.md
+!evals/out/.gitkeep
 
 # Hugging Face / local caches
 .cache/

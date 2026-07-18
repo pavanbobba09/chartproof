@@ -1,3 +1,13 @@
+---
+title: ChartProof API
+emoji: "🩺"
+colorFrom: purple
+colorTo: gray
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # ChartProof
 
 **Auditor-assist clinical chart validation (CCV)** on 100% synthetic data.
@@ -8,9 +18,10 @@ ChartProof is a portfolio demo of an AI copilot for inpatient clinical validatio
 
 | | |
 |---|---|
-| **Status** | Phase 3 complete (composer, QA gate, audit API, precomputed results); Phase 4 next |
-| **Stack** | FastAPI · Pydantic · deterministic rules · (later) LangGraph · ChromaDB · Groq · Next.js |
+| **Status** | Phase 4 complete (evals + training API + Next.js UI); Phase 5 deploy next |
+| **Stack** | FastAPI · LangGraph · ChromaDB · deterministic rules · Groq (generation) · Next.js |
 | **Hosting (planned)** | Hugging Face Spaces (API) + Vercel (UI) |
+| **Repo** | https://github.com/pavanbobba09/chartproof |
 
 ---
 
@@ -24,127 +35,115 @@ ChartProof targets auditor pain: slow evidence gathering, inconsistency, long ra
 
 ---
 
-## Architecture (target)
+## Architecture
 
 ```
-Chart generator (Groq)          Reference corpus (public PDFs)
+Chart generator (Groq)          Reference corpus (guidelines)
         |                                  |
         v                                  v
    Chart bank  ------------------>  ChromaDB index
  (JSON cases + hidden answer keys)         |
                                            v
                               LangGraph pipeline (FastAPI)
-                    evidence agents -> composer
-                    rules engine    -> QA gate
+                    evidence -> rules -> compose -> QA gate
                                            |
                      +---------------------+---------------------+
                      v                     v                     v
               evidence table       rationale letter        review flag
                                            v
-                     Next.js frontend: audit mode + training mode
+                     Next.js: audit mode + training mode
 ```
 
-**What works today**
+---
 
-- FastAPI health API
-- Pydantic schemas (cases, answer keys, spans, audit/training contracts)
-- Sepsis criteria YAML + deterministic rules engine (no LLM)
-- Case/key consistency checker
-- Groq synthetic generator (`python -m data.generate --dx sepsis --n 10`)
-- 10 sepsis cases + answer keys under `data/cases` and `data/keys`
-- Guidelines educational corpus + `manifest.json`
-- Chroma index + span retrieval (`python -m backend.index.build`)
-- Evidence agents + full LangGraph pipeline (through compose + QA)
-- Citation-safe rationale letters and `needs_review` QA gate
-- Audit API: `GET /cases`, `GET/POST /audit/{case_id}` (+ precomputed bank)
-- Unit tests + ruff + GitHub Actions CI (lint + pytest)
+## Eval results (latest full bank)
 
-**Not yet**
+Suite: **full** (10 sepsis cases, precomputed pipeline). Smoke suite (5 fixed cases) is enforced in CI.
 
-- Full 30-case bank (10 now; expand later)
-- Next.js audit/training UI, full eval harness, live deploy
+| Metric | Full bank | Smoke (CI) | Threshold |
+|--------|----------:|-----------:|----------:|
+| Determination accuracy | 0.700 | 1.000 | >= 0.80 |
+| Evidence recall | 0.872 | 1.000 | >= 0.70 |
+| Citation faithfulness | 1.000 | 1.000 | >= 0.95 |
+| Deferral rate (`needs_review`) | 0.300 | 0.000 | tracked |
+
+Smoke suite **passes** thresholds. Full-bank accuracy is below 0.80 because three cases correctly defer to human review (`needs_review` counts as wrong for accuracy). Citation faithfulness is perfect on the deterministic check. See `evals/out/results.md`.
+
+```bash
+python -m evals.run --suite smoke --enforce-thresholds
+python -m evals.run --suite full
+```
 
 ---
 
 ## Quickstart
 
-### Prerequisites
-
-- Python **3.11+**
-- (Optional) [uv](https://github.com/astral-sh/uv) for fast envs
-- `GROQ_API_KEY` only when you run LLM generation, compose, or evals (not needed for rules/tests)
-
-### Setup
+### Backend
 
 ```bash
 git clone https://github.com/pavanbobba09/chartproof.git ChartProof
 cd ChartProof
-
-python3.11 -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
+python3.11 -m venv .venv && source .venv/bin/activate
 pip install -r backend/requirements.txt -r backend/requirements-dev.txt
+cp .env.example .env   # GROQ only needed for generation / live LLM paths
 
-cp .env.example .env               # add GROQ_API_KEY only when needed
-```
+# Optional: rebuild index if you will run live audits
+python -m backend.index.build --data data --out .chroma
 
-With uv:
-
-```bash
-uv venv .venv --python 3.11
-source .venv/bin/activate
-uv pip install -r backend/requirements.txt -r backend/requirements-dev.txt
-```
-
-### Run the API
-
-```bash
 uvicorn backend.app:app --reload --port 8000
-# open http://localhost:8000/health
-# docs at http://localhost:8000/docs
 ```
 
-### Quality gate (engineering loop)
+### Frontend
 
 ```bash
-ruff check backend data
+cd frontend
+cp .env.example .env.local   # NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+npm install
+npm run dev                  # http://localhost:3000
+```
+
+### Quality loop
+
+```bash
+ruff check backend data evals
 pytest backend/tests -q
+python -m evals.run --suite smoke --enforce-thresholds
 ```
 
-CI runs the same lint + test job on every push/PR (see `.github/workflows/ci.yml`).
+### API highlights
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| GET | `/health` | Liveness |
+| GET | `/cases` | Case list (no answer keys) |
+| GET | `/cases/{id}` | Full synthetic chart |
+| GET/POST | `/audit/{id}` | Audit result (`?fresh=true` live) |
+| POST | `/training/{id}/grade` | Grade trainee (reveals key after submit) |
 
 ---
 
-## Project layout
+## Features (shipped)
 
-```
-backend/
-  app.py              # FastAPI entry (GET /health)
-  schemas.py          # DATA_SPEC pydantic models
-  rules/              # Deterministic criteria engine (no LLM)
-  pipeline/           # LangGraph intake → evidence → rules (composer next)
-  index/              # Chroma chunking, build, retrieve
-  tests/
-data/
-  criteria/sepsis.yaml
-  consistency.py      # Case/key consistency checks
-  cases/ keys/ guidelines/ raw/   # Generated assets (planned)
-evals/                # Smoke/full eval harness (planned)
-frontend/             # Next.js UI (planned)
-project_memory/       # Specs, tasks, phase completion logs
-```
+- Synthetic sepsis case bank (10) + answer keys + guidelines corpus
+- Deterministic rules engine (no LLM in `backend/rules/`)
+- Chroma retrieval + narrative evidence agents
+- Citation-enforced rationale letter + QA `needs_review`
+- Precomputed audits for instant demo
+- Eval harness (smoke/full) with CI smoke job
+- Next.js audit mode (chart, evidence click-to-highlight, letter, fresh run)
+- Next.js training mode (verdict + line select + graded feedback)
+
+Inventory: [project_memory/FEATURES.md](project_memory/FEATURES.md)
 
 ---
 
-## Hard rules
+## Known limitations
 
-1. **Synthetic data only**: no real patient data, no EHR/MIMIC.
-2. **Auditor-assist framing**: drafts and `needs_review`; humans decide.
-3. **Citation or drop**: uncited composer claims are stripped in code (planned pipeline).
-4. **Rules stay deterministic**: no LLM inside `backend/rules/`.
-5. **Secrets via env only**: never commit `.env` or API keys.
-6. **Answer keys stay server-side**: only training grade endpoint may reveal key content after submit.
-
-**Known v1 limitations:** no auth or multi-tenancy (public demo); sepsis only; criteria are simplified educational encodings.
+- No auth or multi-tenancy (public demo)
+- Sepsis only; criteria are simplified educational encodings
+- Full-bank determination accuracy still below smoke threshold due to deliberate deferrals
+- Case notes include some pad lines for schema length compliance
+- Live deploy (HF Space + Vercel) is Phase 5
 
 ---
 
@@ -152,49 +151,18 @@ project_memory/       # Specs, tasks, phase completion logs
 
 | Doc | Purpose |
 |-----|---------|
-| [project_memory/PROJECT.md](project_memory/PROJECT.md) | Product vision and architecture |
-| [project_memory/DATA_SPEC.md](project_memory/DATA_SPEC.md) | Schemas and API contracts |
+| [project_memory/PROJECT.md](project_memory/PROJECT.md) | Product vision |
+| [project_memory/DATA_SPEC.md](project_memory/DATA_SPEC.md) | Schemas and contracts |
 | [project_memory/TASKS.md](project_memory/TASKS.md) | Phased checklist |
-| [project_memory/LOOP_PLAN.md](project_memory/LOOP_PLAN.md) | Build → measure → fix loop |
-| [project_memory/PHASE_LOGS.md](project_memory/PHASE_LOGS.md) | Phase writeups + when Groq is needed |
-| [project_memory/PHASE_0_COMPLETE.md](project_memory/PHASE_0_COMPLETE.md) | Phase 0 log |
-| [project_memory/PHASE_1_COMPLETE.md](project_memory/PHASE_1_COMPLETE.md) | Phase 1 log |
-| [project_memory/PHASE_0_1_AUDIT.md](project_memory/PHASE_0_1_AUDIT.md) | Pre-Phase-2 requirements audit |
-| [project_memory/PHASE_2_COMPLETE.md](project_memory/PHASE_2_COMPLETE.md) | Phase 2 work log |
-| [project_memory/PHASE_3_COMPLETE.md](project_memory/PHASE_3_COMPLETE.md) | Phase 3 work log |
-| [project_memory/FEATURES.md](project_memory/FEATURES.md) | Feature inventory (what is built) |
-| [project_memory/DEPLOYMENT.md](project_memory/DEPLOYMENT.md) | CI, HF Spaces, Vercel |
-| [project_memory/CLAUDE.md](project_memory/CLAUDE.md) | Implementer operating rules |
+| [project_memory/LOOP_PLAN.md](project_memory/LOOP_PLAN.md) | Engineering loop |
+| [project_memory/FEATURES.md](project_memory/FEATURES.md) | Feature inventory |
+| [project_memory/E2E_REQUIREMENTS_REVIEW.md](project_memory/E2E_REQUIREMENTS_REVIEW.md) | Requirements audit |
+| [project_memory/PHASE_LOGS.md](project_memory/PHASE_LOGS.md) | Phase completion index |
+| [project_memory/DEPLOYMENT.md](project_memory/DEPLOYMENT.md) | CI / HF / Vercel |
+| [evals/out/results.md](evals/out/results.md) | Latest eval report |
 
-After each phase gate, add `project_memory/PHASE_<N>_COMPLETE.md` and update `PHASE_LOGS.md`.
-
----
-
-## Environment variables
-
-Copy `.env.example` to `.env`. Never commit real secrets.
-
-| Variable | Used for |
-|----------|----------|
-| `GROQ_API_KEY` | Generation, compose, LLM-judge evals (later) |
-| `GROQ_MODEL` | Default `llama-3.3-70b-versatile` |
-| `CHROMA_DIR` | Vector index path (default `.chroma`) |
-| `ALLOWED_ORIGINS` | CORS origins (comma-separated) |
-| `NEXT_PUBLIC_API_BASE_URL` | Frontend → API base URL |
-| `HF_TOKEN` | CI deploy to Hugging Face Space (later) |
-
----
-
-## Roadmap (summary)
-
-| Phase | Focus | Gate |
-|-------|--------|------|
-| 0 | Scaffold | `ruff` + `pytest` (**done**) |
-| 1 | Criteria, rules, synthetic cases | Generator + 10 cases (**done**) |
-| 2 | Retrieval + evidence agents | One case E2E with real spans (**done**) |
-| 3 | Composer + QA gate | Zero invalid citations (**done**) |
-| 4 | UI + evals | Smoke eval thresholds (**next**) |
-| 5 | Deploy + demo | Live link works from a phone |
+Demo video: *(placeholder for Phase 5)*  
+Live demo: *(placeholder for Phase 5)*
 
 ---
 

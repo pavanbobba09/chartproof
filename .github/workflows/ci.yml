@@ -18,6 +18,29 @@ jobs:
       - name: Install
         run: pip install -r backend/requirements.txt -r backend/requirements-dev.txt
       - name: Lint
-        run: ruff check backend
+        run: ruff check backend data evals
       - name: Unit tests and deterministic checks
         run: pytest backend/tests -q
+
+  smoke-eval:
+    # Uses precomputed results (no live LLM). Still skipped for fork PRs if we
+    # later add secrets; currently always runs for same-repo PRs and pushes.
+    needs: test
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install
+        run: pip install -r backend/requirements.txt -r backend/requirements-dev.txt
+      - name: Smoke eval with thresholds
+        run: python -m evals.run --suite smoke --enforce-thresholds
+      - name: Upload eval report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-report
+          path: evals/out/

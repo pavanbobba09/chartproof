@@ -8,8 +8,17 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
+from backend.config import CASES_DIR
 from backend.pipeline.audit_service import list_case_summaries, run_audit
-from backend.schemas import AuditResult, CaseSummary, HealthResponse
+from backend.pipeline.training import case_exists, grade_submission
+from backend.schemas import (
+    AuditResult,
+    Case,
+    CaseSummary,
+    HealthResponse,
+    TrainingGradeRequest,
+    TrainingGradeResponse,
+)
 
 app = FastAPI(
     title="ChartProof API",
@@ -44,6 +53,15 @@ def get_cases() -> list[CaseSummary]:
     return list_case_summaries()
 
 
+@app.get("/cases/{case_id}", response_model=Case)
+def get_case(case_id: str) -> Case:
+    """Return full synthetic chart (never includes answer key)."""
+    path = CASES_DIR / f"{case_id}.json"
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail=f"case not found: {case_id}")
+    return Case.model_validate_json(path.read_text(encoding="utf-8"))
+
+
 @app.get("/audit/{case_id}", response_model=AuditResult)
 def get_audit(case_id: str) -> AuditResult:
     """Return cached/precomputed audit if present; 404 if never run."""
@@ -61,7 +79,6 @@ def post_audit(
     fresh: bool = Query(False, description="Skip caches and run live pipeline"),
 ) -> AuditResult:
     """Run audit pipeline (or serve precomputed/cached result)."""
-    # Ensure case exists without loading answer key
     case_path = Path(__file__).resolve().parents[1] / "data" / "cases" / f"{case_id}.json"
     if not case_path.is_file():
         raise HTTPException(status_code=404, detail=f"case not found: {case_id}")
@@ -71,3 +88,17 @@ def post_audit(
         raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:  # noqa: BLE001
         raise HTTPException(status_code=500, detail=f"audit failed: {e}") from e
+
+
+@app.post("/training/{case_id}/grade", response_model=TrainingGradeResponse)
+def post_training_grade(case_id: str, body: TrainingGradeRequest) -> TrainingGradeResponse:
+    """Grade trainee verdict + selected evidence against the hidden answer key.
+
+    This is the only endpoint allowed to reveal answer-key content, after submit.
+    """
+    if not case_exists(case_id):
+        raise HTTPException(status_code=404, detail=f"case not found: {case_id}")
+    try:
+        return grade_submission(case_id, body)
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e

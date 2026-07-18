@@ -50,14 +50,14 @@ Acceptance: full pipeline on 10 cases produces determinations with zero invalid 
 
 ## Phase 4: UI + evals (target: days 11 to 14)
 
-- [ ] `evals/run.py` with `smoke` and `full` suites, metrics per PROJECT.md, thresholds file, markdown report to `evals/out/results.md`
-- [ ] Add `smoke-eval` job to CI per DEPLOYMENT.md
-- [ ] Next.js app: case picker, chart viewer with line numbers, evidence table with click-to-highlight citation jumps, letter view, status badge
-- [ ] Training mode: verdict buttons, line-select for evidence, `POST /training/{case_id}/grade`, graded feedback view
-- [ ] Generate remaining cases to reach the 30-case bank; run full eval; put the results table in the README
-- [ ] README.md: pitch, architecture diagram image, quickstart, eval table, limitations, demo link placeholders. Must BEGIN with the HF Space frontmatter block from DEPLOYMENT.md section 3, or the Phase 5 Space build will fail
+- [x] `evals/run.py` with `smoke` and `full` suites, metrics per PROJECT.md, thresholds file, markdown report to `evals/out/results.md`
+- [x] Add `smoke-eval` job to CI per DEPLOYMENT.md
+- [x] Next.js app: case picker, chart viewer with line numbers, evidence table with click-to-highlight citation jumps, letter view, status badge
+- [x] Training mode: verdict buttons, line-select for evidence, `POST /training/{case_id}/grade`, graded feedback view
+- [ ] Generate remaining cases to reach the 30-case bank (deferred; 10-case bank + smoke suite green)
+- [x] README.md: pitch, quickstart, eval table, limitations, demo placeholders, HF Space frontmatter at top
 
-Acceptance: `evals.run --suite full` completes with results.md written; both UI modes work against local backend; smoke eval green in CI.
+Acceptance: `evals.run --suite full` completes with results.md written; both UI modes work against local backend; smoke eval green in CI. **Phase 4 complete (2026-07-18) except 30-case expansion.** Writeup: [PHASE_4_COMPLETE.md](./PHASE_4_COMPLETE.md).
 
 ## Phase 5: deploy + demo (target: days 15 to 16)
 

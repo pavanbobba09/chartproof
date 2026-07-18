@@ -1,0 +1,16 @@
+# Smoke suite uses fixed case ids present in the committed bank.
+# Expand to sepsis_012 / sepsis_015 when the 30-case bank lands.
+smoke_case_ids:
+  - sepsis_001
+  - sepsis_004
+  - sepsis_006
+  - sepsis_007
+  - sepsis_010
+smoke:
+  determination_accuracy: 0.80
+  evidence_recall: 0.70
+  citation_faithfulness: 0.95
+full:
+  determination_accuracy: 0.80
+  evidence_recall: 0.70
+  citation_faithfulness: 0.95

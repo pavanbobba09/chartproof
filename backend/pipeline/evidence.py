@@ -224,7 +224,11 @@ def gather_evidence_for_criterion(
         else:
             result = "met"
     elif for_total == 0 and against_total == 0:
-        result = "unclear"
+        # No textual signal: infection stays unclear; absence of vaso/AMS → not_met
+        if node.id in ("vasopressors", "altered_mentation"):
+            result = "not_met"
+        else:
+            result = "unclear"
     elif for_total > against_total:
         result = "met"
     elif against_total > for_total:

@@ -2,7 +2,7 @@
 
 Living inventory of shipped product and engineering capabilities. Update this file at the end of each phase.
 
-**Last updated:** 2026-07-18 (through Phase 3)  
+**Last updated:** 2026-07-18 (through Phase 4)  
 **Repo:** https://github.com/pavanbobba09/chartproof
 
 ---
@@ -112,13 +112,32 @@ curl -X POST 'http://localhost:8000/audit/sepsis_002?fresh=true'
 
 ---
 
+## Phase 4: evals + UI + training
+
+| Feature | How to use / where |
+|---------|---------------------|
+| Eval harness smoke/full | `python -m evals.run --suite smoke --enforce-thresholds` |
+| Metrics | accuracy, evidence recall, citation faithfulness, deferral rate |
+| CI smoke-eval job | `.github/workflows/ci.yml` |
+| `GET /cases/{id}` | Full chart JSON, no keys |
+| `POST /training/{id}/grade` | Trainee grading against hidden key |
+| Next.js case list | `frontend/` → `/` |
+| Audit UI | `/audit/[caseId]` evidence jump + letter + fresh run |
+| Training UI | `/training/[caseId]` verdict + line select + feedback |
+
+```bash
+cd frontend && npm install && npm run dev
+# backend: uvicorn backend.app:app --port 8000
+```
+
+---
+
 ## Not built yet (planned)
 
 | Phase | Features |
 |-------|----------|
-| **4 (next)** | Next.js audit + training UI, eval harness, smoke thresholds in CI |
-| **5** | HF Spaces Docker API, Vercel frontend, demo video |
-| Stretch | Malnutrition/AKI criteria, appeals module, nightly full eval |
+| **5 (next)** | HF Spaces Docker API, Vercel frontend, demo video |
+| Stretch | 30-case bank, malnutrition/AKI, appeals module, nightly full eval |
 
 ---
 
