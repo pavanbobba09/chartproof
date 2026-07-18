@@ -1,0 +1,44 @@
+dx: sepsis
+display_name: Sepsis
+icd10_prefixes: ["A40", "A41", "R65.2"]
+source_note: >
+  Simplified demo encoding informed by Sepsis-3 (Singer et al., JAMA 2016).
+  Educational demo only, not for clinical use.
+verdict_rule: "infection AND organ_dysfunction"
+criteria:
+  - id: infection
+    kind: narrative
+    question: >
+      Is an infection documented or clinically suspected (positive cultures,
+      identified source, or antibiotics started for a presumed infection)?
+
+  - id: organ_dysfunction
+    kind: any_of
+    children:
+      - id: lactate_elevated
+        kind: structured
+        metric: lab.lactate
+        op: gt
+        threshold: 2.0
+      - id: hypotension
+        kind: structured
+        metric: vital.map
+        op: lt
+        threshold: 65
+      - id: vasopressors
+        kind: narrative
+        question: "Were vasopressors administered?"
+      - id: creatinine_rise
+        kind: structured
+        metric: lab.creatinine
+        op: rise_gte
+        threshold: 0.3
+        window_hours: 48
+      - id: thrombocytopenia
+        kind: structured
+        metric: lab.platelets
+        op: lt
+        threshold: 100
+      - id: altered_mentation
+        kind: narrative
+        question: "Is acute altered mental status or GCS below 15 documented?"
