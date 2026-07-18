@@ -73,6 +73,17 @@ def get_audit(case_id: str) -> AuditResult:
     return result
 
 
+def _is_rate_limit_error(exc: BaseException) -> bool:
+    msg = str(exc).lower()
+    return (
+        "429" in msg
+        or "rate limit" in msg
+        or "rate_limit" in msg
+        or "too many requests" in msg
+        or "quota" in msg
+    )
+
+
 @app.post("/audit/{case_id}", response_model=AuditResult)
 def post_audit(
     case_id: str,
@@ -87,6 +98,24 @@ def post_audit(
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
     except Exception as e:  # noqa: BLE001
+        if _is_rate_limit_error(e):
+            raise HTTPException(
+                status_code=503,
+                detail=(
+                    "Live analysis is temporarily rate-limited (LLM or embedding provider). "
+                    "Use the precomputed draft for this case, or retry in a minute."
+                ),
+            ) from e
+        # Missing index / cold-start friendly message
+        msg = str(e)
+        if "collection" in msg.lower() or "chroma" in msg.lower():
+            raise HTTPException(
+                status_code=503,
+                detail=(
+                    "Search index is not ready. Precomputed drafts still work via GET "
+                    f"/audit/{case_id}. Rebuild index or wait for the Space to finish booting."
+                ),
+            ) from e
         raise HTTPException(status_code=500, detail=f"audit failed: {e}") from e
 
 

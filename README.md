@@ -18,10 +18,12 @@ ChartProof is a portfolio demo of an AI copilot for inpatient clinical validatio
 
 | | |
 |---|---|
-| **Status** | Phase 4 complete (evals + training API + Next.js UI); Phase 5 deploy next |
+| **Status** | Phase 5 engineering complete (Docker + CI deploy + demo hardening); set HF/Vercel secrets for live URLs |
 | **Stack** | FastAPI · LangGraph · ChromaDB · deterministic rules · Groq (generation) · Next.js |
-| **Hosting (planned)** | Hugging Face Spaces (API) + Vercel (UI) |
+| **Hosting** | Hugging Face Spaces (Docker API) + Vercel Hobby (UI) |
 | **Repo** | https://github.com/pavanbobba09/chartproof |
+| **API (planned)** | `https://trippy09-chartproof.hf.space` |
+| **UI (planned)** | Vercel project root `frontend/` |
 
 ---
 
@@ -137,13 +139,35 @@ Inventory: [project_memory/FEATURES.md](project_memory/FEATURES.md)
 
 ---
 
+## Deploy (Phase 5)
+
+### Backend image (Hugging Face Spaces)
+
+```bash
+docker build -t chartproof-api .
+# Space sync is automated on green main when GitHub secret HF_TOKEN is set.
+```
+
+One-time:
+
+1. Create Docker Space `trippy09/chartproof` on Hugging Face.
+2. Add GitHub Actions secret `HF_TOKEN` (write access to that Space).
+3. Set Space variable `ALLOWED_ORIGINS` to your Vercel URL(s) and `http://localhost:3000`.
+
+### Frontend (Vercel)
+
+1. Import this repo; **Root Directory** = `frontend`.
+2. Env: `NEXT_PUBLIC_API_BASE_URL=https://trippy09-chartproof.hf.space`.
+
+See [scripts/demo_day_checklist.md](scripts/demo_day_checklist.md) and [project_memory/DEPLOYMENT.md](project_memory/DEPLOYMENT.md).
+
 ## Known limitations
 
 - No auth or multi-tenancy (public demo)
 - Sepsis only; criteria are simplified educational encodings
 - Full-bank determination accuracy still below smoke threshold due to deliberate deferrals
 - Case notes include some pad lines for schema length compliance
-- Live deploy (HF Space + Vercel) is Phase 5
+- Live public URLs require HF_TOKEN + Vercel project (not bound in CI without secrets)
 
 ---
 
@@ -161,8 +185,9 @@ Inventory: [project_memory/FEATURES.md](project_memory/FEATURES.md)
 | [project_memory/DEPLOYMENT.md](project_memory/DEPLOYMENT.md) | CI / HF / Vercel |
 | [evals/out/results.md](evals/out/results.md) | Latest eval report |
 
-Demo video: *(placeholder for Phase 5)*  
-Live demo: *(placeholder for Phase 5)*
+Demo video: *(add link after recording)*  
+Live API: `https://trippy09-chartproof.hf.space` *(after Space is created and CI deploy runs)*  
+Live UI: *(Vercel URL after import)*
 
 ---
 

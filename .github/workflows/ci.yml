@@ -23,8 +23,7 @@ jobs:
         run: pytest backend/tests -q
 
   smoke-eval:
-    # Uses precomputed results (no live LLM). Still skipped for fork PRs if we
-    # later add secrets; currently always runs for same-repo PRs and pushes.
+    # Uses precomputed results (no live LLM). Skipped for fork PRs (no secrets later).
     needs: test
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
@@ -44,3 +43,27 @@ jobs:
         with:
           name: eval-report
           path: evals/out/
+
+  deploy:
+    # Auto-sync to the Hugging Face Space only when main is green.
+    # Requires repo secret HF_TOKEN with write access to the Space.
+    needs: [test, smoke-eval]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          if [ -z "${HF_TOKEN}" ]; then
+            echo "HF_TOKEN secret not set; skipping Space deploy."
+            echo "Add HF_TOKEN in repo Settings -> Secrets, then re-run or push again."
+            exit 0
+          fi
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          # Space: trippy09/chartproof (adjust if your HF username differs)
+          git push --force "https://trippy09:${HF_TOKEN}@huggingface.co/spaces/trippy09/chartproof" HEAD:main

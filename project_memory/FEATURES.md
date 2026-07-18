@@ -2,7 +2,7 @@
 
 Living inventory of shipped product and engineering capabilities. Update this file at the end of each phase.
 
-**Last updated:** 2026-07-18 (through Phase 4)  
+**Last updated:** 2026-07-18 (through Phase 5 engineering)  
 **Repo:** https://github.com/pavanbobba09/chartproof
 
 ---
@@ -132,12 +132,29 @@ cd frontend && npm install && npm run dev
 
 ---
 
-## Not built yet (planned)
+## Phase 5: deploy + demo hardening
 
-| Phase | Features |
-|-------|----------|
-| **5 (next)** | HF Spaces Docker API, Vercel frontend, demo video |
-| Stretch | 30-case bank, malnutrition/AKI, appeals module, nightly full eval |
+| Feature | How to use / where |
+|---------|---------------------|
+| Docker API image | root `Dockerfile` (port 7860, baked index + embeddings) |
+| CI deploy to HF Space | `.github/workflows/ci.yml` `deploy` job (`HF_TOKEN` secret) |
+| Graceful live audit errors | HTTP 503 + clear message on rate limit / missing index |
+| Frontend fresh-run fallback copy | `frontend/app/audit/[caseId]/page.tsx` |
+| Demo checklist | `scripts/demo_day_checklist.md` |
+| Vercel helper | `frontend/vercel.json` |
+
+**Go-live (manual once):** create HF Space `trippy09/chartproof`, set GitHub `HF_TOKEN`, import Vercel with `NEXT_PUBLIC_API_BASE_URL`.
+
+---
+
+## Not built yet / stretch
+
+| Item | Notes |
+|------|--------|
+| Live HF + Vercel URLs | Needs account secrets |
+| Demo video | Record after go-live |
+| 30-case bank | Optional expansion |
+| Malnutrition/AKI, appeals | Stretch product |
 
 ---
 

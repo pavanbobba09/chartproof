@@ -61,14 +61,16 @@ Acceptance: `evals.run --suite full` completes with results.md written; both UI 
 
 ## Phase 5: deploy + demo (target: days 15 to 16)
 
-- [ ] Dockerfile per DEPLOYMENT.md (model pre-download, index built at build time, user 1000, port 7860)
-- [ ] Create HF Space, add secrets, add `deploy` job to CI, verify auto-sync on push to main
-- [ ] Vercel: import `frontend/`, set `NEXT_PUBLIC_API_BASE_URL`, verify CORS, optional subdomain chartproof.pavanbobba-developer.com
-- [ ] Demo-day hardening: precomputed results served instantly, "run fresh analysis" button does a live run, graceful error if Groq rate-limited
+- [x] Dockerfile per DEPLOYMENT.md (model pre-download, index built at build time, user 1000, port 7860)
+- [x] Add `deploy` job to CI (force-sync to HF Space when `HF_TOKEN` is set)
+- [ ] Create HF Space + add `HF_TOKEN` / `ALLOWED_ORIGINS` (one-time account setup)
+- [ ] Vercel: import `frontend/`, set `NEXT_PUBLIC_API_BASE_URL`, verify CORS
+- [x] Demo-day hardening: precomputed path, fresh analysis button, graceful 503 on rate limit / index
+- [x] Demo-day checklist: `scripts/demo_day_checklist.md`
 - [ ] Record 2 minute demo video; link it in the README
-- [ ] End-to-end check from a phone on cellular
+- [ ] End-to-end check from a phone on cellular (after live URLs)
 
-Acceptance: pushing to main deploys automatically; the live link works cold from a phone.
+Acceptance: code path for auto-deploy is in CI; live phone demo depends on HF+Vercel secrets. **Phase 5 engineering complete (2026-07-18); go-live steps remaining.** Writeup: [PHASE_5_COMPLETE.md](./PHASE_5_COMPLETE.md).
 
 ## Stretch (only after Phase 5)
 

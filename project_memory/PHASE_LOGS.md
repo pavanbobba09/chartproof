@@ -56,4 +56,4 @@ Default model: `GROQ_MODEL=llama-3.3-70b-versatile` (verify still free-tier when
 | 3 Composer + QA + audit API | Complete | [PHASE_3_COMPLETE.md](./PHASE_3_COMPLETE.md) |
 | Features inventory | Living | [FEATURES.md](./FEATURES.md) |
 | 4 UI + evals | Complete | [PHASE_4_COMPLETE.md](./PHASE_4_COMPLETE.md) |
-| 5 Deploy + demo | Not started | (pending) |
+| 5 Deploy + demo | Engineering complete | [PHASE_5_COMPLETE.md](./PHASE_5_COMPLETE.md) |

@@ -56,7 +56,15 @@ export default function AuditPage() {
       const a = await postAudit(caseId, true);
       setAudit(a);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "fresh analysis failed");
+      const msg = e instanceof Error ? e.message : "fresh analysis failed";
+      if (msg.includes("503") || msg.toLowerCase().includes("rate-limited")) {
+        setError(
+          "Live analysis is temporarily unavailable (rate limit or index warming). " +
+            "The precomputed draft above remains valid for demo; try again in a minute."
+        );
+      } else {
+        setError(msg);
+      }
     } finally {
       setFreshBusy(false);
     }
