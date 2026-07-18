@@ -22,7 +22,7 @@
       "result": "not_met",
       "method": "structured",
       "evidence_ids": [
-        "E7"
+        "E5"
       ]
     },
     {
@@ -30,24 +30,21 @@
       "result": "not_met",
       "method": "structured",
       "evidence_ids": [
-        "E8"
+        "E6"
       ]
     },
     {
       "criterion_id": "vasopressors",
       "result": "met",
       "method": "narrative",
-      "evidence_ids": [
-        "E5",
-        "E6"
-      ]
+      "evidence_ids": []
     },
     {
       "criterion_id": "creatinine_rise",
       "result": "met",
       "method": "structured",
       "evidence_ids": [
-        "E9"
+        "E7"
       ]
     },
     {
@@ -55,7 +52,7 @@
       "result": "met",
       "method": "structured",
       "evidence_ids": [
-        "E10"
+        "E8"
       ]
     },
     {
@@ -118,28 +115,6 @@
     },
     {
       "evidence_id": "E5",
-      "side": "for",
-      "criterion_id": "vasopressors",
-      "span": {
-        "doc_id": "pn_01",
-        "line_start": 4,
-        "line_end": 7
-      },
-      "text": "Patient is being treated with continued antibiotics and vasopressors. Plan: continue to monitor labs and vital signs, consider adding additional antibiotics if necessary. Patient's condition remains critical, but stable. Will continue to monitor for signs of organ dysfunction."
-    },
-    {
-      "evidence_id": "E6",
-      "side": "for",
-      "criterion_id": "vasopressors",
-      "span": {
-        "doc_id": "pn_01",
-        "line_start": 1,
-        "line_end": 4
-      },
-      "text": "Patient remains febrile with a temperature of 38.2 C. Labs: lactate 2.8 mmol/L, creatinine 1.5 mg/dL, platelets 80 10^9/L. Vital signs: MAP 58 mmHg, temperature 38.2 C. Patient is being treated with continued antibiotics and vasopressors."
-    },
-    {
-      "evidence_id": "E7",
       "side": "against",
       "criterion_id": "lactate_elevated",
       "span": {
@@ -150,7 +125,7 @@
       "text": "Labs: lactate 2.5 mmol/L, creatinine 1.2 mg/dL."
     },
     {
-      "evidence_id": "E8",
+      "evidence_id": "E6",
       "side": "against",
       "criterion_id": "hypotension",
       "span": {
@@ -161,7 +136,7 @@
       "text": "Vital signs: temperature 38.5 C, MAP 60 mmHg."
     },
     {
-      "evidence_id": "E9",
+      "evidence_id": "E7",
       "side": "for",
       "criterion_id": "creatinine_rise",
       "span": {
@@ -172,7 +147,7 @@
       "text": "Labs: lactate 2.5 mmol/L, creatinine 1.2 mg/dL."
     },
     {
-      "evidence_id": "E10",
+      "evidence_id": "E8",
       "side": "for",
       "criterion_id": "thrombocytopenia",
       "span": {
@@ -183,8 +158,8 @@
       "text": "Labs: lactate 2.8 mmol/L, creatinine 1.5 mg/dL, platelets 80 10^9/L."
     }
   ],
-  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_007 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is supported, primarily based on E1 (infection): Suspected sepsis due to pneumonia\n\n## Evidence\n| # | For/Against | Source | Lines | Excerpt |\n|---|-------------|--------|-------|---------|\n| E1 | for | history_and_physical 2022-01-01 | 7-10 | Suspected sepsis due to pneumonia. Plan: continue antibiotics, monitor lactate and creatinine levels, and titrate vasopr |\n| E2 | for | discharge_summary 2022-01-05 | 1-4 | Patient was admitted with suspected sepsis due to pneumonia. He was treated with broad-spectrum antibiotics and vasopres |\n| E3 | for | discharge_summary 2022-01-05 | 4-7 | Vital signs: MAP 70 mmHg, temperature 36.8 C. Patient's condition improved significantly during his hospital stay. He wa |\n| E4 | for | history_and_physical 2022-01-01 | 4-7 | Labs: lactate 2.5 mmol/L, creatinine 1.2 mg/dL. Physical exam reveals bilateral lung crackles and decreased breath sound |\n| E5 | for | progress_note 2022-01-02 | 4-7 | Patient is being treated with continued antibiotics and vasopressors. Plan: continue to monitor labs and vital signs, co |\n| E6 | for | progress_note 2022-01-02 | 1-4 | Patient remains febrile with a temperature of 38.2 C. Labs: lactate 2.8 mmol/L, creatinine 1.5 mg/dL, platelets 80 10^9/ |\n| E7 | against | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 2.5 mmol/L, creatinine 1.2 mg/dL. |\n| E8 | against | history_and_physical 2022-01-01 | 3-3 | Vital signs: temperature 38.5 C, MAP 60 mmHg. |\n| E9 | for | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 2.5 mmol/L, creatinine 1.2 mg/dL. |\n| E10 | for | progress_note 2022-01-02 | 2-2 | Labs: lactate 2.8 mmol/L, creatinine 1.5 mg/dL, platelets 80 10^9/L. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Sepsis coding notes (high level)). Findings that affect payment grouping must be supported by chart indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_007 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is supported, primarily based on E1 (infection): Suspected sepsis due to pneumonia\n\n## Evidence\n| # | For/Against | Source | Lines | Excerpt |\n|---|-------------|--------|-------|---------|\n| E1 | for | history_and_physical 2022-01-01 | 7-10 | Suspected sepsis due to pneumonia. Plan: continue antibiotics, monitor lactate and creatinine levels, and titrate vasopr |\n| E2 | for | discharge_summary 2022-01-05 | 1-4 | Patient was admitted with suspected sepsis due to pneumonia. He was treated with broad-spectrum antibiotics and vasopres |\n| E3 | for | discharge_summary 2022-01-05 | 4-7 | Vital signs: MAP 70 mmHg, temperature 36.8 C. Patient's condition improved significantly during his hospital stay. He wa |\n| E4 | for | history_and_physical 2022-01-01 | 4-7 | Labs: lactate 2.5 mmol/L, creatinine 1.2 mg/dL. Physical exam reveals bilateral lung crackles and decreased breath sound |\n| E5 | against | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 2.5 mmol/L, creatinine 1.2 mg/dL. |\n| E6 | against | history_and_physical 2022-01-01 | 3-3 | Vital signs: temperature 38.5 C, MAP 60 mmHg. |\n| E7 | for | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 2.5 mmol/L, creatinine 1.2 mg/dL. |\n| E8 | for | progress_note 2022-01-02 | 2-2 | Labs: lactate 2.8 mmol/L, creatinine 1.5 mg/dL, platelets 80 10^9/L. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Sepsis coding notes (high level)). Findings that affect payment grouping must be supported by chart indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E2, E3, E4, E5, E6, E7, E8.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
   "dropped_sentences": 0,
   "source": "precomputed",
-  "trace_id": "run_sepsis_007_20260718T175941Z"
+  "trace_id": "run_sepsis_007_20260718T180352Z"
 }

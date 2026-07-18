@@ -47,23 +47,31 @@ _CRITERION_KEYWORDS: dict[str, dict[str, tuple[str, ...]]] = {
     },
     "vasopressors": {
         "for": (
-            "vasopressor",
-            "vasopressors",
             "norepinephrine",
             "levophed",
             "phenylephrine",
-            "vasopressin",
+            "vasopressin drip",
             "on pressors",
             "started on pressors",
+            "started vasopressor",
+            "requiring vasopressors",
+            "vasopressors are being",
+            "treated with broad-spectrum antibiotics and vasopressors",
         ),
         "against": (
             "no vasopressor",
+            "no vasopressors",
             "not requiring vasopressor",
+            "not requiring vasopressors",
             "without vasopressor",
+            "without vasopressors",
             "off vasopressors",
             "not on vasopressors",
             "did not require vasopressor",
+            "did not require vasopressors",
             "no longer requiring vasopressor",
+            "no longer requiring vasopressors",
+            "not requiring pressors",
         ),
     },
     "altered_mentation": {
@@ -108,7 +116,19 @@ def _score_text(text: str, for_kws: tuple[str, ...], against_kws: tuple[str, ...
             for_score += 1.0
     for kw in against_kws:
         if kw in lower:
-            against_score += 1.5  # stronger weight for explicit negation phrases
+            against_score += 2.0  # stronger weight for explicit negation phrases
+    # Generic negation around vasopressor/pressor words (catches plural forms)
+    if re.search(
+        r"\b(no|not|without|never|denies?)\b.{0,40}\b(vasopressors?|pressors?)\b",
+        lower,
+    ) or re.search(
+        r"\b(vasopressors?|pressors?)\b.{0,40}\b(not required|not indicated|discontinued)\b",
+        lower,
+    ):
+        against_score += 2.5
+        # Do not also credit bare "vasopressors" as for when negation present
+        if for_score > 0 and against_score > for_score:
+            for_score = max(0.0, for_score - 1.0)
     return for_score, against_score
 
 
