@@ -102,7 +102,7 @@ Nodes, in order:
 Metrics, computed against answer keys:
 - Determination accuracy: predicted verdict == key verdict (needs_review counts as wrong for accuracy but is tracked separately as the deferral rate).
 - Evidence recall: fraction of planted evidence spans (for the correct side) that intersect at least one cited span.
-- Citation faithfulness: for each output claim, does the cited span actually support it? Checked with a Groq LLM judge; deterministic pre-check that the span text is non-empty and the ID is valid.
+- Citation faithfulness: strict deterministic grounding verifies exact chart text and bounds, independently re-checks criterion-specific evidence sides, confirms determination citations support the verdict, matches evidence-table IDs, and validates guideline source/section pairs. Any issue makes the case unfaithful and is reported by code.
 Suites: `smoke` (5 fixed cases, runs in CI) and `full` (whole bank, run manually or nightly). Thresholds live in `evals/thresholds.yaml`: smoke accuracy >= 0.8, faithfulness >= 0.95, recall >= 0.7. CI fails below thresholds.
 
 ## Tech stack (all free)

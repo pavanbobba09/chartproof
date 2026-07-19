@@ -16,6 +16,7 @@ from backend.schemas import Case, CriteriaFile, EvidenceItem, EvidenceSpan
 
 Verdict = Literal["supported", "not_supported"]
 TriState = Literal["met", "not_met", "unclear"]
+Side = Literal["for", "against"]
 
 _EVIDENCE_ID_RE = re.compile(r"\bE(\d+)\b")
 _SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
@@ -28,12 +29,12 @@ def build_evidence_catalog(
 ) -> list[EvidenceItem]:
     """Flatten findings + structured rule hits into numbered evidence items."""
     items: list[EvidenceItem] = []
-    seen: set[tuple[str, int, int, str]] = set()
+    seen: set[tuple[str, int, int, str, str]] = set()
     eid = 1
 
     def _add(side: str, criterion_id: str, span: EvidenceSpan, text: str) -> None:
         nonlocal eid
-        key = (span.doc_id, span.line_start, span.line_end, side)
+        key = (span.doc_id, span.line_start, span.line_end, side, criterion_id)
         if key in seen:
             return
         seen.add(key)
@@ -55,99 +56,124 @@ def build_evidence_catalog(
             span = EvidenceSpan.model_validate(side_item["span"])
             _add(side_item["side"], cid, span, side_item.get("text") or "")
 
-    # Structured criteria: cite labs/vitals tables as synthetic "spans" on hp line 1 if needed
-    # Prefer citing document lines that mention the metric name
-    breakdown = rules_result.get("breakdown") or {}
+    # Structured criteria: classify each documented observation independently.
+    # This prevents a later normal value from relabeling an earlier abnormal line.
     for crit in rules_result.get("criteria") or []:
         if crit.get("method") != "structured":
             continue
-        cid = crit["criterion_id"]
-        result = crit["result"]
-        if result == "unclear":
-            continue
-        side = "for" if result == "met" else "against"
-        span, text = _find_metric_mention(case, cid)
-        _add(side, cid, span, text)
-
-    # Ensure at least one item when organ dysfunction is clear from structured only
-    if not items and breakdown:
-        for cid, res in breakdown.items():
-            if res in ("met", "not_met"):
-                span, text = _find_metric_mention(case, cid)
-                _add("for" if res == "met" else "against", cid, span, text)
-                if len(items) >= 3:
-                    break
-
-    # Extra keyword scan: surface more chart lines for recall (still real spans)
-    for cid, res in breakdown.items():
-        if res not in ("met", "not_met"):
-            continue
-        side = "for" if res == "met" else "against"
-        for span, text in _find_all_metric_mentions(case, cid, limit=3):
+        cid = str(crit["criterion_id"])
+        for span, text, side in _find_structured_metric_mentions(case, crit):
             _add(side, cid, span, text)
 
     return items
 
 
-def _find_all_metric_mentions(
-    case: Case, criterion_id: str, *, limit: int = 3
-) -> list[tuple[EvidenceSpan, str]]:
-    keywords = {
-        "lactate_elevated": ("lactate",),
-        "hypotension": ("map", "hypotens", "blood pressure", "mmhg"),
-        "creatinine_rise": ("creatinine",),
-        "thrombocytopenia": ("platelet",),
-        "infection": (
-            "infection",
-            "antibiotic",
-            "uti",
-            "pneumonia",
-            "culture",
-            "sepsis",
-        ),
-        "vasopressors": ("vasopressor", "pressor", "norepinephrine", "levophed"),
-        "organ_dysfunction": ("organ dysfunction", "lactate", "map"),
-        "altered_mentation": ("mental", "confused", "gcs", "alert and oriented"),
-    }
-    kws = keywords.get(criterion_id, (criterion_id.replace("_", " "),))
-    found: list[tuple[EvidenceSpan, str]] = []
-    for doc in case.documents:
-        for i, line in enumerate(doc.lines, start=1):
-            low = line.lower()
-            if any(k in low for k in kws):
-                found.append(
-                    (
-                        EvidenceSpan(doc_id=doc.doc_id, line_start=i, line_end=i),
-                        line,
-                    )
-                )
-                if len(found) >= limit:
-                    return found
-    return found
+_METRIC_VALUE_PATTERNS: dict[str, re.Pattern[str]] = {
+    "lactate_elevated": re.compile(
+        r"\blactate(?:\s+level)?\D{0,35}?([0-9]+(?:\.[0-9]+)?)",
+        re.IGNORECASE,
+    ),
+    "hypotension": re.compile(
+        r"\bmap\D{0,20}?([0-9]+(?:\.[0-9]+)?)",
+        re.IGNORECASE,
+    ),
+    "creatinine_rise": re.compile(
+        r"\bcreatinine(?:\s+level)?\D{0,35}?([0-9]+(?:\.[0-9]+)?)",
+        re.IGNORECASE,
+    ),
+    "thrombocytopenia": re.compile(
+        r"\bplatelets?(?:\s+count)?\D{0,35}?([0-9]+(?:\.[0-9]+)?)",
+        re.IGNORECASE,
+    ),
+}
 
 
-def _find_metric_mention(case: Case, criterion_id: str) -> tuple[EvidenceSpan, str]:
-    keywords = {
-        "lactate_elevated": ("lactate",),
-        "hypotension": ("map", "hypotens", "blood pressure"),
-        "creatinine_rise": ("creatinine",),
-        "thrombocytopenia": ("platelet",),
-        "infection": ("infection", "antibiotic", "uti", "pneumonia"),
-        "vasopressors": ("vasopressor", "pressor"),
-        "organ_dysfunction": ("organ dysfunction", "lactate", "map"),
-    }
-    kws = keywords.get(criterion_id, (criterion_id.replace("_", " "),))
-    for doc in case.documents:
-        for i, line in enumerate(doc.lines, start=1):
-            low = line.lower()
-            if any(k in low for k in kws):
-                return EvidenceSpan(doc_id=doc.doc_id, line_start=i, line_end=i), line
-    # Fallback: first line of first document
-    doc = case.documents[0]
-    return (
-        EvidenceSpan(doc_id=doc.doc_id, line_start=1, line_end=1),
-        doc.lines[0] if doc.lines else "",
+def _point_observation_side(value: float, op: str, threshold: float) -> Side:
+    met = {
+        "gt": value > threshold,
+        "gte": value >= threshold,
+        "lt": value < threshold,
+        "lte": value <= threshold,
+    }.get(op)
+    if met is None:
+        raise ValueError(f"unsupported point op for evidence: {op}")
+    return "for" if met else "against"
+
+
+def _trend_observation_side(text: str) -> Side | None:
+    lower = text.lower()
+    against_markers = (
+        "stable",
+        "unchanged",
+        "not changed",
+        "no significant",
+        "decreas",
+        "returned to baseline",
+        "at baseline",
     )
+    if any(marker in lower for marker in against_markers):
+        return "against"
+    for_markers = ("rise", "risen", "rose", "increas", "worsen")
+    if any(marker in lower for marker in for_markers):
+        return "for"
+    return None
+
+
+def classify_structured_observation_side(
+    criterion_id: str,
+    text: str,
+    op: str,
+    threshold: float,
+) -> Side | None:
+    """Classify one structured chart excerpt against its encoded criterion."""
+    pattern = _METRIC_VALUE_PATTERNS.get(criterion_id)
+    if pattern is None:
+        return None
+    match = pattern.search(text)
+    if match is None:
+        return None
+    if op == "rise_gte":
+        return _trend_observation_side(text)
+    return _point_observation_side(float(match.group(1)), op, threshold)
+
+
+def _find_structured_metric_mentions(
+    case: Case,
+    criterion: dict[str, Any],
+    *,
+    limit: int = 6,
+) -> list[tuple[EvidenceSpan, str, Side]]:
+    criterion_id = str(criterion["criterion_id"])
+    op = criterion.get("op")
+    threshold = criterion.get("threshold")
+    if not op or threshold is None or criterion_id not in _METRIC_VALUE_PATTERNS:
+        return []
+
+    found: list[tuple[EvidenceSpan, str, Side]] = []
+    for doc in case.documents:
+        for line_number, line in enumerate(doc.lines, start=1):
+            side = classify_structured_observation_side(
+                criterion_id,
+                line,
+                str(op),
+                float(threshold),
+            )
+            if side is None:
+                continue
+            found.append(
+                (
+                    EvidenceSpan(
+                        doc_id=doc.doc_id,
+                        line_start=line_number,
+                        line_end=line_number,
+                    ),
+                    line,
+                    side,
+                )
+            )
+            if len(found) >= limit:
+                return found
+    return found
 
 
 def derive_llm_verdict(
@@ -259,7 +285,10 @@ def compose_letter(
 
     # Strongest reason from top for/against item (must include evidence_id)
     if verdict == "supported":
-        top = next((e for e in evidence if e.side == "for"), None)
+        top = next(
+            (e for e in evidence if e.side == "for" and e.criterion_id != "infection"),
+            next((e for e in evidence if e.side == "for"), None),
+        )
         reason = (
             f"Draft determination is supported, primarily based on {top.evidence_id} "
             f"({top.criterion_id}): {_excerpt(top.text)}"
@@ -312,7 +341,7 @@ def compose_letter(
     ]
     coding = (
         f"Clinical validation of billed {display} should rest on documented infection "
-        f"plus organ dysfunction indicators (sepsis3_summary, {g_bits[0][1]}). "
+        f"plus organ dysfunction indicators ({g_bits[0][0]}, {g_bits[0][1]}). "
         f"Findings that affect payment grouping must be supported by chart indicators "
         f"({g_bits[1][0]}, {g_bits[1][1]}). "
         f"This draft is for auditor review only and is not a payment decision. "
@@ -360,13 +389,30 @@ def compose_from_state(
             client = get_client(chroma_dir) if chroma_dir else None
             hits = retrieve_guidelines(
                 f"{criteria.display_name} clinical validation coding",
-                n_results=2,
+                n_results=8,
                 client=client,
                 persist_dir=chroma_dir,
             )
-            for h in hits:
-                if h.source_id and h.section:
-                    guideline_bits.append((h.source_id, h.section))
+            clinical = next(
+                (
+                    (h.source_id, h.section)
+                    for h in hits
+                    if h.source_id
+                    and h.section
+                    and criteria.dx.lower() in h.source_id.lower()
+                ),
+                None,
+            )
+            coding = next(
+                (
+                    (h.source_id, h.section)
+                    for h in hits
+                    if h.source_id and h.section and h.source_id.startswith("icd10cm_")
+                ),
+                None,
+            )
+            if clinical and coding:
+                guideline_bits = [clinical, coding]
         except Exception:  # noqa: BLE001 - offline compose still works
             guideline_bits = []
 
@@ -390,4 +436,5 @@ def compose_from_state(
         "llm_verdict": llm_verdict,
         "letter_markdown": letter,
         "dropped_sentences": dropped,
+        "guideline_bits": guideline_bits,
     }

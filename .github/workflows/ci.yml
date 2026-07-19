@@ -22,8 +22,25 @@ jobs:
       - name: Unit tests and deterministic checks
         run: pytest backend/tests -q
 
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Production build and type check
+        run: npm run build
+
   smoke-eval:
-    # Uses precomputed results (no live LLM). Skipped for fork PRs (no secrets later).
+    # Runs the live deterministic pipeline. No Groq key is required.
     needs: test
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
@@ -35,8 +52,10 @@ jobs:
           cache: pip
       - name: Install
         run: pip install -r backend/requirements.txt -r backend/requirements-dev.txt
-      - name: Smoke eval with thresholds
-        run: python -m evals.run --suite smoke --enforce-thresholds
+      - name: Build retrieval index
+        run: python -m backend.index.build --data data --out .chroma
+      - name: Live smoke eval with thresholds
+        run: python -m evals.run --suite smoke --live --enforce-thresholds
       - name: Upload eval report
         if: always()
         uses: actions/upload-artifact@v4
@@ -47,7 +66,7 @@ jobs:
   deploy:
     # Auto-sync to the Hugging Face Space only when main is green.
     # Requires repo secret HF_TOKEN with write access to the Space.
-    needs: [test, smoke-eval]
+    needs: [test, frontend, smoke-eval]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:

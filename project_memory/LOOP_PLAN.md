@@ -37,6 +37,21 @@ See PHASE_LOGS.md for the Groq key matrix by phase.
 
 Hard rule from CLAUDE.md: for any pipeline change after Phase 4, also keep smoke eval above thresholds.
 
+## Post-Phase-5 trust loop
+
+Each trust iteration follows this gate:
+
+```
+reproduce with a regression test
+  → make the smallest correctness fix
+  → run lint + full backend tests
+  → run the live smoke eval (not precomputed outputs)
+  → build the production frontend
+  → refresh precomputed demo results only after the live gate passes
+```
+
+The live deterministic audit path does not require `GROQ_API_KEY`. Groq is currently used only for generating additional synthetic cases.
+
 ## Loop metrics (what we optimize)
 
 1. **Correctness**: determination accuracy vs answer keys
@@ -62,10 +77,10 @@ Training mode closes a second loop: trainee → grade vs key → missed evidence
 
 ## Current focus
 
-**Phase 0**: establish the engineering loop substrate (repo, schemas, health API, CI).  
-Acceptance: `pytest` and `ruff check backend` pass.
+**Trust loop 2**: replace structural citation checks with strict grounded faithfulness validation.
+Acceptance: injected grounding and semantic defects fail regression tests, live smoke and full-bank faithfulness remain above threshold, and every failure reports an actionable issue code.
 
-Next after Phase 0: Phase 1 (sepsis criteria + rules engine + synthetic generator).
+Next: make the QA comparison genuinely independent and expose human-readable QA reasons in the audit UI.
 
 ## Working conventions
 

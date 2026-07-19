@@ -107,7 +107,13 @@ class EvidenceFinding:
     # each item: {side, span, text, score}
 
 
-def _score_text(text: str, for_kws: tuple[str, ...], against_kws: tuple[str, ...]) -> tuple[float, float]:
+def _score_text(
+    text: str,
+    for_kws: tuple[str, ...],
+    against_kws: tuple[str, ...],
+    *,
+    apply_vasopressor_negation: bool = False,
+) -> tuple[float, float]:
     lower = text.lower()
     for_score = 0.0
     against_score = 0.0
@@ -118,18 +124,42 @@ def _score_text(text: str, for_kws: tuple[str, ...], against_kws: tuple[str, ...
         if kw in lower:
             against_score += 2.0  # stronger weight for explicit negation phrases
     # Generic negation around vasopressor/pressor words (catches plural forms)
-    if re.search(
-        r"\b(no|not|without|never|denies?)\b.{0,40}\b(vasopressors?|pressors?)\b",
-        lower,
-    ) or re.search(
-        r"\b(vasopressors?|pressors?)\b.{0,40}\b(not required|not indicated|discontinued)\b",
-        lower,
+    if apply_vasopressor_negation and (
+        re.search(
+            r"\b(no|not|without|never|denies?)\b.{0,40}\b(vasopressors?|pressors?)\b",
+            lower,
+        )
+        or re.search(
+            r"\b(vasopressors?|pressors?)\b.{0,40}\b(not required|not indicated|discontinued)\b",
+            lower,
+        )
     ):
         against_score += 2.5
         # Do not also credit bare "vasopressors" as for when negation present
         if for_score > 0 and against_score > for_score:
             for_score = max(0.0, for_score - 1.0)
     return for_score, against_score
+
+
+def classify_narrative_evidence_side(
+    criterion_id: str,
+    text: str,
+) -> Side | None:
+    """Re-evaluate one narrative excerpt against its criterion-specific signals."""
+    bags = _CRITERION_KEYWORDS.get(criterion_id)
+    if bags is None:
+        return None
+    for_score, against_score = _score_text(
+        text,
+        bags["for"],
+        bags["against"],
+        apply_vasopressor_negation=criterion_id == "vasopressors",
+    )
+    if against_score > for_score and against_score > 0:
+        return "against"
+    if for_score > against_score and for_score > 0:
+        return "for"
+    return None
 
 
 def _collect_narrative_nodes(nodes: list[CriteriaNode]) -> list[CriteriaNode]:
@@ -184,7 +214,12 @@ def gather_evidence_for_criterion(
             if key in seen_spans:
                 continue
             seen_spans.add(key)
-            fs, as_ = _score_text(ch.text, for_kws, against_kws)
+            fs, as_ = _score_text(
+                ch.text,
+                for_kws,
+                against_kws,
+                apply_vasopressor_negation=node.id == "vasopressors",
+            )
             if as_ > fs and as_ > 0:
                 candidates.append(("against", ch.span, ch.text, as_))
             elif fs > 0:
@@ -194,7 +229,12 @@ def gather_evidence_for_criterion(
     if len(candidates) < 2:
         for doc in case.documents:
             for i, line in enumerate(doc.lines, start=1):
-                fs, as_ = _score_text(line, for_kws, against_kws)
+                fs, as_ = _score_text(
+                    line,
+                    for_kws,
+                    against_kws,
+                    apply_vasopressor_negation=node.id == "vasopressors",
+                )
                 if fs == 0 and as_ == 0:
                     continue
                 span = EvidenceSpan(doc_id=doc.doc_id, line_start=i, line_end=i)

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import pytest
@@ -19,7 +18,7 @@ REPO = Path(__file__).resolve().parents[2]
 
 @pytest.fixture(scope="module")
 def precomputed_sepsis_001(tmp_path_factory: pytest.TempPathFactory):
-    """Build tiny index and one precomputed audit result in repo precomputed dir."""
+    """Run one live audit against a temporary index without modifying the case bank."""
     chroma = tmp_path_factory.mktemp("chroma_api")
     case = Case.model_validate_json((REPO / "data/cases/sepsis_001.json").read_text())
     cli = get_client(chroma)
@@ -27,14 +26,7 @@ def precomputed_sepsis_001(tmp_path_factory: pytest.TempPathFactory):
     build_guidelines_collection(cli, REPO / "data/guidelines")
     raw = run_full_pipeline("sepsis_001", persist_trace=False, chroma_dir=chroma)
     result = AuditResult.model_validate(raw["audit_result"])
-    # Write to real precomputed path for GET/POST cache tests
-    path = REPO / "data" / "precomputed" / "sepsis_001.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    payload = result.model_dump(mode="json")
-    payload["source"] = "precomputed"
-    path.write_text(json.dumps(payload, indent=2) + "\n")
     yield result
-    # keep precomputed for bank (Phase 3 ships these)
 
 
 def test_list_cases_no_keys() -> None:

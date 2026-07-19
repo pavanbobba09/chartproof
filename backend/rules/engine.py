@@ -24,6 +24,10 @@ class CriterionEval:
     result: TriState
     method: str
     detail: str = ""
+    metric: str | None = None
+    op: str | None = None
+    threshold: float | None = None
+    window_hours: int | None = None
 
 
 @dataclass
@@ -86,30 +90,30 @@ def evaluate_structured(node: CriteriaNode, case: Case) -> TriState:
         window = node.window_hours if node.window_hours is not None else 48
         if len(series) < 2:
             return "unclear"
-        # max - min among any pair within window_hours
+        # Largest forward rise among chronologically ordered pairs in the window.
         best_rise = 0.0
         found_pair = False
         for i, (t_i, v_i) in enumerate(series):
             for t_j, v_j in series[i + 1 :]:
-                hours = abs((t_j - t_i).total_seconds()) / 3600.0
+                hours = (t_j - t_i).total_seconds() / 3600.0
                 if hours <= window:
                     found_pair = True
-                    best_rise = max(best_rise, abs(v_j - v_i))
+                    best_rise = max(best_rise, v_j - v_i)
         if not found_pair:
             return "unclear"
         return "met" if best_rise >= thr else "not_met"
 
-    # Point ops: use the most extreme value favoring the condition when useful;
-    # for demo simplicity use the latest value.
-    latest = series[-1][1]
+    # Point criteria are met when any recorded observation crosses the threshold.
+    # A later improvement must not erase earlier organ-dysfunction evidence.
+    values = [value for _, value in series]
     if op == "gt":
-        return "met" if latest > thr else "not_met"
+        return "met" if any(value > thr for value in values) else "not_met"
     if op == "gte":
-        return "met" if latest >= thr else "not_met"
+        return "met" if any(value >= thr for value in values) else "not_met"
     if op == "lt":
-        return "met" if latest < thr else "not_met"
+        return "met" if any(value < thr for value in values) else "not_met"
     if op == "lte":
-        return "met" if latest <= thr else "not_met"
+        return "met" if any(value <= thr for value in values) else "not_met"
     raise ValueError(f"unsupported op: {op}")
 
 
@@ -144,6 +148,10 @@ def evaluate_node(
                 result=result,
                 method="structured",
                 detail=f"{node.metric} {node.op} {node.threshold}",
+                metric=node.metric,
+                op=node.op,
+                threshold=node.threshold,
+                window_hours=node.window_hours,
             )
         )
         return result

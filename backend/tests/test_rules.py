@@ -136,6 +136,22 @@ def test_structured_rise_gte_creatinine() -> None:
             },
         ]
     )
+    falling = _case(
+        labs=[
+            {
+                "name": "creatinine",
+                "value": 1.5,
+                "unit": "mg/dL",
+                "datetime": "2026-01-03T08:00",
+            },
+            {
+                "name": "creatinine",
+                "value": 1.0,
+                "unit": "mg/dL",
+                "datetime": "2026-01-04T08:00",
+            },
+        ]
+    )
     single = _case(
         labs=[
             {
@@ -148,7 +164,35 @@ def test_structured_rise_gte_creatinine() -> None:
     )
     assert evaluate_structured(node, rising) == "met"
     assert evaluate_structured(node, flat) == "not_met"
+    assert evaluate_structured(node, falling) == "not_met"
     assert evaluate_structured(node, single) == "unclear"
+
+
+def test_structured_point_op_preserves_earlier_abnormal_value() -> None:
+    node = CriteriaNode(
+        id="lactate_elevated",
+        kind=CriteriaKind.STRUCTURED,
+        metric="lab.lactate",
+        op="gt",
+        threshold=2.0,
+    )
+    case = _case(
+        labs=[
+            {
+                "name": "lactate",
+                "value": 3.2,
+                "unit": "mmol/L",
+                "datetime": "2026-01-03T08:00",
+            },
+            {
+                "name": "lactate",
+                "value": 1.4,
+                "unit": "mmol/L",
+                "datetime": "2026-01-04T08:00",
+            },
+        ]
+    )
+    assert evaluate_structured(node, case) == "met"
 
 
 def test_structured_missing_metric_unclear() -> None:

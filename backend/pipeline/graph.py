@@ -9,7 +9,7 @@ from langgraph.graph import END, StateGraph
 
 from backend.config import CASES_DIR, CHROMA_DIR, CRITERIA_DIR
 from backend.index.build import get_client
-from backend.pipeline.compose import compose_from_state
+from backend.pipeline.compose import compose_from_state, compose_letter
 from backend.pipeline.evidence import run_evidence_agents
 from backend.pipeline.qa import qa_gate
 from backend.pipeline.traces import new_trace_id, save_trace
@@ -104,6 +104,10 @@ def node_rules(state: PipelineState) -> PipelineState:
                     "result": c.result,
                     "method": c.method,
                     "detail": c.detail,
+                    "metric": c.metric,
+                    "op": c.op,
+                    "threshold": c.threshold,
+                    "window_hours": c.window_hours,
                 }
                 for c in result.criteria
             ],
@@ -161,9 +165,23 @@ def node_qa(state: PipelineState) -> PipelineState:
             )
         )
 
-    # Re-render letter header status if QA forced needs_review
+    # Keep the letter determination aligned with the final QA outcome.
     letter = composed.get("letter_markdown") or ""
-    if qa["status"] == "needs_review" and "Status: completed" in letter:
+    if qa["status"] == "needs_review" and qa["verdict"] is None:
+        case = Case.model_validate(state["case"])
+        criteria = CriteriaFile.model_validate(state["criteria"])
+        raw_guideline_bits = composed.get("guideline_bits") or []
+        guideline_bits = [tuple(bit) for bit in raw_guideline_bits]
+        letter, _ = compose_letter(
+            case=case,
+            criteria=criteria,
+            status="needs_review",
+            verdict=None,
+            evidence=evidence_items,
+            rules_verdict=rules.get("verdict"),
+            guideline_bits=guideline_bits or None,
+        )
+    elif qa["status"] == "needs_review" and "Status: completed" in letter:
         letter = letter.replace("Status: completed", "Status: needs_review", 1)
 
     rules_v = rules.get("verdict")

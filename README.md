@@ -64,12 +64,12 @@ Suite: **full** (10 sepsis cases, precomputed pipeline). Smoke suite (5 fixed ca
 
 | Metric | Full bank | Smoke (CI) | Threshold |
 |--------|----------:|-----------:|----------:|
-| Determination accuracy | 0.700 | 1.000 | >= 0.80 |
-| Evidence recall | 0.872 | 1.000 | >= 0.70 |
+| Determination accuracy | 1.000 | 1.000 | >= 0.80 |
+| Evidence recall | 0.818 | 1.000 | >= 0.70 |
 | Citation faithfulness | 1.000 | 1.000 | >= 0.95 |
-| Deferral rate (`needs_review`) | 0.300 | 0.000 | tracked |
+| Deferral rate (`needs_review`) | 0.000 | 0.000 | tracked |
 
-Smoke suite **passes** thresholds. Full-bank accuracy is below 0.80 because three cases correctly defer to human review (`needs_review` counts as wrong for accuracy). Citation faithfulness is perfect on the deterministic check. See `evals/out/results.md`.
+Smoke and full suites **pass** thresholds. Citation faithfulness is a strict grounded check covering exact chart spans, criterion-specific evidence sides, determination support, evidence-table IDs, and guideline source/section pairs. See `evals/out/results.md`.
 
 ```bash
 python -m evals.run --suite smoke --enforce-thresholds
@@ -87,7 +87,7 @@ git clone https://github.com/pavanbobba09/chartproof.git ChartProof
 cd ChartProof
 python3.11 -m venv .venv && source .venv/bin/activate
 pip install -r backend/requirements.txt -r backend/requirements-dev.txt
-cp .env.example .env   # GROQ only needed for generation / live LLM paths
+cp .env.example .env   # GROQ is only needed for synthetic case generation
 
 # Optional: rebuild index if you will run live audits
 python -m backend.index.build --data data --out .chroma
@@ -165,7 +165,7 @@ See [scripts/demo_day_checklist.md](scripts/demo_day_checklist.md) and [project_
 
 - No auth or multi-tenancy (public demo)
 - Sepsis only; criteria are simplified educational encodings
-- Full-bank determination accuracy still below smoke threshold due to deliberate deferrals
+- Faithfulness validation is deterministic and tailored to the encoded demo criteria; external clinical adjudication remains out of scope
 - Case notes include some pad lines for schema length compliance
 - Live public URLs require HF_TOKEN + Vercel project (not bound in CI without secrets)
 
