@@ -46,7 +46,7 @@ export type AuditResult = {
   verdict: string | null;
   confidence: number;
   rules_verdict?: string | null;
-  llm_verdict?: string | null;
+  draft_verdict?: string | null;
   criteria_results: {
     criterion_id: string;
     result: string;
@@ -56,6 +56,7 @@ export type AuditResult = {
   evidence: EvidenceItem[];
   letter_markdown: string;
   dropped_sentences: number;
+  force_reasons?: string[];
   source: string;
   trace_id?: string | null;
 };

@@ -5,7 +5,7 @@ from __future__ import annotations
 from backend.pipeline.compose import (
     build_evidence_catalog,
     compose_letter,
-    derive_llm_verdict,
+    derive_draft_verdict,
     filter_uncited_sentences,
 )
 from backend.pipeline.graph import node_qa
@@ -99,18 +99,18 @@ def test_compose_letter_has_required_sections() -> None:
 def test_qa_disagreement_needs_review() -> None:
     out = qa_gate(
         rules_verdict="supported",
-        llm_verdict="not_supported",
+        draft_verdict="not_supported",
         dropped_sentences=0,
         evidence_count=3,
     )
     assert out["status"] == "needs_review"
-    assert "rules_llm_disagreement" in out["force_reasons"]
+    assert "rules_draft_disagreement" in out["force_reasons"]
 
 
 def test_qa_dropped_sentences_needs_review() -> None:
     out = qa_gate(
         rules_verdict="supported",
-        llm_verdict="supported",
+        draft_verdict="supported",
         dropped_sentences=2,
         evidence_count=3,
     )
@@ -121,7 +121,7 @@ def test_qa_dropped_sentences_needs_review() -> None:
 def test_qa_agreement_completed() -> None:
     out = qa_gate(
         rules_verdict="not_supported",
-        llm_verdict="not_supported",
+        draft_verdict="not_supported",
         dropped_sentences=0,
         unclear_criteria=0,
         evidence_count=4,
@@ -131,7 +131,7 @@ def test_qa_agreement_completed() -> None:
     assert out["confidence"] >= 0.6
 
 
-def test_derive_llm_verdict_follows_rules_when_balanced() -> None:
+def test_derive_draft_verdict_follows_rules_when_balanced() -> None:
     evidence = [
         EvidenceItem(
             evidence_id="E1",
@@ -148,7 +148,7 @@ def test_derive_llm_verdict_follows_rules_when_balanced() -> None:
             text="y",
         ),
     ]
-    assert derive_llm_verdict("not_supported", evidence) == "not_supported"
+    assert derive_draft_verdict("not_supported", evidence) == "not_supported"
 
 
 def test_structured_evidence_side_is_based_on_each_observation() -> None:
@@ -225,7 +225,7 @@ def test_qa_disagreement_rewrites_letter_as_deferred() -> None:
             ],
         },
         "compose_result": {
-            "llm_verdict": "not_supported",
+            "draft_verdict": "not_supported",
             "evidence": [evidence.model_dump(mode="json")],
             "letter_markdown": (
                 "# Clinical validation finding: Sepsis\n"

@@ -16,6 +16,21 @@ import {
   postAudit,
 } from "@/lib/api";
 
+const REVIEW_REASON_LABELS: Record<string, string> = {
+  rules_draft_disagreement:
+    "The deterministic rules verdict and the draft verdict disagree.",
+  unknown_verdict: "A verdict could not be determined from the chart.",
+  dropped_uncited_sentences:
+    "Draft sentences without valid citations were removed.",
+  low_confidence: "Confidence is below the review threshold.",
+};
+
+const CRITERION_RESULT_STYLES: Record<string, string> = {
+  met: "bg-emerald-100 text-emerald-800",
+  not_met: "bg-rose-100 text-rose-800",
+  unclear: "bg-amber-100 text-amber-800",
+};
+
 export default function AuditPage() {
   const params = useParams();
   const caseId = String(params.caseId);
@@ -76,6 +91,11 @@ export default function AuditPage() {
     scrollToSpan(span);
   }
 
+  function jumpToEvidenceId(evidenceId: string) {
+    const item = audit?.evidence.find((e) => e.evidence_id === evidenceId);
+    if (item) jumpTo(item.span);
+  }
+
   if (loading) {
     return <p className="text-slate-600">Loading audit…</p>;
   }
@@ -125,6 +145,64 @@ export default function AuditPage() {
         <div className="space-y-4">
           {audit && (
             <>
+              {audit.status === "needs_review" &&
+                (audit.force_reasons?.length ?? 0) > 0 && (
+                  <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 shadow-sm">
+                    <h2 className="mb-1 text-sm font-semibold text-amber-900">
+                      Why this draft needs human review
+                    </h2>
+                    <ul className="list-disc pl-5 text-sm text-amber-900">
+                      {audit.force_reasons?.map((code) => (
+                        <li key={code}>
+                          {REVIEW_REASON_LABELS[code] ?? code}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+              {audit.criteria_results.length > 0 && (
+                <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <h2 className="mb-2 text-sm font-semibold text-slate-800">
+                    Criteria checklist
+                  </h2>
+                  <ul className="space-y-1.5">
+                    {audit.criteria_results.map((c) => (
+                      <li
+                        key={c.criterion_id}
+                        className="flex flex-wrap items-center gap-2 text-sm"
+                      >
+                        <span
+                          className={`rounded px-1.5 py-0.5 text-xs font-semibold ${
+                            CRITERION_RESULT_STYLES[c.result] ??
+                            "bg-slate-100 text-slate-700"
+                          }`}
+                        >
+                          {c.result}
+                        </span>
+                        <span className="font-medium text-slate-800">
+                          {c.criterion_id}
+                        </span>
+                        <span className="text-xs text-slate-400">
+                          {c.method}
+                        </span>
+                        {c.evidence_ids.map((eid) => (
+                          <button
+                            key={eid}
+                            type="button"
+                            onClick={() => jumpToEvidenceId(eid)}
+                            className="rounded border border-slate-200 bg-slate-50 px-1 font-mono text-xs text-brand-600 hover:bg-amber-50"
+                            title="Jump to cited chart lines"
+                          >
+                            {eid}
+                          </button>
+                        ))}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
                 <h2 className="mb-2 text-sm font-semibold text-slate-800">
                   Evidence table
@@ -133,7 +211,7 @@ export default function AuditPage() {
                   source: {audit.source} · confidence{" "}
                   {(audit.confidence * 100).toFixed(0)}% · rules{" "}
                   {audit.rules_verdict ?? "n/a"} · draft{" "}
-                  {audit.llm_verdict ?? "n/a"}
+                  {audit.draft_verdict ?? "n/a"}
                 </p>
                 <div className="overflow-x-auto">
                   <table className="min-w-full text-left text-xs">

@@ -32,7 +32,7 @@ _STRUCTURED_VALUE_PATTERNS: dict[str, re.Pattern[str]] = {
         re.IGNORECASE,
     ),
     "hypotension": re.compile(
-        r"\bmap\D{0,20}?([0-9]+(?:\.[0-9]+)?)",
+        r"\b(?:map|mean arterial pressure)\D{0,20}?([0-9]+(?:\.[0-9]+)?)",
         re.IGNORECASE,
     ),
     "creatinine_rise": re.compile(

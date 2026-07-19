@@ -141,7 +141,7 @@ def node_qa(state: PipelineState) -> PipelineState:
     evidence = composed.get("evidence") or []
     qa = qa_gate(
         rules_verdict=rules.get("verdict"),
-        llm_verdict=composed.get("llm_verdict"),
+        draft_verdict=composed.get("draft_verdict"),
         dropped_sentences=int(composed.get("dropped_sentences") or 0),
         unclear_criteria=unclear,
         evidence_count=len(evidence),
@@ -185,18 +185,19 @@ def node_qa(state: PipelineState) -> PipelineState:
         letter = letter.replace("Status: completed", "Status: needs_review", 1)
 
     rules_v = rules.get("verdict")
-    llm_v = composed.get("llm_verdict")
+    draft_v = composed.get("draft_verdict")
     audit = AuditResult(
         case_id=state["case_id"],
         status=qa["status"],
         verdict=qa["verdict"],
         confidence=qa["confidence"],
         rules_verdict=rules_v if rules_v in ("supported", "not_supported") else None,
-        llm_verdict=llm_v if llm_v in ("supported", "not_supported") else None,
+        draft_verdict=draft_v if draft_v in ("supported", "not_supported") else None,
         criteria_results=criteria_results,
         evidence=evidence_items,
         letter_markdown=letter,
         dropped_sentences=int(composed.get("dropped_sentences") or 0),
+        force_reasons=list(qa.get("force_reasons") or []),
         source="live",
         trace_id=state.get("trace_id"),
     )

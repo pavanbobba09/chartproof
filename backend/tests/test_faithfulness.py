@@ -78,7 +78,7 @@ Draft for auditor review.
         verdict="supported",
         confidence=0.85,
         rules_verdict="supported",
-        llm_verdict="supported",
+        draft_verdict="supported",
         evidence=evidence,
         letter_markdown=letter,
     )

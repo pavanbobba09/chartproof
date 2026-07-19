@@ -103,7 +103,7 @@ _METRIC_VALUE_PATTERNS: dict[str, re.Pattern[str]] = {
         re.IGNORECASE,
     ),
     "hypotension": re.compile(
-        r"\bmap\D{0,20}?([0-9]+(?:\.[0-9]+)?)",
+        r"\b(?:map|mean arterial pressure)\D{0,20}?([0-9]+(?:\.[0-9]+)?)",
         re.IGNORECASE,
     ),
     "creatinine_rise": re.compile(
@@ -205,11 +205,11 @@ def _find_structured_metric_mentions(
     return found
 
 
-def derive_llm_verdict(
+def derive_draft_verdict(
     rules_verdict: str | None,
     evidence: list[EvidenceItem],
 ) -> Verdict | None:
-    """Heuristic LLM-side verdict from evidence balance (deterministic demo path)."""
+    """Draft verdict from evidence balance (deterministic heuristic, not an LLM)."""
     if rules_verdict in ("supported", "not_supported"):
         # Slightly independent signal: count for vs against on organ-related criteria
         for_n = sum(1 for e in evidence if e.side == "for")
@@ -412,7 +412,7 @@ def compose_from_state(
     """Full compose step output for the pipeline."""
     evidence = build_evidence_catalog(case, evidence_findings, rules_result)
     rules_verdict = rules_result.get("verdict")
-    llm_verdict = derive_llm_verdict(rules_verdict, evidence)
+    draft_verdict = derive_draft_verdict(rules_verdict, evidence)
 
     guideline_bits: list[tuple[str, str]] = []
     if use_guidelines:
@@ -451,7 +451,7 @@ def compose_from_state(
 
     # Temporary status for letter header; QA may override
     status = "completed"
-    verdict_for_letter: str | None = llm_verdict or (
+    verdict_for_letter: str | None = draft_verdict or (
         rules_verdict if rules_verdict in ("supported", "not_supported") else None
     )
     letter, dropped = compose_letter(
@@ -466,7 +466,7 @@ def compose_from_state(
 
     return {
         "evidence": [e.model_dump(mode="json") for e in evidence],
-        "llm_verdict": llm_verdict,
+        "draft_verdict": draft_verdict,
         "letter_markdown": letter,
         "dropped_sentences": dropped,
         "guideline_bits": guideline_bits,

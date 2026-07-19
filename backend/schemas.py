@@ -174,11 +174,16 @@ class AuditResult(BaseModel):
     verdict: Verdict | None
     confidence: float = Field(ge=0.0, le=1.0)
     rules_verdict: Verdict | None = None
-    llm_verdict: Verdict | None = None
+    # Composer's draft verdict. Deterministic evidence-balance heuristic by
+    # default (honest name: this is NOT an LLM output unless one is configured).
+    draft_verdict: Verdict | None = None
     criteria_results: list[CriterionResult] = Field(default_factory=list)
     evidence: list[EvidenceItem] = Field(default_factory=list)
     letter_markdown: str = ""
     dropped_sentences: int = 0
+    # Why QA forced needs_review (empty when status is completed). Reviewer-safe
+    # reason codes, e.g. rules_draft_disagreement, low_confidence.
+    force_reasons: list[str] = Field(default_factory=list)
     source: AuditSource = "live"
     trace_id: str | None = None
 

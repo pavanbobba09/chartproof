@@ -1,4 +1,10 @@
-"""QA gate: rules vs LLM comparison, confidence, needs_review forcing."""
+"""QA gate: rules vs draft comparison, confidence, needs_review forcing.
+
+The draft verdict comes from the composer (deterministic evidence-balance
+heuristic by default; optionally an LLM when configured). The QA gate compares
+it against the independent rules verdict and forces human review on
+disagreement, unknowns, dropped citations, or low confidence.
+"""
 
 from __future__ import annotations
 
@@ -11,16 +17,16 @@ Verdict = Literal["supported", "not_supported"]
 def compute_confidence(
     *,
     rules_verdict: str | None,
-    llm_verdict: str | None,
+    draft_verdict: str | None,
     dropped_sentences: int,
     unclear_criteria: int,
     evidence_count: int,
 ) -> float:
     """Heuristic confidence in [0, 1]."""
     score = 0.85
-    if rules_verdict != llm_verdict:
+    if rules_verdict != draft_verdict:
         score -= 0.35
-    if rules_verdict == "unknown" or llm_verdict is None:
+    if rules_verdict == "unknown" or draft_verdict is None:
         score -= 0.25
     if dropped_sentences > 0:
         score -= min(0.3, 0.1 * dropped_sentences)
@@ -36,7 +42,7 @@ def compute_confidence(
 def qa_gate(
     *,
     rules_verdict: str | None,
-    llm_verdict: str | None,
+    draft_verdict: str | None,
     dropped_sentences: int = 0,
     unclear_criteria: int = 0,
     evidence_count: int = 0,
@@ -45,7 +51,7 @@ def qa_gate(
     """Return status, final verdict, confidence, and force reasons."""
     confidence = compute_confidence(
         rules_verdict=rules_verdict,
-        llm_verdict=llm_verdict,
+        draft_verdict=draft_verdict,
         dropped_sentences=dropped_sentences,
         unclear_criteria=unclear_criteria,
         evidence_count=evidence_count,
@@ -54,10 +60,10 @@ def qa_gate(
     reasons: list[str] = []
     status: PipelineStatus = "completed"
 
-    if rules_verdict != llm_verdict:
-        reasons.append("rules_llm_disagreement")
+    if rules_verdict != draft_verdict:
+        reasons.append("rules_draft_disagreement")
         status = "needs_review"
-    if rules_verdict == "unknown" or llm_verdict is None:
+    if rules_verdict == "unknown" or draft_verdict is None:
         reasons.append("unknown_verdict")
         status = "needs_review"
     if dropped_sentences > 0:
@@ -68,10 +74,10 @@ def qa_gate(
         status = "needs_review"
 
     # Final draft verdict shown to auditor
-    if status == "needs_review" and rules_verdict != llm_verdict:
+    if status == "needs_review" and rules_verdict != draft_verdict:
         final: Verdict | None = None
-    elif llm_verdict in ("supported", "not_supported"):
-        final = llm_verdict  # type: ignore[assignment]
+    elif draft_verdict in ("supported", "not_supported"):
+        final = draft_verdict  # type: ignore[assignment]
     elif rules_verdict in ("supported", "not_supported"):
         final = rules_verdict  # type: ignore[assignment]
     else:

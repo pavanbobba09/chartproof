@@ -1,6 +1,6 @@
 # ChartProof eval report (full)
 
-Generated: 2026-07-19T19:29:28.444083+00:00
+Generated: 2026-07-19T19:33:29.781919+00:00
 
 ## Aggregate metrics
 
