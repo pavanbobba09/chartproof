@@ -22,7 +22,13 @@ class CaseMetrics:
 
 
 def determination_correct(result: AuditResult, key: AnswerKey) -> bool:
-    """needs_review counts as wrong for accuracy (tracked separately as deferral)."""
+    """needs_review counts as wrong for accuracy (tracked separately as deferral).
+
+    Exception: when the key marks deferral as the expected behavior
+    (ambiguous-by-design cases), routing to a human IS the correct output.
+    """
+    if key.deferral_expected:
+        return result.status == "needs_review"
     if result.status == "needs_review":
         return False
     return result.verdict == key.verdict

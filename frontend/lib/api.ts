@@ -57,6 +57,7 @@ export type AuditResult = {
   letter_markdown: string;
   dropped_sentences: number;
   force_reasons?: string[];
+  composer?: string;
   source: string;
   trace_id?: string | null;
 };

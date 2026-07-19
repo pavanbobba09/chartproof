@@ -55,3 +55,24 @@ def test_full_suite_writes_report(tmp_path: Path) -> None:
         )
     ]
     assert aggregate(rows)["determination_accuracy"] == 1.0
+
+
+def test_deferral_case_defers_and_scores_correct() -> None:
+    """sepsis_011 is ambiguous by design: deferral IS the correct output."""
+    result = AuditResult.model_validate_json(
+        (REPO / "data/precomputed/sepsis_011.json").read_text(encoding="utf-8")
+    )
+    key = AnswerKey.model_validate_json(
+        (REPO / "data/keys/sepsis_011.key.json").read_text(encoding="utf-8")
+    )
+    assert key.deferral_expected is True
+    assert result.status == "needs_review"
+    assert result.verdict is None
+    assert "unknown_verdict" in result.force_reasons
+
+    case = Case.model_validate_json(
+        (REPO / "data/cases/sepsis_011.json").read_text(encoding="utf-8")
+    )
+    row = score_case(result, key, case, load_criteria("sepsis"))
+    assert row.determination_correct is True
+    assert row.deferred is True

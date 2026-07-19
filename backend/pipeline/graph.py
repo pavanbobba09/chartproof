@@ -198,6 +198,7 @@ def node_qa(state: PipelineState) -> PipelineState:
         letter_markdown=letter,
         dropped_sentences=int(composed.get("dropped_sentences") or 0),
         force_reasons=list(qa.get("force_reasons") or []),
+        composer=str(composed.get("composer") or "deterministic"),
         source="live",
         trace_id=state.get("trace_id"),
     )

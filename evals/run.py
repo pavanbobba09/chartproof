@@ -89,11 +89,24 @@ def run_suite(
 
     passed = True
     failures: list[str] = []
+    per_case_floor = limits.get("per_case_evidence_recall")
     for name, minimum in limits.items():
+        if name == "per_case_evidence_recall":
+            continue  # enforced per case below, not on the aggregate
         actual = metrics.get(name, 0.0)
         if actual < float(minimum):
             passed = False
             failures.append(f"{name}: {actual:.3f} < {float(minimum):.3f}")
+
+    # Per-case floor: aggregates must not hide a severe local recall miss.
+    if per_case_floor is not None:
+        for r in rows:
+            if r.evidence_recall < float(per_case_floor):
+                passed = False
+                failures.append(
+                    f"per_case_evidence_recall: {r.case_id} "
+                    f"{r.evidence_recall:.3f} < {float(per_case_floor):.3f}"
+                )
 
     if errors:
         passed = False

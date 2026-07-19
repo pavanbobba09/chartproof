@@ -1,6 +1,6 @@
 # ChartProof eval report (full)
 
-Generated: 2026-07-19T19:33:29.781919+00:00
+Generated: 2026-07-19T19:41:10.622183+00:00
 
 ## Aggregate metrics
 
@@ -9,7 +9,7 @@ Generated: 2026-07-19T19:33:29.781919+00:00
 | Determination accuracy | 1.000 | 0.80 |
 | Evidence recall | 1.000 | 0.70 |
 | Citation faithfulness | 1.000 | 0.95 |
-| Deferral rate | 0.000 | n/a |
+| Deferral rate | 0.091 | n/a |
 
 **Suite passed thresholds:** True
 
@@ -27,3 +27,4 @@ Generated: 2026-07-19T19:33:29.781919+00:00
 | sepsis_008 | completed | not_supported | not_supported | True | 1.00 | 1.00 |
 | sepsis_009 | completed | supported | supported | True | 1.00 | 1.00 |
 | sepsis_010 | completed | not_supported | not_supported | True | 1.00 | 1.00 |
+| sepsis_011 | needs_review | not_supported | None | True | 1.00 | 1.00 |

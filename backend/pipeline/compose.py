@@ -1,12 +1,17 @@
 """Composer: determination draft + rationale letter with citation enforcement.
 
 Hard rule: only numbered evidence IDs may be referenced. Uncited claim sentences
-are dropped in code (not prompt-only). The compose path is deterministic so
-tests and free-tier demos stay offline-friendly.
+are dropped in code (not prompt-only). The default path is deterministic so
+tests and free-tier demos stay offline-friendly. Setting CHARTPROOF_LLM_COMPOSE=1
+with GROQ_API_KEY enables an LLM draft (verdict + determination prose) that is
+filtered through the same citation gate; any failure falls back to the
+deterministic path.
 """
 
 from __future__ import annotations
 
+import json
+import os
 import re
 from typing import Any, Literal
 
@@ -231,6 +236,72 @@ def derive_draft_verdict(
     return None
 
 
+def llm_compose_enabled() -> bool:
+    """LLM compose is strictly opt-in so CI, evals, and precompute stay deterministic."""
+    return (
+        os.environ.get("CHARTPROOF_LLM_COMPOSE") == "1"
+        and bool(os.environ.get("GROQ_API_KEY"))
+    )
+
+
+def _llm_compose(
+    case: Case,
+    criteria: CriteriaFile,
+    evidence: list[EvidenceItem],
+) -> tuple[Verdict | None, str | None]:
+    """Ask Groq for an independent draft verdict + determination prose.
+
+    Returns (verdict, determination_text). The prompt deliberately excludes the
+    rules verdict so the second opinion stays independent, and the caller runs
+    the returned text through the same citation gate as the deterministic
+    letter; the prompt is not trusted.
+    """
+    import httpx
+
+    from backend.config import GROQ_API_KEY, GROQ_API_URL, GROQ_MODEL
+
+    catalog = "\n".join(
+        f"{e.evidence_id} [{e.side}, {e.criterion_id}] "
+        f"({e.span.doc_id}:{e.span.line_start}-{e.span.line_end}) {e.text}"
+        for e in evidence
+    )
+    prompt = (
+        "You are drafting a clinical validation determination for an auditor. "
+        f"Billed diagnosis: {criteria.display_name}. "
+        "You may reference ONLY the numbered evidence IDs listed below. "
+        "Every claim sentence must cite at least one evidence ID like E3. "
+        "Do not invent evidence, values, or IDs. "
+        "Respond with JSON only: "
+        '{"verdict": "supported" | "not_supported", '
+        '"determination": "2-3 sentences citing evidence IDs"}\n\n'
+        f"Evidence catalog:\n{catalog}"
+    )
+    response = httpx.post(
+        GROQ_API_URL,
+        headers={"Authorization": f"Bearer {GROQ_API_KEY}"},
+        json={
+            "model": GROQ_MODEL,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.2,
+            "max_tokens": 400,
+        },
+        timeout=30.0,
+    )
+    response.raise_for_status()
+    content = response.json()["choices"][0]["message"]["content"]
+    match = re.search(r"\{.*\}", content, re.DOTALL)
+    if match is None:
+        return None, None
+    data = json.loads(match.group(0))
+    verdict = data.get("verdict")
+    determination = data.get("determination")
+    if verdict not in ("supported", "not_supported"):
+        verdict = None
+    if not isinstance(determination, str) or not determination.strip():
+        determination = None
+    return verdict, determination
+
+
 def filter_uncited_sentences(text: str, valid_ids: set[str]) -> tuple[str, int]:
     """Drop claim sentences in ## Determination that lack a valid evidence ID.
 
@@ -302,8 +373,14 @@ def compose_letter(
     evidence: list[EvidenceItem],
     rules_verdict: str | None,
     guideline_bits: list[tuple[str, str]] | None = None,
+    determination_override: str | None = None,
 ) -> tuple[str, int]:
-    """Build DATA_SPEC section 9 letter; enforce citations. Returns (markdown, dropped)."""
+    """Build DATA_SPEC section 9 letter; enforce citations. Returns (markdown, dropped).
+
+    determination_override replaces the deterministic determination prose (used
+    by the LLM compose path); it passes through the same citation gate, so
+    uncited claim sentences are still dropped.
+    """
     display = criteria.display_name
     valid_ids = {e.evidence_id for e in evidence}
 
@@ -343,6 +420,9 @@ def compose_letter(
                 f"Draft determination is deferred pending auditor review (see {evidence[0].evidence_id}); "
                 f"criteria evaluation was incomplete or conflicting."
             )
+
+    if determination_override:
+        reason = determination_override.replace("\n", " ").strip()
 
     # Evidence table. One row per evidence ID; the same chart span can appear
     # under several criteria, so the Criterion column makes each row's
@@ -414,6 +494,21 @@ def compose_from_state(
     rules_verdict = rules_result.get("verdict")
     draft_verdict = derive_draft_verdict(rules_verdict, evidence)
 
+    # Optional LLM draft (opt-in): an independent second opinion whose prose
+    # still passes the citation gate. Any failure falls back to deterministic.
+    composer = "deterministic"
+    determination_override: str | None = None
+    if llm_compose_enabled():
+        try:
+            llm_verdict, llm_text = _llm_compose(case, criteria, evidence)
+            if llm_verdict is not None and llm_text is not None:
+                draft_verdict = llm_verdict
+                determination_override = llm_text
+                composer = "llm"
+        except Exception:  # noqa: BLE001 - never let the LLM path break an audit
+            composer = "deterministic"
+            determination_override = None
+
     guideline_bits: list[tuple[str, str]] = []
     if use_guidelines:
         try:
@@ -462,6 +557,7 @@ def compose_from_state(
         evidence=evidence,
         rules_verdict=rules_verdict,
         guideline_bits=guideline_bits or None,
+        determination_override=determination_override,
     )
 
     return {
@@ -470,4 +566,5 @@ def compose_from_state(
         "letter_markdown": letter,
         "dropped_sentences": dropped,
         "guideline_bits": guideline_bits,
+        "composer": composer,
     }

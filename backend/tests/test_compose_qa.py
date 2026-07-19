@@ -244,3 +244,107 @@ def test_qa_disagreement_rewrites_letter_as_deferred() -> None:
     assert result["audit_result"]["verdict"] is None
     assert "deferred pending auditor review" in letter
     assert "Draft determination is not_supported" not in letter
+
+
+def _findings_for_llm_tests() -> list[dict]:
+    return [
+        {
+            "criterion_id": "infection",
+            "result": "met",
+            "side_items": [
+                {
+                    "side": "for",
+                    "span": {"doc_id": "hp", "line_start": 2, "line_end": 2},
+                    "text": "line 2",
+                    "score": 2.0,
+                }
+            ],
+        }
+    ]
+
+
+def test_llm_compose_disabled_by_default(monkeypatch) -> None:
+    from backend.pipeline import compose as compose_module
+
+    monkeypatch.delenv("CHARTPROOF_LLM_COMPOSE", raising=False)
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    out = compose_module.compose_from_state(
+        _case(),
+        _criteria(),
+        _findings_for_llm_tests(),
+        {"verdict": "supported", "criteria": []},
+        use_guidelines=False,
+    )
+    assert out["composer"] == "deterministic"
+
+
+def test_llm_compose_uses_llm_verdict_and_prose(monkeypatch) -> None:
+    from backend.pipeline import compose as compose_module
+
+    monkeypatch.setenv("CHARTPROOF_LLM_COMPOSE", "1")
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    monkeypatch.setattr(
+        compose_module,
+        "_llm_compose",
+        lambda case, criteria, evidence: (
+            "not_supported",
+            "Draft determination is not_supported because E1 lacks organ findings.",
+        ),
+    )
+    out = compose_module.compose_from_state(
+        _case(),
+        _criteria(),
+        _findings_for_llm_tests(),
+        {"verdict": "supported", "criteria": []},
+        use_guidelines=False,
+    )
+    assert out["composer"] == "llm"
+    assert out["draft_verdict"] == "not_supported"
+    assert "lacks organ findings" in out["letter_markdown"]
+
+
+def test_llm_compose_uncited_prose_is_dropped(monkeypatch) -> None:
+    """LLM output goes through the same citation gate as everything else."""
+    from backend.pipeline import compose as compose_module
+
+    monkeypatch.setenv("CHARTPROOF_LLM_COMPOSE", "1")
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    monkeypatch.setattr(
+        compose_module,
+        "_llm_compose",
+        lambda case, criteria, evidence: (
+            "supported",
+            "The chart shows overwhelming evidence of sepsis infection.",
+        ),
+    )
+    out = compose_module.compose_from_state(
+        _case(),
+        _criteria(),
+        _findings_for_llm_tests(),
+        {"verdict": "supported", "criteria": []},
+        use_guidelines=False,
+    )
+    assert out["composer"] == "llm"
+    assert out["dropped_sentences"] >= 1
+    assert "overwhelming evidence" not in out["letter_markdown"]
+
+
+def test_llm_compose_falls_back_on_error(monkeypatch) -> None:
+    from backend.pipeline import compose as compose_module
+
+    monkeypatch.setenv("CHARTPROOF_LLM_COMPOSE", "1")
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+
+    def _boom(case, criteria, evidence):
+        raise RuntimeError("HTTP 429 rate limit")
+
+    monkeypatch.setattr(compose_module, "_llm_compose", _boom)
+    out = compose_module.compose_from_state(
+        _case(),
+        _criteria(),
+        _findings_for_llm_tests(),
+        {"verdict": "supported", "criteria": []},
+        use_guidelines=False,
+    )
+    assert out["composer"] == "deterministic"
+    assert out["letter_markdown"]

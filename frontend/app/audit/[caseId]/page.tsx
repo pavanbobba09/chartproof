@@ -208,7 +208,8 @@ export default function AuditPage() {
                   Evidence table
                 </h2>
                 <p className="mb-2 text-xs text-slate-500">
-                  source: {audit.source} · confidence{" "}
+                  source: {audit.source} · composer{" "}
+                  {audit.composer ?? "deterministic"} · confidence{" "}
                   {(audit.confidence * 100).toFixed(0)}% · rules{" "}
                   {audit.rules_verdict ?? "n/a"} · draft{" "}
                   {audit.draft_verdict ?? "n/a"}

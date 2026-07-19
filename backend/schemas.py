@@ -151,6 +151,10 @@ class AnswerKey(BaseModel):
     difficulty: Difficulty
     planted_evidence: list[PlantedEvidence]
     key_rationale: str
+    # True when the correct pipeline behavior is to defer to a human
+    # (needs_review) rather than issue the verdict. Evals score deferral as
+    # correct for these cases; verdict remains the best forced answer.
+    deferral_expected: bool = False
 
 
 class EvidenceItem(BaseModel):
@@ -184,6 +188,9 @@ class AuditResult(BaseModel):
     # Why QA forced needs_review (empty when status is completed). Reviewer-safe
     # reason codes, e.g. rules_draft_disagreement, low_confidence.
     force_reasons: list[str] = Field(default_factory=list)
+    # Which composer produced the letter: "deterministic" (default) or "llm"
+    # (Groq path, enabled via CHARTPROOF_LLM_COMPOSE=1 + GROQ_API_KEY).
+    composer: str = "deterministic"
     source: AuditSource = "live"
     trace_id: str | None = None
 

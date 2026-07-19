@@ -60,14 +60,16 @@ Chart generator (Groq)          Reference corpus (guidelines)
 
 ## Eval results (latest full bank)
 
-Suite: **full** (10 sepsis cases, precomputed pipeline). Smoke suite (5 fixed cases) is enforced in CI.
+Suite: **full** (11 sepsis cases, precomputed pipeline). Smoke suite (5 fixed cases) is enforced in CI. A per-case evidence-recall floor (0.50) prevents aggregates from hiding local misses.
 
 | Metric | Full bank | Smoke (CI) | Threshold |
 |--------|----------:|-----------:|----------:|
 | Determination accuracy | 1.000 | 1.000 | >= 0.80 |
-| Evidence recall | 1.000 | 1.000 | >= 0.70 |
+| Evidence recall | 1.000 | 1.000 | >= 0.70 (>= 0.50 per case) |
 | Citation faithfulness | 1.000 | 1.000 | >= 0.95 |
-| Deferral rate (`needs_review`) | 0.000 | 0.000 | tracked |
+| Deferral rate (`needs_review`) | 0.091 | 0.000 | tracked |
+
+The nonzero deferral rate is by design: `sepsis_011` is ambiguous on purpose (clear infection, incomplete organ-dysfunction workup) and the correct pipeline behavior, scored as correct by the evals, is routing it to a human with explicit review reasons.
 
 Smoke and full suites **pass** thresholds. Citation faithfulness is a strict grounded check covering exact chart spans, criterion-specific evidence sides, determination support, evidence-table IDs, and guideline source/section pairs. See `evals/out/results.md`.
 
@@ -126,13 +128,14 @@ python -m evals.run --suite smoke --enforce-thresholds
 
 ## Features (shipped)
 
-- Synthetic sepsis case bank (10) + answer keys + guidelines corpus
+- Synthetic sepsis case bank (11) + answer keys + guidelines corpus, including one ambiguous-by-design case that correctly defers to a human
 - Deterministic rules engine (no LLM in `backend/rules/`)
-- Chroma retrieval + narrative evidence agents
-- Citation-enforced rationale letter + QA `needs_review`
+- Chroma retrieval + narrative evidence agents (shared lexicon with the faithfulness oracle)
+- Citation-enforced rationale letter + QA `needs_review` with reviewer-readable force reasons
+- Optional LLM composer (`CHARTPROOF_LLM_COMPOSE=1` + `GROQ_API_KEY`): independent Groq draft verdict and prose, filtered through the same citation gate, deterministic fallback on any failure
 - Precomputed audits for instant demo
-- Eval harness (smoke/full) with CI smoke job
-- Next.js audit mode (chart, evidence click-to-highlight, letter, fresh run)
+- Eval harness (smoke/full) with CI smoke job, per-case recall floor, and deferral-correctness scoring
+- Next.js audit mode (chart, criteria checklist, evidence click-to-highlight, review reasons, letter, fresh run)
 - Next.js training mode (verdict + line select + graded feedback)
 
 Inventory: [project_memory/FEATURES.md](project_memory/FEATURES.md)
