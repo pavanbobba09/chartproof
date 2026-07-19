@@ -77,10 +77,9 @@ Training mode closes a second loop: trainee → grade vs key → missed evidence
 
 ## Current focus
 
-**Trust loop 2**: replace structural citation checks with strict grounded faithfulness validation.
-Acceptance: injected grounding and semantic defects fail regression tests, live smoke and full-bank faithfulness remain above threshold, and every failure reports an actionable issue code.
+**Trust loop 3 complete** (see TRUST_LOOP_3_COMPLETE.md): honest draft_verdict naming, force_reasons in the audit UI, real deferral case with deferral_expected scoring, per-case recall floor, shared evidence lexicon, answer-key corrections, opt-in Groq composer behind the citation gate.
 
-Next: make the QA comparison genuinely independent and expose human-readable QA reasons in the audit UI.
+Next: go-live (HF Space + Vercel + LICENSE + demo video), then AKI via KDIGO as the second diagnosis.
 
 ## Working conventions
 
