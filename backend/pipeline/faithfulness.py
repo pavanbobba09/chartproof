@@ -8,6 +8,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from backend.config import GUIDELINES_DIR
+from backend.pipeline.lexicon import narrative_side
 from backend.schemas import (
     AuditResult,
     Case,
@@ -43,71 +44,6 @@ _STRUCTURED_VALUE_PATTERNS: dict[str, re.Pattern[str]] = {
         re.IGNORECASE,
     ),
 }
-
-_NARRATIVE_SIGNALS: dict[str, dict[str, tuple[str, ...]]] = {
-    "infection": {
-        "for": (
-            "infection",
-            "antibiotic",
-            "ceftriaxone",
-            "vancomycin",
-            "culture",
-            "uti",
-            "pneumonia",
-            "bacteremia",
-            "sepsis",
-            "fever",
-        ),
-        "against": (
-            "no infection",
-            "infection ruled out",
-            "cultures negative",
-            "not infected",
-        ),
-    },
-    "vasopressors": {
-        "for": (
-            "norepinephrine",
-            "levophed",
-            "phenylephrine",
-            "vasopressin drip",
-            "started on pressors",
-            "requiring vasopressors",
-            "vasopressors are being",
-            "treated with broad-spectrum antibiotics and vasopressors",
-        ),
-        "against": (
-            "no vasopressor",
-            "not requiring vasopressor",
-            "without vasopressor",
-            "off vasopressors",
-            "not on vasopressors",
-            "did not require vasopressor",
-            "no longer requiring vasopressor",
-            "no longer on vasopressors",
-        ),
-    },
-    "altered_mentation": {
-        "for": (
-            "altered mental",
-            "confused",
-            "confusion",
-            "obtunded",
-            "delirium",
-            "unresponsive",
-            "encephalopath",
-            "mental status change",
-        ),
-        "against": (
-            "alert and oriented",
-            "mental status clear",
-            "normal mental",
-            "gcs 15",
-            "neurologically intact",
-        ),
-    },
-}
-
 
 @dataclass(frozen=True)
 class FaithfulnessIssue:
@@ -154,17 +90,10 @@ def _grounded_text(item: EvidenceItem, case: Case) -> tuple[str | None, str | No
 
 
 def _narrative_side(criterion_id: str, text: str) -> str | None:
-    signals = _NARRATIVE_SIGNALS.get(criterion_id)
-    if signals is None:
-        return None
-    lower = text.lower()
-    for_score = sum(1 for phrase in signals["for"] if phrase in lower)
-    against_score = sum(2 for phrase in signals["against"] if phrase in lower)
-    if against_score > for_score and against_score > 0:
-        return "against"
-    if for_score > against_score and for_score > 0:
-        return "for"
-    return None
+    # Canonical lexicon shared with the evidence agents (see lexicon.py for the
+    # independence tradeoff). This check verifies stored side labels against
+    # what the cited text actually supports under that lexicon.
+    return narrative_side(criterion_id, text)
 
 
 def _structured_side(item: EvidenceItem, node: CriteriaNode) -> str | None:
@@ -212,7 +141,9 @@ def _expected_side(item: EvidenceItem, node: CriteriaNode) -> str | None:
         return _narrative_side(item.criterion_id, item.text)
     if node.kind == CriteriaKind.STRUCTURED:
         return _structured_side(item, node)
-    return None
+    # Composite criteria: explicit textual statements about the composite
+    # itself are side-checked with the same shared lexicon.
+    return _narrative_side(item.criterion_id, item.text)
 
 
 def _guideline_sections(guidelines_dir: Path) -> set[tuple[str, str]]:

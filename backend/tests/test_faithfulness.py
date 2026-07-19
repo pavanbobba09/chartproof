@@ -154,3 +154,26 @@ def test_unknown_guideline_section_fails() -> None:
     report = _evaluate(result)
     assert report.score == 0.0
     assert any(issue.code == "invalid_guideline_citation" for issue in report.issues)
+
+
+def test_offline_compose_fallback_guidelines_are_faithful() -> None:
+    """Offline compose (no Chroma) must cite real manifest sources and sections."""
+    from backend.pipeline.compose import compose_letter
+
+    case = _case()
+    criteria = load_criteria("sepsis")
+    evidence = _result().evidence
+    letter, dropped = compose_letter(
+        case=case,
+        criteria=criteria,
+        status="completed",
+        verdict="supported",
+        evidence=evidence,
+        rules_verdict="supported",
+        guideline_bits=None,  # force the offline fallback pair
+    )
+    result = _result().model_copy(update={"letter_markdown": letter})
+    report = _evaluate(result)
+    assert not any(
+        issue.code == "invalid_guideline_citation" for issue in report.issues
+    ), [issue.message for issue in report.issues]

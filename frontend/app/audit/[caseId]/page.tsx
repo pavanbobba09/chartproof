@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { ChartViewer, scrollToSpan } from "@/components/ChartViewer";
 import { StatusBadge } from "@/components/StatusBadge";
 import {
@@ -171,7 +172,9 @@ export default function AuditPage() {
                   Rationale letter (draft)
                 </h2>
                 <div className="prose-letter text-sm text-slate-800">
-                  <ReactMarkdown>{audit.letter_markdown}</ReactMarkdown>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {audit.letter_markdown}
+                  </ReactMarkdown>
                 </div>
               </div>
             </>

@@ -12,7 +12,9 @@
       "method": "narrative",
       "evidence_ids": [
         "E1",
-        "E2"
+        "E2",
+        "E3",
+        "E4"
       ]
     },
     {
@@ -20,9 +22,9 @@
       "result": "not_met",
       "method": "structured",
       "evidence_ids": [
-        "E5",
-        "E6",
-        "E7"
+        "E8",
+        "E9",
+        "E10"
       ]
     },
     {
@@ -36,8 +38,9 @@
       "result": "not_met",
       "method": "narrative",
       "evidence_ids": [
-        "E3",
-        "E4"
+        "E5",
+        "E6",
+        "E7"
       ]
     },
     {
@@ -45,7 +48,7 @@
       "result": "not_met",
       "method": "structured",
       "evidence_ids": [
-        "E8"
+        "E11"
       ]
     },
     {
@@ -53,10 +56,10 @@
       "result": "not_met",
       "method": "structured",
       "evidence_ids": [
-        "E9",
-        "E10",
-        "E11",
-        "E12"
+        "E12",
+        "E13",
+        "E14",
+        "E15"
       ]
     },
     {
@@ -97,6 +100,28 @@
     },
     {
       "evidence_id": "E3",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "He presented to the emergency department with a 2-day history of fever and cough."
+    },
+    {
+      "evidence_id": "E4",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "The patient was started on antibiotics and admitted to the hospital for further management."
+    },
+    {
+      "evidence_id": "E5",
       "side": "against",
       "criterion_id": "vasopressors",
       "span": {
@@ -107,7 +132,7 @@
       "text": "The patient's condition has improved, and the patient is no longer requiring vasopressors. Nursing: patient tolerating oral intake as ordered. Nursing: skin warm and dry; no new rashes documented. Nursing: pain score reviewed; analgesia as needed."
     },
     {
-      "evidence_id": "E4",
+      "evidence_id": "E6",
       "side": "against",
       "criterion_id": "vasopressors",
       "span": {
@@ -118,7 +143,18 @@
       "text": "The patient's platelet count was rechecked and was 180 10^9/L. The patient's MAP has remained stable, ranging from 80-100 mmHg. The patient is being considered for discharge to a skilled nursing facility. The patient's condition has improved, and the patient is no longer requiring vasopressors."
     },
     {
-      "evidence_id": "E5",
+      "evidence_id": "E7",
+      "side": "against",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 7,
+        "line_end": 7
+      },
+      "text": "The patient's condition has improved, and the patient is no longer requiring vasopressors."
+    },
+    {
+      "evidence_id": "E8",
       "side": "against",
       "criterion_id": "lactate_elevated",
       "span": {
@@ -129,7 +165,7 @@
       "text": "Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L."
     },
     {
-      "evidence_id": "E6",
+      "evidence_id": "E9",
       "side": "against",
       "criterion_id": "lactate_elevated",
       "span": {
@@ -140,7 +176,7 @@
       "text": "The patient's lactate level was rechecked and was 1.1 mmol/L."
     },
     {
-      "evidence_id": "E7",
+      "evidence_id": "E10",
       "side": "against",
       "criterion_id": "lactate_elevated",
       "span": {
@@ -151,7 +187,7 @@
       "text": "The patient's lactate level was normal at discharge, 1.0 mmol/L."
     },
     {
-      "evidence_id": "E8",
+      "evidence_id": "E11",
       "side": "against",
       "criterion_id": "creatinine_rise",
       "span": {
@@ -162,7 +198,7 @@
       "text": "The patient's creatinine level was stable at discharge, 1.1 mg/dL."
     },
     {
-      "evidence_id": "E9",
+      "evidence_id": "E12",
       "side": "against",
       "criterion_id": "thrombocytopenia",
       "span": {
@@ -173,7 +209,7 @@
       "text": "Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L."
     },
     {
-      "evidence_id": "E10",
+      "evidence_id": "E13",
       "side": "against",
       "criterion_id": "thrombocytopenia",
       "span": {
@@ -184,7 +220,7 @@
       "text": "The patient's platelet count has been stable, ranging from 150-200 10^9/L."
     },
     {
-      "evidence_id": "E11",
+      "evidence_id": "E14",
       "side": "against",
       "criterion_id": "thrombocytopenia",
       "span": {
@@ -195,7 +231,7 @@
       "text": "The patient's platelet count was rechecked and was 180 10^9/L."
     },
     {
-      "evidence_id": "E12",
+      "evidence_id": "E15",
       "side": "against",
       "criterion_id": "thrombocytopenia",
       "span": {
@@ -206,8 +242,8 @@
       "text": "The patient's platelet count was normal at discharge, 200 10^9/L."
     }
   ],
-  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_004 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is not_supported, primarily based on E3 (vasopressors): The patient's condition has improved, and the patient is no longer requiring vasopressors\n\n## Evidence\n| # | For/Against | Source | Lines | Excerpt |\n|---|-------------|--------|-------|---------|\n| E1 | for | history_and_physical 2022-01-01 | 4-7 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. The patient was started on antibiotics and admitte |\n| E2 | for | history_and_physical 2022-01-01 | 1-4 | Patient is a 65-year-old male with a history of hypertension and diabetes. He presented to the emergency department with |\n| E3 | against | progress_note 2022-01-02 | 7-10 | The patient's condition has improved, and the patient is no longer requiring vasopressors. Nursing: patient tolerating o |\n| E4 | against | progress_note 2022-01-02 | 4-7 | The patient's platelet count was rechecked and was 180 10^9/L. The patient's MAP has remained stable, ranging from 80-10 |\n| E5 | against | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. |\n| E6 | against | progress_note 2022-01-02 | 2-2 | The patient's lactate level was rechecked and was 1.1 mmol/L. |\n| E7 | against | discharge_summary 2022-01-03 | 3-3 | The patient's lactate level was normal at discharge, 1.0 mmol/L. |\n| E8 | against | discharge_summary 2022-01-03 | 4-4 | The patient's creatinine level was stable at discharge, 1.1 mg/dL. |\n| E9 | against | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. |\n| E10 | against | history_and_physical 2022-01-01 | 8-8 | The patient's platelet count has been stable, ranging from 150-200 10^9/L. |\n| E11 | against | progress_note 2022-01-02 | 4-4 | The patient's platelet count was rechecked and was 180 10^9/L. |\n| E12 | against | discharge_summary 2022-01-03 | 5-5 | The patient's platelet count was normal at discharge, 200 10^9/L. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). Findings that affect payment grouping must be supported by chart indicators (icd10cm_guidelines_fy2026_summary, Section: Sepsis coding notes (high level)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E11, E12, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_004 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is not_supported, primarily based on E5 (vasopressors): The patient's condition has improved, and the patient is no longer requiring vasopressors\n\n## Evidence\n| # | For/Against | Criterion | Source | Lines | Excerpt |\n|---|-------------|-----------|--------|-------|---------|\n| E1 | for | infection | history_and_physical 2022-01-01 | 4-7 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. The patient was started on antibiotics and admitte |\n| E2 | for | infection | history_and_physical 2022-01-01 | 1-4 | Patient is a 65-year-old male with a history of hypertension and diabetes. He presented to the emergency department with |\n| E3 | for | infection | history_and_physical 2022-01-01 | 2-2 | He presented to the emergency department with a 2-day history of fever and cough. |\n| E4 | for | infection | history_and_physical 2022-01-01 | 5-5 | The patient was started on antibiotics and admitted to the hospital for further management. |\n| E5 | against | vasopressors | progress_note 2022-01-02 | 7-10 | The patient's condition has improved, and the patient is no longer requiring vasopressors. Nursing: patient tolerating o |\n| E6 | against | vasopressors | progress_note 2022-01-02 | 4-7 | The patient's platelet count was rechecked and was 180 10^9/L. The patient's MAP has remained stable, ranging from 80-10 |\n| E7 | against | vasopressors | progress_note 2022-01-02 | 7-7 | The patient's condition has improved, and the patient is no longer requiring vasopressors. |\n| E8 | against | lactate_elevated | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. |\n| E9 | against | lactate_elevated | progress_note 2022-01-02 | 2-2 | The patient's lactate level was rechecked and was 1.1 mmol/L. |\n| E10 | against | lactate_elevated | discharge_summary 2022-01-03 | 3-3 | The patient's lactate level was normal at discharge, 1.0 mmol/L. |\n| E11 | against | creatinine_rise | discharge_summary 2022-01-03 | 4-4 | The patient's creatinine level was stable at discharge, 1.1 mg/dL. |\n| E12 | against | thrombocytopenia | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. |\n| E13 | against | thrombocytopenia | history_and_physical 2022-01-01 | 8-8 | The patient's platelet count has been stable, ranging from 150-200 10^9/L. |\n| E14 | against | thrombocytopenia | progress_note 2022-01-02 | 4-4 | The patient's platelet count was rechecked and was 180 10^9/L. |\n| E15 | against | thrombocytopenia | discharge_summary 2022-01-03 | 5-5 | The patient's platelet count was normal at discharge, 200 10^9/L. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). Findings that affect payment grouping must be supported by chart indicators (icd10cm_guidelines_fy2026_summary, Section: Sepsis coding notes (high level)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E11, E12, E13, E14, E15, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
   "dropped_sentences": 0,
   "source": "precomputed",
-  "trace_id": "run_sepsis_004_20260718T202008Z"
+  "trace_id": "run_sepsis_004_20260719T192912111039Z_5b25c4"
 }

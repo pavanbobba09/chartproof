@@ -10,93 +10,15 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 from backend.index.retrieve import retrieve_case
+from backend.pipeline.lexicon import (
+    NARRATIVE_KEYWORDS,
+    Side,
+    narrative_side,
+    score_text,
+)
 from backend.schemas import Case, CriteriaKind, CriteriaNode, EvidenceSpan
 
 TriState = Literal["met", "not_met", "unclear"]
-Side = Literal["for", "against"]
-
-# Keyword bags for demo-quality narrative resolution (synthetic charts)
-_CRITERION_KEYWORDS: dict[str, dict[str, tuple[str, ...]]] = {
-    "infection": {
-        "for": (
-            "infection",
-            "infected",
-            "antibiotic",
-            "antibiotics",
-            "ceftriaxone",
-            "vancomycin",
-            "piperacillin",
-            "culture",
-            "uti",
-            "pneumonia",
-            "bacteremia",
-            "sepsis",
-            "cellulitis",
-            "pyelonephritis",
-            "abscess",
-            "fever",
-            "leukocytosis",
-        ),
-        "against": (
-            "no infection",
-            "infection ruled out",
-            "cultures negative",
-            "not infected",
-            "aseptic",
-        ),
-    },
-    "vasopressors": {
-        "for": (
-            "norepinephrine",
-            "levophed",
-            "phenylephrine",
-            "vasopressin drip",
-            "on pressors",
-            "started on pressors",
-            "started vasopressor",
-            "requiring vasopressors",
-            "vasopressors are being",
-            "treated with broad-spectrum antibiotics and vasopressors",
-        ),
-        "against": (
-            "no vasopressor",
-            "no vasopressors",
-            "not requiring vasopressor",
-            "not requiring vasopressors",
-            "without vasopressor",
-            "without vasopressors",
-            "off vasopressors",
-            "not on vasopressors",
-            "did not require vasopressor",
-            "did not require vasopressors",
-            "no longer requiring vasopressor",
-            "no longer requiring vasopressors",
-            "not requiring pressors",
-        ),
-    },
-    "altered_mentation": {
-        "for": (
-            "altered mental",
-            "confused",
-            "confusion",
-            "obtunded",
-            "delirium",
-            "gcs",
-            "unresponsive",
-            "encephalopath",
-            "mental status change",
-        ),
-        "against": (
-            "alert and oriented",
-            "mental status clear",
-            "normal mental",
-            "a&ox3",
-            "a and o x3",
-            "gcs 15",
-            "neurologically intact",
-        ),
-    },
-}
 
 
 @dataclass
@@ -107,59 +29,12 @@ class EvidenceFinding:
     # each item: {side, span, text, score}
 
 
-def _score_text(
-    text: str,
-    for_kws: tuple[str, ...],
-    against_kws: tuple[str, ...],
-    *,
-    apply_vasopressor_negation: bool = False,
-) -> tuple[float, float]:
-    lower = text.lower()
-    for_score = 0.0
-    against_score = 0.0
-    for kw in for_kws:
-        if kw in lower:
-            for_score += 1.0
-    for kw in against_kws:
-        if kw in lower:
-            against_score += 2.0  # stronger weight for explicit negation phrases
-    # Generic negation around vasopressor/pressor words (catches plural forms)
-    if apply_vasopressor_negation and (
-        re.search(
-            r"\b(no|not|without|never|denies?)\b.{0,40}\b(vasopressors?|pressors?)\b",
-            lower,
-        )
-        or re.search(
-            r"\b(vasopressors?|pressors?)\b.{0,40}\b(not required|not indicated|discontinued)\b",
-            lower,
-        )
-    ):
-        against_score += 2.5
-        # Do not also credit bare "vasopressors" as for when negation present
-        if for_score > 0 and against_score > for_score:
-            for_score = max(0.0, for_score - 1.0)
-    return for_score, against_score
-
-
 def classify_narrative_evidence_side(
     criterion_id: str,
     text: str,
 ) -> Side | None:
     """Re-evaluate one narrative excerpt against its criterion-specific signals."""
-    bags = _CRITERION_KEYWORDS.get(criterion_id)
-    if bags is None:
-        return None
-    for_score, against_score = _score_text(
-        text,
-        bags["for"],
-        bags["against"],
-        apply_vasopressor_negation=criterion_id == "vasopressors",
-    )
-    if against_score > for_score and against_score > 0:
-        return "against"
-    if for_score > against_score and for_score > 0:
-        return "for"
-    return None
+    return narrative_side(criterion_id, text)
 
 
 def _collect_narrative_nodes(nodes: list[CriteriaNode]) -> list[CriteriaNode]:
@@ -181,7 +56,7 @@ def gather_evidence_for_criterion(
 ) -> EvidenceFinding:
     """Retrieve FOR/AGAINST evidence and resolve yes/no/unclear."""
     question = node.question or node.id
-    bags = _CRITERION_KEYWORDS.get(
+    bags = NARRATIVE_KEYWORDS.get(
         node.id,
         {
             "for": tuple(re.findall(r"[a-zA-Z]{4,}", (node.question or node.id).lower())[:8]),
@@ -214,38 +89,41 @@ def gather_evidence_for_criterion(
             if key in seen_spans:
                 continue
             seen_spans.add(key)
-            fs, as_ = _score_text(
+            fs, as_ = score_text(
                 ch.text,
                 for_kws,
                 against_kws,
-                apply_vasopressor_negation=node.id == "vasopressors",
+                apply_vasopressor_rules=node.id == "vasopressors",
             )
+            # Ties are ambiguous excerpts (signals on both sides); cite neither.
             if as_ > fs and as_ > 0:
                 candidates.append(("against", ch.span, ch.text, as_))
-            elif fs > 0:
+            elif fs > as_:
                 candidates.append(("for", ch.span, ch.text, fs))
 
-    # Fallback: scan full chart if retrieval weak
-    if len(candidates) < 2:
-        for doc in case.documents:
-            for i, line in enumerate(doc.lines, start=1):
-                fs, as_ = _score_text(
-                    line,
-                    for_kws,
-                    against_kws,
-                    apply_vasopressor_negation=node.id == "vasopressors",
-                )
-                if fs == 0 and as_ == 0:
-                    continue
-                span = EvidenceSpan(doc_id=doc.doc_id, line_start=i, line_end=i)
-                key = (span.doc_id, span.line_start, span.line_end)
-                if key in seen_spans:
-                    continue
-                seen_spans.add(key)
-                if as_ > fs:
-                    candidates.append(("against", span, line, as_))
-                else:
-                    candidates.append(("for", span, line, fs))
+    # Always sweep the full chart as well: retrieval is recall-limited and a
+    # keyword sweep over demo-size charts is cheap. Catches signal lines the
+    # retriever ranked below the cutoff.
+    for doc in case.documents:
+        for i, line in enumerate(doc.lines, start=1):
+            fs, as_ = score_text(
+                line,
+                for_kws,
+                against_kws,
+                apply_vasopressor_rules=node.id == "vasopressors",
+            )
+            if fs == as_:
+                # No signal, or ambiguous signals on both sides: cite neither.
+                continue
+            span = EvidenceSpan(doc_id=doc.doc_id, line_start=i, line_end=i)
+            key = (span.doc_id, span.line_start, span.line_end)
+            if key in seen_spans:
+                continue
+            seen_spans.add(key)
+            if as_ > fs:
+                candidates.append(("against", span, line, as_))
+            else:
+                candidates.append(("for", span, line, fs))
 
     candidates.sort(key=lambda x: x[3], reverse=True)
     # Keep top items per side

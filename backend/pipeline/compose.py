@@ -1,9 +1,8 @@
 """Composer: determination draft + rationale letter with citation enforcement.
 
 Hard rule: only numbered evidence IDs may be referenced. Uncited claim sentences
-are dropped in code (not prompt-only). Default path is deterministic so tests and
-free-tier demos stay offline-friendly; optional Groq can draft prose that is then
-filtered through the same citation gate.
+are dropped in code (not prompt-only). The compose path is deterministic so
+tests and free-tier demos stay offline-friendly.
 """
 
 from __future__ import annotations
@@ -12,6 +11,7 @@ import re
 from typing import Any, Literal
 
 from backend.index.retrieve import retrieve_guidelines
+from backend.pipeline.lexicon import narrative_side
 from backend.schemas import Case, CriteriaFile, EvidenceItem, EvidenceSpan
 
 Verdict = Literal["supported", "not_supported"]
@@ -64,6 +64,35 @@ def build_evidence_catalog(
         cid = str(crit["criterion_id"])
         for span, text, side in _find_structured_metric_mentions(case, crit):
             _add(side, cid, span, text)
+
+    # Composite criteria: cite explicit chart statements about the composite
+    # itself ("no evidence of organ dysfunction"). Each line is side-classified
+    # by the shared lexicon, so sides cannot be inherited incorrectly.
+    for crit in rules_result.get("criteria") or []:
+        if crit.get("method") not in ("any_of", "all_of"):
+            continue
+        cid = str(crit["criterion_id"])
+        added = 0
+        for doc in case.documents:
+            for line_number, line in enumerate(doc.lines, start=1):
+                side = narrative_side(cid, line)
+                if side is None:
+                    continue
+                _add(
+                    side,
+                    cid,
+                    EvidenceSpan(
+                        doc_id=doc.doc_id,
+                        line_start=line_number,
+                        line_end=line_number,
+                    ),
+                    line,
+                )
+                added += 1
+                if added >= 4:
+                    break
+            if added >= 4:
+                break
 
     return items
 
@@ -315,11 +344,13 @@ def compose_letter(
                 f"criteria evaluation was incomplete or conflicting."
             )
 
-    # Evidence table
+    # Evidence table. One row per evidence ID; the same chart span can appear
+    # under several criteria, so the Criterion column makes each row's
+    # attribution explicit instead of looking like a duplicate.
     doc_lookup = {d.doc_id: d for d in case.documents}
     rows = [
-        "| # | For/Against | Source | Lines | Excerpt |",
-        "|---|-------------|--------|-------|---------|",
+        "| # | For/Against | Criterion | Source | Lines | Excerpt |",
+        "|---|-------------|-----------|--------|-------|---------|",
     ]
     for e in evidence:
         doc = doc_lookup.get(e.span.doc_id)
@@ -328,16 +359,18 @@ def compose_letter(
         )
         excerpt = e.text.replace("|", "/").replace("\n", " ")[:120]
         rows.append(
-            f"| {e.evidence_id} | {e.side} | {source} | "
+            f"| {e.evidence_id} | {e.side} | {e.criterion_id} | {source} | "
             f"{e.span.line_start}-{e.span.line_end} | {excerpt} |"
         )
     if len(rows) == 2:
-        rows.append("| - | - | - | - | No evidence spans collected |")
+        rows.append("| - | - | - | - | - | No evidence spans collected |")
 
-    # Coding rationale with guideline citations
+    # Coding rationale with guideline citations. Fallback pairs must be real
+    # manifest source_ids with real section headings so the offline path still
+    # passes the grounded faithfulness gate.
     g_bits = guideline_bits or [
         ("sepsis3_summary", "Section: Definition"),
-        ("icd10cm_coding_summary", "Section: Clinical validation context"),
+        ("icd10cm_guidelines_fy2026_summary", "Section: Clinical validation context"),
     ]
     coding = (
         f"Clinical validation of billed {display} should rest on documented infection "

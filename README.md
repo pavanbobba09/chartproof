@@ -65,7 +65,7 @@ Suite: **full** (10 sepsis cases, precomputed pipeline). Smoke suite (5 fixed ca
 | Metric | Full bank | Smoke (CI) | Threshold |
 |--------|----------:|-----------:|----------:|
 | Determination accuracy | 1.000 | 1.000 | >= 0.80 |
-| Evidence recall | 0.818 | 1.000 | >= 0.70 |
+| Evidence recall | 1.000 | 1.000 | >= 0.70 |
 | Citation faithfulness | 1.000 | 1.000 | >= 0.95 |
 | Deferral rate (`needs_review`) | 0.000 | 0.000 | tracked |
 

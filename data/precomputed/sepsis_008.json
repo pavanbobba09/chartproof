@@ -65,7 +65,9 @@
       "criterion_id": "organ_dysfunction",
       "result": "not_met",
       "method": "any_of",
-      "evidence_ids": []
+      "evidence_ids": [
+        "E10"
+      ]
     }
   ],
   "evidence": [
@@ -107,11 +109,11 @@
       "side": "for",
       "criterion_id": "infection",
       "span": {
-        "doc_id": "pn_01",
-        "line_start": 4,
-        "line_end": 7
+        "doc_id": "hp",
+        "line_start": 2,
+        "line_end": 2
       },
-      "text": "Patient's condition is stable, and antibiotics are continued. No signs of organ dysfunction are noted at this time. Patient is to continue with current treatment and monitoring. Follow-up labs and vitals will be obtained in 24 hours."
+      "text": "He presents with a 2-day history of fever, chills, and cough."
     },
     {
       "evidence_id": "E5",
@@ -167,10 +169,21 @@
         "line_end": 2
       },
       "text": "Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9/L."
+    },
+    {
+      "evidence_id": "E10",
+      "side": "against",
+      "criterion_id": "organ_dysfunction",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "No signs of organ dysfunction are noted at this time."
     }
   ],
-  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_008 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is not_supported, primarily based on E5 (lactate_elevated): Labs - lactate 1\n\n## Evidence\n| # | For/Against | Source | Lines | Excerpt |\n|---|-------------|--------|-------|---------|\n| E1 | for | history_and_physical 2022-01-01 | 4-7 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. Physical exam reveals bilateral lung crackles and  |\n| E2 | for | discharge_summary 2022-01-05 | 1-4 | Patient was treated for pneumonia with empiric antibiotics. Labs and vitals were monitored closely, and no signs of orga |\n| E3 | for | progress_note 2022-01-02 | 1-4 | Patient remains febrile with a temperature of 38.2 C. Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9 |\n| E4 | for | progress_note 2022-01-02 | 4-7 | Patient's condition is stable, and antibiotics are continued. No signs of organ dysfunction are noted at this time. Pati |\n| E5 | against | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. |\n| E6 | against | progress_note 2022-01-02 | 2-2 | Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9/L. |\n| E7 | against | progress_note 2022-01-02 | 3-3 | Vitals: MAP 80 mmHg, temperature 38.2 C. |\n| E8 | against | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. |\n| E9 | against | progress_note 2022-01-02 | 2-2 | Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9/L. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). Findings that affect payment grouping must be supported by chart indicators (icd10cm_guidelines_fy2026_summary, Section: Sepsis coding notes (high level)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_008 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is not_supported, primarily based on E5 (lactate_elevated): Labs - lactate 1\n\n## Evidence\n| # | For/Against | Criterion | Source | Lines | Excerpt |\n|---|-------------|-----------|--------|-------|---------|\n| E1 | for | infection | history_and_physical 2022-01-01 | 4-7 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. Physical exam reveals bilateral lung crackles and  |\n| E2 | for | infection | discharge_summary 2022-01-05 | 1-4 | Patient was treated for pneumonia with empiric antibiotics. Labs and vitals were monitored closely, and no signs of orga |\n| E3 | for | infection | progress_note 2022-01-02 | 1-4 | Patient remains febrile with a temperature of 38.2 C. Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9 |\n| E4 | for | infection | history_and_physical 2022-01-01 | 2-2 | He presents with a 2-day history of fever, chills, and cough. |\n| E5 | against | lactate_elevated | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. |\n| E6 | against | lactate_elevated | progress_note 2022-01-02 | 2-2 | Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9/L. |\n| E7 | against | hypotension | progress_note 2022-01-02 | 3-3 | Vitals: MAP 80 mmHg, temperature 38.2 C. |\n| E8 | against | thrombocytopenia | history_and_physical 2022-01-01 | 4-4 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. |\n| E9 | against | thrombocytopenia | progress_note 2022-01-02 | 2-2 | Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9/L. |\n| E10 | against | organ_dysfunction | progress_note 2022-01-02 | 5-5 | No signs of organ dysfunction are noted at this time. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). Findings that affect payment grouping must be supported by chart indicators (icd10cm_guidelines_fy2026_summary, Section: Sepsis coding notes (high level)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
   "dropped_sentences": 0,
   "source": "precomputed",
-  "trace_id": "run_sepsis_008_20260718T202009Z"
+  "trace_id": "run_sepsis_008_20260719T192912385837Z_1c5f65"
 }
