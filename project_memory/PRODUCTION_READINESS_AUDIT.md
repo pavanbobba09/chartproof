@@ -4,6 +4,8 @@ Date: 2026-07-18
 Scope: repository at `/Users/harsh/Documents/ChartProof`  
 Mode: synthetic data only, read-only product review, no application fixes made
 
+Update 2026-07-20: the bank was expanded after this audit to 100 synthetic records. Fifteen are independently generated scenarios and 85 are deterministic volume-test variants intended for UI, API, and load testing. The expanded bank improves volume coverage but does not resolve the clinical-diversity limitation or change the production release decision below.
+
 ## Release decision
 
 | Intended use | Decision | Reason |

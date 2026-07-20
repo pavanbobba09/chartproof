@@ -77,9 +77,9 @@ Training mode closes a second loop: trainee → grade vs key → missed evidence
 
 ## Current focus
 
-**Trust loop 3 complete** (see TRUST_LOOP_3_COMPLETE.md): honest draft_verdict naming, force_reasons in the audit UI, real deferral case with deferral_expected scoring, per-case recall floor, shared evidence lexicon, answer-key corrections, opt-in Groq composer behind the citation gate.
+**Trust loop 4 complete** (see TRUST_LOOP_4_COMPLETE.md): explicit 15/85 dataset provenance, searchable and paginated 100-record workflow, cache-isolated API tests, keyboard-accessible evidence controls, and a production Chrome journey enforced in CI.
 
-Next: go-live (HF Space + Vercel + LICENSE + demo video), then AKI via KDIGO as the second diagnosis.
+Next: stop feature expansion, prepare the demo narrative, and add capabilities only when tied to a confirmed role or product requirement.
 
 ## Working conventions
 

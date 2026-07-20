@@ -1,0 +1,154 @@
+{
+  "case_id": "sepsis_056",
+  "target_dx": "sepsis",
+  "billed": {
+    "icd10": [
+      "A41.9"
+    ],
+    "drg": "871"
+  },
+  "patient": {
+    "age": 62,
+    "sex": "F"
+  },
+  "documents": [
+    {
+      "doc_id": "hp",
+      "doc_type": "history_and_physical",
+      "date": "2026-05-05",
+      "lines": [
+        "Patient is a 78-year-old female with a history of recurrent urinary tract infections.",
+        "She presents with a 1-day history of fever, chills, and right flank pain.",
+        "Urinalysis is consistent with pyelonephritis and intravenous ceftriaxone is started.",
+        "Vital signs: temperature 38.4 C, MAP 78 mmHg, heart rate 96 bpm.",
+        "Laboratory results: lactate 2.0 mmol/L, creatinine 1.1 mg/dL.",
+        "She is admitted for intravenous antibiotics and observation.",
+        "Additional admission laboratory panels were ordered but results are not filed in this record.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Nursing: intake and output recorded this shift.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate."
+      ]
+    },
+    {
+      "doc_id": "pn_01",
+      "doc_type": "progress_note",
+      "date": "2026-05-06",
+      "lines": [
+        "Patient remains febrile overnight but hemodynamically stable.",
+        "Repeat lactate is 1.9 mmol/L and MAP is 82 mmHg.",
+        "Creatinine remains stable at 1.1 mg/dL.",
+        "Complete blood count results are pending and have not been filed in the chart.",
+        "Continuing ceftriaxone for pyelonephritis; urine culture results are pending.",
+        "No additional concerns documented on today's rounds.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Nursing: intake and output recorded this shift.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: family updated on plan of care.",
+        "Provider: code status confirmed with patient or surrogate."
+      ]
+    },
+    {
+      "doc_id": "ds",
+      "doc_type": "discharge_summary",
+      "date": "2026-05-08",
+      "lines": [
+        "Patient was treated for pyelonephritis with intravenous ceftriaxone.",
+        "Fevers resolved and she remained hemodynamically stable throughout the stay.",
+        "Discharge laboratory results: lactate 1.8 mmol/L and creatinine 1.0 mg/dL.",
+        "Several ordered laboratory panels were never filed, so the severity workup in this record is incomplete.",
+        "She is discharged home with oral antibiotics and urology follow-up.",
+        "Follow-up with primary care physician in one week.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Nursing: intake and output recorded this shift.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: family updated on plan of care.",
+        "Provider: code status confirmed with patient or surrogate. Synthetic volume-test variant sepsis_056; no real patient data."
+      ]
+    }
+  ],
+  "labs": [
+    {
+      "name": "lactate",
+      "value": 2.0,
+      "unit": "mmol/L",
+      "datetime": "2026-05-05T09:00"
+    },
+    {
+      "name": "lactate",
+      "value": 1.9,
+      "unit": "mmol/L",
+      "datetime": "2026-05-06T08:00"
+    },
+    {
+      "name": "lactate",
+      "value": 1.8,
+      "unit": "mmol/L",
+      "datetime": "2026-05-08T08:00"
+    },
+    {
+      "name": "creatinine",
+      "value": 1.1,
+      "unit": "mg/dL",
+      "datetime": "2026-05-05T09:00"
+    },
+    {
+      "name": "creatinine",
+      "value": 1.1,
+      "unit": "mg/dL",
+      "datetime": "2026-05-06T08:00"
+    },
+    {
+      "name": "creatinine",
+      "value": 1.0,
+      "unit": "mg/dL",
+      "datetime": "2026-05-08T08:00"
+    }
+  ],
+  "vitals": [
+    {
+      "name": "map",
+      "value": 78.0,
+      "unit": "mmHg",
+      "datetime": "2026-05-05T09:00"
+    },
+    {
+      "name": "map",
+      "value": 82.0,
+      "unit": "mmHg",
+      "datetime": "2026-05-06T08:00"
+    },
+    {
+      "name": "temp",
+      "value": 38.4,
+      "unit": "C",
+      "datetime": "2026-05-05T09:00"
+    },
+    {
+      "name": "temp",
+      "value": 38.1,
+      "unit": "C",
+      "datetime": "2026-05-06T08:00"
+    },
+    {
+      "name": "temp",
+      "value": 37.1,
+      "unit": "C",
+      "datetime": "2026-05-08T08:00"
+    }
+  ],
+  "dataset_role": "volume_test",
+  "source_case_id": "sepsis_011"
+}

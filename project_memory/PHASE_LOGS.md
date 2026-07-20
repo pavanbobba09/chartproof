@@ -60,3 +60,4 @@ Default model: `GROQ_MODEL=llama-3.3-70b-versatile` (verify still free-tier when
 | Trust loop 1 | Complete | [TRUST_LOOP_1_COMPLETE.md](./TRUST_LOOP_1_COMPLETE.md) |
 | Trust loop 2 | Complete | [TRUST_LOOP_2_COMPLETE.md](./TRUST_LOOP_2_COMPLETE.md) |
 | Trust loop 3 | Complete | [TRUST_LOOP_3_COMPLETE.md](./TRUST_LOOP_3_COMPLETE.md) |
+| Trust loop 4 | Complete | [TRUST_LOOP_4_COMPLETE.md](./TRUST_LOOP_4_COMPLETE.md) |

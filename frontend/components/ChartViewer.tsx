@@ -64,15 +64,29 @@ export function ChartViewer({
                 <li
                   key={n}
                   id={`line-${doc.doc_id}-${n}`}
-                  className={`flex gap-3 px-3 py-1.5 ${
-                    hi ? "line-highlight" : sel ? "line-selected" : ""
-                  } ${selectable ? "cursor-pointer hover:bg-slate-50" : ""}`}
-                  onClick={() => selectable && onToggleLine?.(doc.doc_id, n)}
+                  className={hi ? "line-highlight" : sel ? "line-selected" : ""}
                 >
-                  <span className="w-8 shrink-0 select-none text-right text-slate-400">
-                    {n}
-                  </span>
-                  <span className="whitespace-pre-wrap text-slate-800">{line}</span>
+                  {selectable ? (
+                    <button
+                      type="button"
+                      aria-pressed={sel}
+                      aria-label={`${sel ? "Remove" : "Select"} ${doc.doc_id} line ${n}`}
+                      onClick={() => onToggleLine?.(doc.doc_id, n)}
+                      className="flex w-full gap-3 px-3 py-1.5 text-left hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-brand-600"
+                    >
+                      <span className="w-8 shrink-0 select-none text-right text-slate-400">
+                        {n}
+                      </span>
+                      <span className="whitespace-pre-wrap text-slate-800">{line}</span>
+                    </button>
+                  ) : (
+                    <div className="flex gap-3 px-3 py-1.5">
+                      <span className="w-8 shrink-0 select-none text-right text-slate-400">
+                        {n}
+                      </span>
+                      <span className="whitespace-pre-wrap text-slate-800">{line}</span>
+                    </div>
+                  )}
                 </li>
               );
             })}

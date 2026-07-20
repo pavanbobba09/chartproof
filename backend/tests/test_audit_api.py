@@ -9,11 +9,18 @@ from fastapi.testclient import TestClient
 
 from backend.app import app
 from backend.index.build import build_case_collection, build_guidelines_collection, get_client
+from backend.pipeline import audit_service
 from backend.pipeline.graph import run_full_pipeline
 from backend.schemas import AuditResult, Case
 
 client = TestClient(app)
 REPO = Path(__file__).resolve().parents[2]
+
+
+@pytest.fixture(autouse=True)
+def isolated_runtime_cache(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Keep API tests independent from fresh audits run in a developer session."""
+    monkeypatch.setattr(audit_service, "RUNTIME_CACHE_DIR", tmp_path / "runtime-cache")
 
 
 @pytest.fixture(scope="module")
@@ -38,6 +45,10 @@ def test_list_cases_no_keys() -> None:
     assert "case_id" in body[0]
     assert "key_rationale" not in body[0]
     assert "planted_evidence" not in body[0]
+    assert {row["dataset_role"] for row in body} == {
+        "clinical_scenario",
+        "volume_test",
+    }
 
 
 def test_get_audit_precomputed(precomputed_sepsis_001: AuditResult) -> None:

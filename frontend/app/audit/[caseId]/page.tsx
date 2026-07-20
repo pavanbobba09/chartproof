@@ -229,14 +229,20 @@ export default function AuditPage() {
                       {audit.evidence.map((e) => (
                         <tr
                           key={e.evidence_id}
-                          className="cursor-pointer border-t border-slate-100 hover:bg-amber-50"
-                          onClick={() => jumpTo(e.span)}
+                          className="border-t border-slate-100 hover:bg-amber-50"
                         >
                           <td className="px-2 py-1 font-mono">{e.evidence_id}</td>
                           <td className="px-2 py-1">{e.side}</td>
                           <td className="px-2 py-1">{e.criterion_id}</td>
                           <td className="px-2 py-1 font-mono">
-                            {e.span.doc_id}:{e.span.line_start}-{e.span.line_end}
+                            <button
+                              type="button"
+                              onClick={() => jumpTo(e.span)}
+                              aria-label={`Show ${e.evidence_id} in chart at ${e.span.doc_id} lines ${e.span.line_start} through ${e.span.line_end}`}
+                              className="rounded text-left text-brand-700 underline decoration-dotted underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+                            >
+                              {e.span.doc_id}:{e.span.line_start}-{e.span.line_end}
+                            </button>
                           </td>
                           <td className="max-w-xs truncate px-2 py-1">{e.text}</td>
                         </tr>

@@ -93,6 +93,7 @@ def list_case_summaries() -> list[CaseSummary]:
             CaseSummary(
                 case_id=case_id,
                 target_dx=data.get("target_dx", "unknown"),
+                dataset_role=data.get("dataset_role", "clinical_scenario"),
                 difficulty=difficulty,
                 has_precomputed=_precomputed_path(case_id).is_file(),
             )

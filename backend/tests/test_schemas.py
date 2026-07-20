@@ -94,6 +94,27 @@ def test_case_requires_documents() -> None:
         )
 
 
+def test_volume_case_requires_source_case_id() -> None:
+    with pytest.raises(ValidationError):
+        Case.model_validate(
+            {
+                "case_id": "sepsis_016",
+                "target_dx": "sepsis",
+                "dataset_role": "volume_test",
+                "billed": {"icd10": ["A41.9"], "drg": "871"},
+                "patient": {"age": 50, "sex": "M"},
+                "documents": [
+                    {
+                        "doc_id": "hp",
+                        "doc_type": "history_and_physical",
+                        "date": "2026-01-03",
+                        "lines": ["Synthetic line."],
+                    }
+                ],
+            }
+        )
+
+
 def test_answer_key_verdict_enum() -> None:
     key = AnswerKey.model_validate(
         {

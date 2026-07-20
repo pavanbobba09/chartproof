@@ -5,6 +5,7 @@ const API_BASE =
 export type CaseSummary = {
   case_id: string;
   target_dx: string;
+  dataset_role: "clinical_scenario" | "volume_test";
   difficulty?: string | null;
   has_precomputed: boolean;
 };
@@ -25,6 +26,8 @@ export type Document = {
 export type Case = {
   case_id: string;
   target_dx: string;
+  dataset_role: "clinical_scenario" | "volume_test";
+  source_case_id?: string | null;
   billed: { icd10: string[]; drg: string };
   patient: { age: number; sex: string };
   documents: Document[];

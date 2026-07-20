@@ -45,6 +45,7 @@ EvidenceSide = Literal["for", "against"]
 CriterionResultKind = Literal["met", "not_met", "unclear"]
 AuditSource = Literal["precomputed", "cached", "live"]
 Difficulty = Literal["clear", "borderline"]
+DatasetRole = Literal["clinical_scenario", "volume_test"]
 
 
 class EvidenceSpan(BaseModel):
@@ -111,6 +112,8 @@ class VitalValue(BaseModel):
 class Case(BaseModel):
     case_id: str
     target_dx: str
+    dataset_role: DatasetRole = "clinical_scenario"
+    source_case_id: str | None = None
     billed: BilledCodes
     patient: Patient
     documents: list[Document]
@@ -121,6 +124,8 @@ class Case(BaseModel):
     def documents_nonempty(self) -> Case:
         if not self.documents:
             raise ValueError("case must have at least one document")
+        if self.dataset_role == "volume_test" and not self.source_case_id:
+            raise ValueError("volume-test cases must identify source_case_id")
         return self
 
 
@@ -219,6 +224,7 @@ class CaseSummary(BaseModel):
 
     case_id: str
     target_dx: str
+    dataset_role: DatasetRole = "clinical_scenario"
     difficulty: Difficulty | None = None
     has_precomputed: bool = False
 

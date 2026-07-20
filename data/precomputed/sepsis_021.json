@@ -1,0 +1,227 @@
+{
+  "case_id": "sepsis_021",
+  "status": "completed",
+  "verdict": "not_supported",
+  "confidence": 0.85,
+  "rules_verdict": "not_supported",
+  "draft_verdict": "not_supported",
+  "criteria_results": [
+    {
+      "criterion_id": "infection",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ]
+    },
+    {
+      "criterion_id": "lactate_elevated",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E7",
+        "E8",
+        "E9"
+      ]
+    },
+    {
+      "criterion_id": "hypotension",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E10"
+      ]
+    },
+    {
+      "criterion_id": "vasopressors",
+      "result": "not_met",
+      "method": "narrative",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "creatinine_rise",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "thrombocytopenia",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E11",
+        "E12",
+        "E13"
+      ]
+    },
+    {
+      "criterion_id": "altered_mentation",
+      "result": "not_met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E5",
+        "E6"
+      ]
+    },
+    {
+      "criterion_id": "organ_dysfunction",
+      "result": "not_met",
+      "method": "any_of",
+      "evidence_ids": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E1",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "The patient's condition has improved significantly over the past 48 hours. The patient is no longer febrile, and the lactate level has decreased to 1.5 mmol/L. Creatinine level is 1.0 mg/dL, platelets are 160 x 10^9/L. The patient is being discharged home on oral antibiotics."
+    },
+    {
+      "evidence_id": "E2",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "He presents with a 2-day history of fever, chills, and cough."
+    },
+    {
+      "evidence_id": "E3",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 7,
+        "line_end": 10
+      },
+      "text": "Chest X-ray shows a small infiltrate in the left lower lobe. The patient is started on antibiotics and oxygen therapy. Nursing: patient tolerating oral intake as ordered. Nursing: skin warm and dry; no new rashes documented."
+    },
+    {
+      "evidence_id": "E4",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "The patient is being discharged home on oral antibiotics. The patient is advised to follow up with their primary care physician in 1 week. The patient's vital signs are stable, with a blood pressure of 120/80 mmHg and a heart rate of 80 bpm. Nursing: patient tolerating oral intake as ordered."
+    },
+    {
+      "evidence_id": "E5",
+      "side": "against",
+      "criterion_id": "altered_mentation",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "Lungs are clear to auscultation, but there is a mild wheeze in the left lower lobe. The patient is alert and oriented, but appears mildly distressed. Lab results: lactate 1.8 mmol/L, creatinine 1.2 mg/dL, platelets 150 x 10^9/L. Chest X-ray shows a small infiltrate in the left lower lobe."
+    },
+    {
+      "evidence_id": "E6",
+      "side": "against",
+      "criterion_id": "altered_mentation",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "The patient is alert and oriented, but appears mildly distressed."
+    },
+    {
+      "evidence_id": "E7",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "text": "Lab results: lactate 1.8 mmol/L, creatinine 1.2 mg/dL, platelets 150 x 10^9/L."
+    },
+    {
+      "evidence_id": "E8",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Lactate level is 1.9 mmol/L, creatinine is 1.1 mg/dL, platelets are 140 x 10^9/L."
+    },
+    {
+      "evidence_id": "E9",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "The patient is no longer febrile, and the lactate level has decreased to 1.5 mmol/L."
+    },
+    {
+      "evidence_id": "E10",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "text": "Vital signs: MAP is 80 mmHg, which is within normal limits."
+    },
+    {
+      "evidence_id": "E11",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "text": "Lab results: lactate 1.8 mmol/L, creatinine 1.2 mg/dL, platelets 150 x 10^9/L."
+    },
+    {
+      "evidence_id": "E12",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Lactate level is 1.9 mmol/L, creatinine is 1.1 mg/dL, platelets are 140 x 10^9/L."
+    },
+    {
+      "evidence_id": "E13",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Creatinine level is 1.0 mg/dL, platelets are 160 x 10^9/L."
+    }
+  ],
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_021 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is not_supported, primarily based on E5 (altered_mentation): Lungs are clear to auscultation, but there is a mild wheeze in the left lower lobe\n\n## Evidence\n| # | For/Against | Criterion | Source | Lines | Excerpt |\n|---|-------------|-----------|--------|-------|---------|\n| E1 | for | infection | discharge_summary 2022-01-31 | 1-4 | The patient's condition has improved significantly over the past 48 hours. The patient is no longer febrile, and the lac |\n| E2 | for | infection | history_and_physical 2022-01-29 | 2-2 | He presents with a 2-day history of fever, chills, and cough. |\n| E3 | for | infection | history_and_physical 2022-01-29 | 7-10 | Chest X-ray shows a small infiltrate in the left lower lobe. The patient is started on antibiotics and oxygen therapy. N |\n| E4 | for | infection | discharge_summary 2022-01-31 | 4-7 | The patient is being discharged home on oral antibiotics. The patient is advised to follow up with their primary care ph |\n| E5 | against | altered_mentation | history_and_physical 2022-01-29 | 4-7 | Lungs are clear to auscultation, but there is a mild wheeze in the left lower lobe. The patient is alert and oriented, b |\n| E6 | against | altered_mentation | history_and_physical 2022-01-29 | 5-5 | The patient is alert and oriented, but appears mildly distressed. |\n| E7 | against | lactate_elevated | history_and_physical 2022-01-29 | 6-6 | Lab results: lactate 1.8 mmol/L, creatinine 1.2 mg/dL, platelets 150 x 10^9/L. |\n| E8 | against | lactate_elevated | progress_note 2022-01-30 | 3-3 | Lactate level is 1.9 mmol/L, creatinine is 1.1 mg/dL, platelets are 140 x 10^9/L. |\n| E9 | against | lactate_elevated | discharge_summary 2022-01-31 | 2-2 | The patient is no longer febrile, and the lactate level has decreased to 1.5 mmol/L. |\n| E10 | against | hypotension | progress_note 2022-01-30 | 6-6 | Vital signs: MAP is 80 mmHg, which is within normal limits. |\n| E11 | against | thrombocytopenia | history_and_physical 2022-01-29 | 6-6 | Lab results: lactate 1.8 mmol/L, creatinine 1.2 mg/dL, platelets 150 x 10^9/L. |\n| E12 | against | thrombocytopenia | progress_note 2022-01-30 | 3-3 | Lactate level is 1.9 mmol/L, creatinine is 1.1 mg/dL, platelets are 140 x 10^9/L. |\n| E13 | against | thrombocytopenia | discharge_summary 2022-01-31 | 3-3 | Creatinine level is 1.0 mg/dL, platelets are 160 x 10^9/L. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). Findings that affect payment grouping must be supported by chart indicators (icd10cm_guidelines_fy2026_summary, Section: Sepsis coding notes (high level)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E11, E12, E13, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "dropped_sentences": 0,
+  "force_reasons": [],
+  "composer": "deterministic",
+  "source": "precomputed",
+  "trace_id": "run_sepsis_021_20260720T154706091971Z_312971"
+}

@@ -60,22 +60,23 @@ Chart generator (Groq)          Reference corpus (guidelines)
 
 ## Eval results (latest full bank)
 
-Suite: **full** (11 sepsis cases, precomputed pipeline). Smoke suite (5 fixed cases) is enforced in CI. A per-case evidence-recall floor (0.50) prevents aggregates from hiding local misses.
+Suite: **full** (100 synthetic sepsis records, precomputed pipeline). The bank contains 15 independently generated scenarios and 85 deterministic volume-test variants for UI, API, and load testing. Smoke suite (5 fixed cases) is enforced in CI. A per-case evidence-recall floor (0.50) prevents aggregates from hiding local misses.
 
 | Metric | Full bank | Smoke (CI) | Threshold |
 |--------|----------:|-----------:|----------:|
 | Determination accuracy | 1.000 | 1.000 | >= 0.80 |
-| Evidence recall | 1.000 | 1.000 | >= 0.70 (>= 0.50 per case) |
+| Evidence recall | 0.946 | 1.000 | >= 0.70 (>= 0.50 per case) |
 | Citation faithfulness | 1.000 | 1.000 | >= 0.95 |
-| Deferral rate (`needs_review`) | 0.091 | 0.000 | tracked |
+| Deferral rate (`needs_review`) | 0.060 | 0.000 | tracked |
 
-The nonzero deferral rate is by design: `sepsis_011` is ambiguous on purpose (clear infection, incomplete organ-dysfunction workup) and the correct pipeline behavior, scored as correct by the evals, is routing it to a human with explicit review reasons.
+The nonzero deferral rate is by design: `sepsis_011` is ambiguous on purpose (clear infection, incomplete organ-dysfunction workup) and the volume bank includes variants derived from it. The correct pipeline behavior, scored as correct by the evals, is routing these records to a human with explicit review reasons.
 
 Smoke and full suites **pass** thresholds. Citation faithfulness is a strict grounded check covering exact chart spans, criterion-specific evidence sides, determination support, evidence-table IDs, and guideline source/section pairs. See `evals/out/results.md`.
 
 ```bash
 python -m evals.run --suite smoke --enforce-thresholds
 python -m evals.run --suite full
+cd frontend && npm run test:e2e  # requires the local API/UI and Chrome
 ```
 
 ---
@@ -128,7 +129,7 @@ python -m evals.run --suite smoke --enforce-thresholds
 
 ## Features (shipped)
 
-- Synthetic sepsis case bank (11) + answer keys + guidelines corpus, including one ambiguous-by-design case that correctly defers to a human
+- Synthetic sepsis case bank (100) + answer keys + guidelines corpus. Fifteen scenarios are independently generated and 85 are deterministic volume-test variants. The bank includes ambiguous-by-design records that correctly defer to a human.
 - Deterministic rules engine (no LLM in `backend/rules/`)
 - Chroma retrieval + narrative evidence agents (shared lexicon with the faithfulness oracle)
 - Citation-enforced rationale letter + QA `needs_review` with reviewer-readable force reasons
