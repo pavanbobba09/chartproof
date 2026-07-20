@@ -1,13 +1,3 @@
----
-title: ChartProof API
-emoji: "🩺"
-colorFrom: purple
-colorTo: gray
-sdk: docker
-app_port: 7860
-pinned: false
----
-
 # ChartProof
 
 **Auditor-assist clinical chart validation (CCV)** on 100% synthetic data.
@@ -18,12 +8,12 @@ ChartProof is a portfolio demo of an AI copilot for inpatient clinical validatio
 
 | | |
 |---|---|
-| **Status** | Phase 5 engineering complete (Docker + CI deploy + demo hardening); set HF/Vercel secrets for live URLs |
+| **Status** | Live portfolio deployment; full pipeline covered by CI and local Docker |
 | **Stack** | FastAPI · LangGraph · ChromaDB · deterministic rules · Groq (generation) · Next.js |
-| **Hosting** | Hugging Face Spaces (Docker API) + Vercel Hobby (UI) |
+| **Hosting** | Vercel Hobby (Next.js UI + lightweight FastAPI portfolio API) |
 | **Repo** | https://github.com/pavanbobba09/chartproof |
-| **API (planned)** | `https://trippy09-chartproof.hf.space` |
-| **UI (planned)** | Vercel project root `frontend/` |
+| **Live API** | https://chartproof-api.vercel.app |
+| **Live UI** | https://chartproof.vercel.app |
 
 ---
 
@@ -143,25 +133,26 @@ Inventory: [project_memory/FEATURES.md](project_memory/FEATURES.md)
 
 ---
 
-## Deploy (Phase 5)
+## Deploy
 
-### Backend image (Hugging Face Spaces)
+The $0 portfolio deployment uses two Vercel Hobby projects:
+
+- `chartproof`: Next.js project rooted at `frontend/`.
+- `chartproof-api`: repository-root FastAPI project using `app.py`.
+
+The public API deliberately serves committed, CI-verified audit drafts and
+server-side training grading. It does not claim to run the model/retrieval path.
+The full pipeline remains available locally through `backend.app` and the Docker
+image, and is exercised by CI's live deterministic smoke evaluation.
 
 ```bash
-docker build -t chartproof-api .
-# Space sync is automated on green main when GitHub secret HF_TOKEN is set.
+# API (repository root)
+vercel deploy --prod
+
+# UI (frontend/), configured with:
+# NEXT_PUBLIC_API_BASE_URL=https://chartproof-api.vercel.app
+cd frontend && vercel deploy --prod
 ```
-
-One-time:
-
-1. Create Docker Space `trippy09/chartproof` on Hugging Face.
-2. Add GitHub Actions secret `HF_TOKEN` (write access to that Space).
-3. Set Space variable `ALLOWED_ORIGINS` to your Vercel URL(s) and `http://localhost:3000`.
-
-### Frontend (Vercel)
-
-1. Import this repo; **Root Directory** = `frontend`.
-2. Env: `NEXT_PUBLIC_API_BASE_URL=https://trippy09-chartproof.hf.space`.
 
 See [scripts/demo_day_checklist.md](scripts/demo_day_checklist.md) and [project_memory/DEPLOYMENT.md](project_memory/DEPLOYMENT.md).
 
@@ -171,7 +162,8 @@ See [scripts/demo_day_checklist.md](scripts/demo_day_checklist.md) and [project_
 - Sepsis only; criteria are simplified educational encodings
 - Faithfulness validation is deterministic and tailored to the encoded demo criteria; external clinical adjudication remains out of scope
 - Case notes include some pad lines for schema length compliance
-- Live public URLs require HF_TOKEN + Vercel project (not bound in CI without secrets)
+- The free public API serves immutable precomputed drafts; run the local backend for fresh retrieval/model execution
+- Vercel Hobby is appropriate only for this personal, non-commercial portfolio demo
 
 ---
 
@@ -186,12 +178,12 @@ See [scripts/demo_day_checklist.md](scripts/demo_day_checklist.md) and [project_
 | [project_memory/FEATURES.md](project_memory/FEATURES.md) | Feature inventory |
 | [project_memory/E2E_REQUIREMENTS_REVIEW.md](project_memory/E2E_REQUIREMENTS_REVIEW.md) | Requirements audit |
 | [project_memory/PHASE_LOGS.md](project_memory/PHASE_LOGS.md) | Phase completion index |
-| [project_memory/DEPLOYMENT.md](project_memory/DEPLOYMENT.md) | CI / HF / Vercel |
+| [project_memory/DEPLOYMENT.md](project_memory/DEPLOYMENT.md) | CI / Vercel deployment profiles |
 | [evals/out/results.md](evals/out/results.md) | Latest eval report |
 
 Demo video: *(add link after recording)*  
-Live API: `https://trippy09-chartproof.hf.space` *(after Space is created and CI deploy runs)*  
-Live UI: *(Vercel URL after import)*
+Live API: https://chartproof-api.vercel.app<br>
+Live UI: https://chartproof.vercel.app
 
 ---
 
