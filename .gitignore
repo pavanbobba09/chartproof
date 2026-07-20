@@ -16,6 +16,7 @@ build/
 # Env and secrets
 .env
 .env.local
+.vercel/
 
 # Project runtime artifacts
 .chroma/
