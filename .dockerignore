@@ -19,5 +19,6 @@ frontend/out
 frontend/.env.local
 *.md
 !README.md
+!data/guidelines/*.md
 project_memory
 docs

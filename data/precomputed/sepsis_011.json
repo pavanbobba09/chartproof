@@ -1,0 +1,194 @@
+{
+  "case_id": "sepsis_011",
+  "status": "needs_review",
+  "verdict": null,
+  "confidence": 0.15,
+  "rules_verdict": null,
+  "draft_verdict": "not_supported",
+  "criteria_results": [
+    {
+      "criterion_id": "infection",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ]
+    },
+    {
+      "criterion_id": "lactate_elevated",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E5",
+        "E6",
+        "E7"
+      ]
+    },
+    {
+      "criterion_id": "hypotension",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E8",
+        "E9"
+      ]
+    },
+    {
+      "criterion_id": "vasopressors",
+      "result": "not_met",
+      "method": "narrative",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "creatinine_rise",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E10"
+      ]
+    },
+    {
+      "criterion_id": "thrombocytopenia",
+      "result": "unclear",
+      "method": "structured",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "altered_mentation",
+      "result": "not_met",
+      "method": "narrative",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "organ_dysfunction",
+      "result": "unclear",
+      "method": "any_of",
+      "evidence_ids": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E1",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient is a 78-year-old female with a history of recurrent urinary tract infections. She presents with a 1-day history of fever, chills, and right flank pain. Urinalysis is consistent with pyelonephritis and intravenous ceftriaxone is started. Vital signs: temperature 38.4 C, MAP 78 mmHg, heart rate 96 bpm."
+    },
+    {
+      "evidence_id": "E2",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient was treated for pyelonephritis with intravenous ceftriaxone. Fevers resolved and she remained hemodynamically stable throughout the stay. Discharge laboratory results: lactate 1.8 mmol/L and creatinine 1.0 mg/dL. Several ordered laboratory panels were never filed, so the severity workup in this record is incomplete."
+    },
+    {
+      "evidence_id": "E3",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "Complete blood count results are pending and have not been filed in the chart. Continuing ceftriaxone for pyelonephritis; urine culture results are pending. No additional concerns documented on today's rounds. Nursing: patient tolerating oral intake as ordered."
+    },
+    {
+      "evidence_id": "E4",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "Continuing ceftriaxone for pyelonephritis; urine culture results are pending."
+    },
+    {
+      "evidence_id": "E5",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "Laboratory results: lactate 2.0 mmol/L, creatinine 1.1 mg/dL."
+    },
+    {
+      "evidence_id": "E6",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Repeat lactate is 1.9 mmol/L and MAP is 82 mmHg."
+    },
+    {
+      "evidence_id": "E7",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Discharge laboratory results: lactate 1.8 mmol/L and creatinine 1.0 mg/dL."
+    },
+    {
+      "evidence_id": "E8",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Vital signs: temperature 38.4 C, MAP 78 mmHg, heart rate 96 bpm."
+    },
+    {
+      "evidence_id": "E9",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Repeat lactate is 1.9 mmol/L and MAP is 82 mmHg."
+    },
+    {
+      "evidence_id": "E10",
+      "side": "against",
+      "criterion_id": "creatinine_rise",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Creatinine remains stable at 1.1 mg/dL."
+    }
+  ],
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_011 | Status: needs_review | Draft for auditor review\n\n## Determination\nDraft determination is deferred pending auditor review (see E1); criteria evaluation was incomplete or conflicting.\n\n## Evidence\n| # | For/Against | Criterion | Source | Lines | Excerpt |\n|---|-------------|-----------|--------|-------|---------|\n| E1 | for | infection | history_and_physical 2026-02-10 | 1-4 | Patient is a 78-year-old female with a history of recurrent urinary tract infections. She presents with a 1-day history  |\n| E2 | for | infection | discharge_summary 2026-02-13 | 1-4 | Patient was treated for pyelonephritis with intravenous ceftriaxone. Fevers resolved and she remained hemodynamically st |\n| E3 | for | infection | progress_note 2026-02-11 | 4-7 | Complete blood count results are pending and have not been filed in the chart. Continuing ceftriaxone for pyelonephritis |\n| E4 | for | infection | progress_note 2026-02-11 | 5-5 | Continuing ceftriaxone for pyelonephritis; urine culture results are pending. |\n| E5 | against | lactate_elevated | history_and_physical 2026-02-10 | 5-5 | Laboratory results: lactate 2.0 mmol/L, creatinine 1.1 mg/dL. |\n| E6 | against | lactate_elevated | progress_note 2026-02-11 | 2-2 | Repeat lactate is 1.9 mmol/L and MAP is 82 mmHg. |\n| E7 | against | lactate_elevated | discharge_summary 2026-02-13 | 3-3 | Discharge laboratory results: lactate 1.8 mmol/L and creatinine 1.0 mg/dL. |\n| E8 | against | hypotension | history_and_physical 2026-02-10 | 4-4 | Vital signs: temperature 38.4 C, MAP 78 mmHg, heart rate 96 bpm. |\n| E9 | against | hypotension | progress_note 2026-02-11 | 2-2 | Repeat lactate is 1.9 mmol/L and MAP is 82 mmHg. |\n| E10 | against | creatinine_rise | progress_note 2026-02-11 | 3-3 | Creatinine remains stable at 1.1 mg/dL. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). Findings that affect payment grouping must be supported by chart indicators (icd10cm_guidelines_fy2026_summary, Section: Sepsis coding notes (high level)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "dropped_sentences": 0,
+  "force_reasons": [
+    "rules_draft_disagreement",
+    "unknown_verdict",
+    "low_confidence"
+  ],
+  "composer": "deterministic",
+  "source": "precomputed",
+  "trace_id": "run_sepsis_011_20260719T194039805615Z_326981"
+}

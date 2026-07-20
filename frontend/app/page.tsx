@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { getCases } from "@/lib/api";
+import { CaseBank } from "@/components/CaseBank";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +22,13 @@ export default async function HomePage() {
         </p>
       </div>
 
+      <div className="rounded-lg border border-violet-200 bg-violet-50 p-4 text-sm text-violet-950">
+        <span className="font-semibold">Honest evaluation boundary:</span>{" "}
+        clinical quality is measured on 15 independently generated scenarios.
+        The other 85 records are deterministic variants for workflow and volume
+        testing, not additional clinical evidence.
+      </div>
+
       {error && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
           Could not reach the API. Start the backend on port 8000 and set{" "}
@@ -30,60 +37,7 @@ export default async function HomePage() {
         </div>
       )}
 
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-        <table className="min-w-full text-left text-sm">
-          <thead className="bg-slate-100 text-slate-700">
-            <tr>
-              <th className="px-4 py-3 font-medium">Case</th>
-              <th className="px-4 py-3 font-medium">Dx</th>
-              <th className="px-4 py-3 font-medium">Difficulty</th>
-              <th className="px-4 py-3 font-medium">Precomputed</th>
-              <th className="px-4 py-3 font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cases.map((c) => (
-              <tr key={c.case_id} className="border-t border-slate-100">
-                <td className="px-4 py-3 font-mono text-xs sm:text-sm">
-                  {c.case_id}
-                </td>
-                <td className="px-4 py-3 capitalize">{c.target_dx}</td>
-                <td className="px-4 py-3">{c.difficulty || "n/a"}</td>
-                <td className="px-4 py-3">
-                  {c.has_precomputed ? (
-                    <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs text-emerald-700">
-                      ready
-                    </span>
-                  ) : (
-                    <span className="text-xs text-slate-400">live only</span>
-                  )}
-                </td>
-                <td className="px-4 py-3 space-x-2">
-                  <Link
-                    href={`/audit/${c.case_id}`}
-                    className="inline-flex rounded-md bg-brand-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-700"
-                  >
-                    Audit
-                  </Link>
-                  <Link
-                    href={`/training/${c.case_id}`}
-                    className="inline-flex rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
-                  >
-                    Train
-                  </Link>
-                </td>
-              </tr>
-            ))}
-            {!cases.length && !error && (
-              <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-slate-500">
-                  No cases found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      {!error && <CaseBank cases={cases} />}
     </div>
   );
 }

@@ -157,7 +157,9 @@ AuditResult, returned by `POST /audit/{case_id}` and `GET /audit/{case_id}`:
   "verdict": "not_supported",
   "confidence": 0.86,
   "rules_verdict": "not_supported",
-  "llm_verdict": "not_supported",
+  "draft_verdict": "not_supported",
+  "force_reasons": [],
+  "composer": "deterministic",
   "criteria_results": [
     { "criterion_id": "infection", "result": "met", "method": "narrative", "evidence_ids": ["E1"] },
     { "criterion_id": "organ_dysfunction", "result": "not_met", "method": "mixed", "evidence_ids": ["E2", "E3"] }

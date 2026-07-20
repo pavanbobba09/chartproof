@@ -1,0 +1,250 @@
+{
+  "case_id": "sepsis_042",
+  "target_dx": "sepsis",
+  "billed": {
+    "icd10": [
+      "A41.9"
+    ],
+    "drg": "871"
+  },
+  "patient": {
+    "age": 53,
+    "sex": "F"
+  },
+  "documents": [
+    {
+      "doc_id": "hp",
+      "doc_type": "history_and_physical",
+      "date": "2022-02-26",
+      "lines": [
+        "Patient is a 65 year old male with a history of hypertension and diabetes.",
+        "He presents with a 2 day history of fever and cough.",
+        "The patient reports a temperature of 38.5 degrees Celsius at home.",
+        "He has been experiencing shortness of breath and chest pain.",
+        "The patient's vital signs are: temperature 38.2 degrees Celsius, blood pressure 90/60 mmHg, heart rate 110 beats per minute, respiratory rate 24 breaths per minute.",
+        "The physical exam reveals crackles in the lungs bilaterally.",
+        "The patient's labs are significant for a lactate level of 3.5 mmol/L.",
+        "A chest X-ray shows bilateral infiltrates.",
+        "The patient is being treated with oxygen and broad spectrum antibiotics.",
+        "The patient's creatinine level is 1.2 mg/dL.",
+        "The patient's platelet count is 80,000 cells per microliter.",
+        "The patient is being monitored closely for signs of sepsis.",
+        "The patient's MAP is 60 mmHg.",
+        "The patient is being considered for vasopressor support.",
+        "The patient's condition is being closely monitored.",
+        "The patient's family is being updated on his condition.",
+        "The patient's code status is being discussed with the family."
+      ]
+    },
+    {
+      "doc_id": "pn_01",
+      "doc_type": "progress_note",
+      "date": "2022-02-27",
+      "lines": [
+        "The patient's condition has not improved overnight.",
+        "The patient's temperature is still elevated at 38.5 degrees Celsius.",
+        "The patient's blood pressure is 80/50 mmHg.",
+        "The patient's heart rate is 120 beats per minute.",
+        "The patient's respiratory rate is 28 breaths per minute.",
+        "The patient's oxygen saturation is 88% on 4 liters of oxygen.",
+        "The patient's lactate level is still elevated at 3.2 mmol/L.",
+        "The patient's creatinine level has risen to 1.5 mg/dL.",
+        "The patient's platelet count is 70,000 cells per microliter.",
+        "The patient is being treated with vasopressors to support his blood pressure.",
+        "The patient's MAP is 55 mmHg.",
+        "The patient's condition is being closely monitored.",
+        "The patient's family is being updated on his condition.",
+        "The patient's code status is being discussed with the family.",
+        "The patient's prognosis is guarded.",
+        "The patient's treatment plan is being adjusted to include more aggressive antibiotic therapy."
+      ]
+    },
+    {
+      "doc_id": "ds",
+      "doc_type": "discharge_summary",
+      "date": "2022-03-07",
+      "lines": [
+        "The patient was admitted to the hospital on 01/01/2022 with a diagnosis of sepsis.",
+        "The patient was treated with broad spectrum antibiotics and vasopressor support.",
+        "The patient's condition improved slowly over the course of his hospital stay.",
+        "The patient's lactate level decreased to 1.5 mmol/L.",
+        "The patient's creatinine level decreased to 1.0 mg/dL.",
+        "The patient's platelet count increased to 150,000 cells per microliter.",
+        "The patient's blood pressure improved to 100/60 mmHg.",
+        "The patient's heart rate decreased to 80 beats per minute.",
+        "The patient's respiratory rate decreased to 18 breaths per minute.",
+        "The patient's oxygen saturation improved to 95% on room air.",
+        "The patient was discharged home on 01/10/2022.",
+        "The patient was instructed to follow up with his primary care physician in 1 week.",
+        "The patient was given a prescription for antibiotics to complete at home.",
+        "The patient's condition at discharge was stable.",
+        "The patient's prognosis is good."
+      ]
+    },
+    {
+      "doc_id": "pn_02",
+      "doc_type": "progress_note",
+      "date": "2022-03-02",
+      "lines": [
+        "The patient's condition is slowly improving.",
+        "The patient's temperature is 37.5 degrees Celsius.",
+        "The patient's blood pressure is 90/60 mmHg.",
+        "The patient's heart rate is 100 beats per minute.",
+        "The patient's respiratory rate is 20 breaths per minute.",
+        "The patient's oxygen saturation is 90% on 2 liters of oxygen.",
+        "The patient's lactate level is 2.0 mmol/L.",
+        "The patient's creatinine level is 1.2 mg/dL.",
+        "The patient's platelet count is 100,000 cells per microliter.",
+        "The patient is being weaned off vasopressor support.",
+        "The patient's MAP is 60 mmHg.",
+        "The patient's condition is being closely monitored.",
+        "The patient's family is being updated on his condition.",
+        "The patient's code status is being discussed with the family.",
+        "The patient's prognosis is improving.",
+        "The patient's treatment plan is being adjusted to include less aggressive antibiotic therapy."
+      ]
+    },
+    {
+      "doc_id": "pn_03",
+      "doc_type": "progress_note",
+      "date": "2022-03-05",
+      "lines": [
+        "The patient's condition is continuing to improve.",
+        "The patient's temperature is 36.5 degrees Celsius.",
+        "The patient's blood pressure is 100/60 mmHg.",
+        "The patient's heart rate is 80 beats per minute.",
+        "The patient's respiratory rate is 18 breaths per minute.",
+        "The patient's oxygen saturation is 95% on room air.",
+        "The patient's lactate level is 1.0 mmol/L.",
+        "The patient's creatinine level is 0.9 mg/dL.",
+        "The patient's platelet count is 150,000 cells per microliter.",
+        "The patient is being prepared for discharge.",
+        "The patient's condition is being closely monitored.",
+        "The patient's family is being updated on his condition.",
+        "The patient's code status is being discussed with the family.",
+        "The patient's prognosis is good.",
+        "The patient's treatment plan is being adjusted to include follow up care at home. Synthetic volume-test variant sepsis_042; no real patient data."
+      ]
+    }
+  ],
+  "labs": [
+    {
+      "name": "lactate",
+      "value": 3.5,
+      "unit": "mmol/L",
+      "datetime": "2022-02-26T08:00"
+    },
+    {
+      "name": "lactate",
+      "value": 3.2,
+      "unit": "mmol/L",
+      "datetime": "2022-02-27T08:00"
+    },
+    {
+      "name": "lactate",
+      "value": 2.0,
+      "unit": "mmol/L",
+      "datetime": "2022-03-02T08:00"
+    },
+    {
+      "name": "lactate",
+      "value": 1.5,
+      "unit": "mmol/L",
+      "datetime": "2022-03-05T08:00"
+    },
+    {
+      "name": "creatinine",
+      "value": 1.2,
+      "unit": "mg/dL",
+      "datetime": "2022-02-26T08:00"
+    },
+    {
+      "name": "creatinine",
+      "value": 1.5,
+      "unit": "mg/dL",
+      "datetime": "2022-02-27T08:00"
+    },
+    {
+      "name": "creatinine",
+      "value": 1.2,
+      "unit": "mg/dL",
+      "datetime": "2022-03-02T08:00"
+    },
+    {
+      "name": "creatinine",
+      "value": 0.9,
+      "unit": "mg/dL",
+      "datetime": "2022-03-05T08:00"
+    },
+    {
+      "name": "platelets",
+      "value": 80000.0,
+      "unit": "10^9/L",
+      "datetime": "2022-02-26T08:00"
+    },
+    {
+      "name": "platelets",
+      "value": 70000.0,
+      "unit": "10^9/L",
+      "datetime": "2022-02-27T08:00"
+    },
+    {
+      "name": "platelets",
+      "value": 100000.0,
+      "unit": "10^9/L",
+      "datetime": "2022-03-02T08:00"
+    },
+    {
+      "name": "platelets",
+      "value": 150000.0,
+      "unit": "10^9/L",
+      "datetime": "2022-03-05T08:00"
+    }
+  ],
+  "vitals": [
+    {
+      "name": "map",
+      "value": 60.0,
+      "unit": "mmHg",
+      "datetime": "2022-02-26T08:00"
+    },
+    {
+      "name": "map",
+      "value": 55.0,
+      "unit": "mmHg",
+      "datetime": "2022-02-27T08:00"
+    },
+    {
+      "name": "map",
+      "value": 60.0,
+      "unit": "mmHg",
+      "datetime": "2022-03-02T08:00"
+    },
+    {
+      "name": "temp",
+      "value": 38.2,
+      "unit": "C",
+      "datetime": "2022-02-26T08:00"
+    },
+    {
+      "name": "temp",
+      "value": 38.5,
+      "unit": "C",
+      "datetime": "2022-02-27T08:00"
+    },
+    {
+      "name": "temp",
+      "value": 37.5,
+      "unit": "C",
+      "datetime": "2022-03-02T08:00"
+    },
+    {
+      "name": "temp",
+      "value": 36.5,
+      "unit": "C",
+      "datetime": "2022-03-05T08:00"
+    }
+  ],
+  "dataset_role": "volume_test",
+  "source_case_id": "sepsis_012"
+}

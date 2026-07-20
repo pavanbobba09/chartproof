@@ -5,12 +5,17 @@ from __future__ import annotations
 from backend.config import CASES_DIR, KEYS_DIR
 from backend.schemas import (
     AnswerKey,
+    Case,
     EvidenceSpan,
     MissedSpan,
     TrainingGradeRequest,
     TrainingGradeResponse,
 )
 from evals.metrics import planted_for_side
+
+# Guardrails so oversized or fabricated selections cannot buy a free score.
+MAX_SELECTED_SPANS = 100
+MAX_SPAN_LINES = 10
 
 
 def load_key(case_id: str) -> AnswerKey:
@@ -20,16 +25,58 @@ def load_key(case_id: str) -> AnswerKey:
     return AnswerKey.model_validate_json(path.read_text(encoding="utf-8"))
 
 
+def load_case(case_id: str) -> Case:
+    path = CASES_DIR / f"{case_id}.json"
+    if not path.is_file():
+        raise FileNotFoundError(f"case not found: {case_id}")
+    return Case.model_validate_json(path.read_text(encoding="utf-8"))
+
+
 def case_exists(case_id: str) -> bool:
     return (CASES_DIR / f"{case_id}.json").is_file()
 
 
+def validate_selected_spans(case: Case, spans: list[EvidenceSpan]) -> list[EvidenceSpan]:
+    """Reject spans that do not exist in the chart; dedupe exact repeats.
+
+    Raises ValueError with a client-safe message on any invalid span.
+    """
+    if len(spans) > MAX_SELECTED_SPANS:
+        raise ValueError(
+            f"too many selected spans ({len(spans)}); maximum is {MAX_SELECTED_SPANS}"
+        )
+    line_counts = {doc.doc_id: len(doc.lines) for doc in case.documents}
+    deduped: list[EvidenceSpan] = []
+    seen: set[tuple[str, int, int]] = set()
+    for span in spans:
+        limit = line_counts.get(span.doc_id)
+        if limit is None:
+            raise ValueError(f"unknown document in selection: {span.doc_id}")
+        if span.line_end > limit:
+            raise ValueError(
+                f"selection {span.doc_id}:{span.line_start}-{span.line_end} "
+                f"is outside the document ({limit} lines)"
+            )
+        if span.line_end - span.line_start + 1 > MAX_SPAN_LINES:
+            raise ValueError(
+                f"selection {span.doc_id}:{span.line_start}-{span.line_end} "
+                f"is too long; maximum span is {MAX_SPAN_LINES} lines"
+            )
+        key = (span.doc_id, span.line_start, span.line_end)
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(span)
+    return deduped
+
+
 def grade_submission(case_id: str, req: TrainingGradeRequest) -> TrainingGradeResponse:
     key = load_key(case_id)
+    case = load_case(case_id)
     verdict_correct = req.verdict == key.verdict
 
     targets = planted_for_side(key)
-    selected = list(req.selected_spans)
+    selected = validate_selected_spans(case, list(req.selected_spans))
 
     hit_plants: list[bool] = []
     for plant in targets:

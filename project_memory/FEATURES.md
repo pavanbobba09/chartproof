@@ -42,7 +42,7 @@ Living inventory of shipped product and engineering capabilities. Update this fi
 | Case/key consistency checker | Span ranges, min planted evidence, lab/vital mentions, doc length 15–60 |
 | Groq case generator | `python -m data.generate --dx sepsis --n 10` (needs `GROQ_API_KEY`) |
 | Raw generation cache | `data/raw/` (gitignored) for rate-limit friendly reruns |
-| Synthetic case bank | 10 cases: `data/cases/sepsis_001` … `sepsis_010` |
+| Synthetic case bank | 100 records: 15 independently generated scenarios plus 85 deterministic volume-test variants, `data/cases/sepsis_001` through `sepsis_100` |
 | Hidden answer keys | `data/keys/*.key.json` (server-side; not exposed by public list APIs) |
 | Guidelines corpus | Educational markdown + `data/guidelines/manifest.json` |
 
@@ -122,6 +122,9 @@ curl -X POST 'http://localhost:8000/audit/sepsis_002?fresh=true'
 | `GET /cases/{id}` | Full chart JSON, no keys |
 | `POST /training/{id}/grade` | Trainee grading against hidden key |
 | Next.js case list | `frontend/` → `/` |
+| Case-bank controls | Search, difficulty and dataset-purpose filters, 20-record pagination, and honest 15/85 provenance totals |
+| Keyboard evidence controls | Semantic chart-line and evidence-jump buttons with focus and pressed states |
+| Primary browser journey | Playwright Core + system Chrome covers case bank, audit evidence, and training grade; enforced in CI |
 | Audit UI | `/audit/[caseId]` evidence jump + letter + fresh run |
 | Training UI | `/training/[caseId]` verdict + line select + feedback |
 

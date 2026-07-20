@@ -1,0 +1,148 @@
+{
+  "case_id": "sepsis_068",
+  "target_dx": "sepsis",
+  "billed": {
+    "icd10": [
+      "A41.9"
+    ],
+    "drg": "871"
+  },
+  "patient": {
+    "age": 82,
+    "sex": "F"
+  },
+  "documents": [
+    {
+      "doc_id": "hp",
+      "doc_type": "history_and_physical",
+      "date": "2022-04-23",
+      "lines": [
+        "Patient is a 65-year-old male with a history of hypertension and diabetes.",
+        "He presents with a 2-day history of fever, chills, and cough.",
+        "Vital signs: temperature 38.5 C, blood pressure 120/80 mmHg, heart rate 100 bpm.",
+        "Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L.",
+        "Physical exam reveals bilateral lung crackles and wheezing.",
+        "Patient is started on empiric antibiotics for suspected pneumonia.",
+        "Sepsis is considered in the differential diagnosis.",
+        "Patient is to be monitored closely for signs of organ dysfunction.",
+        "Follow-up labs and vitals will be obtained in 24 hours.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed."
+      ]
+    },
+    {
+      "doc_id": "pn_01",
+      "doc_type": "progress_note",
+      "date": "2022-04-24",
+      "lines": [
+        "Patient remains febrile with a temperature of 38.2 C.",
+        "Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9/L.",
+        "Vitals: MAP 80 mmHg, temperature 38.2 C.",
+        "Patient's condition is stable, and antibiotics are continued.",
+        "No signs of organ dysfunction are noted at this time.",
+        "Patient is to continue with current treatment and monitoring.",
+        "Follow-up labs and vitals will be obtained in 24 hours.",
+        "Sepsis is still considered in the differential diagnosis, but no clear evidence is seen.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate."
+      ]
+    },
+    {
+      "doc_id": "ds",
+      "doc_type": "discharge_summary",
+      "date": "2022-04-27",
+      "lines": [
+        "Patient was treated for pneumonia with empiric antibiotics.",
+        "Labs and vitals were monitored closely, and no signs of organ dysfunction were noted.",
+        "Patient's condition improved, and he was discharged home.",
+        "Final diagnosis: pneumonia, not sepsis.",
+        "Patient is to follow up with primary care in 1 week.",
+        "No further treatment is needed at this time.",
+        "Nursing: patient tolerating oral intake as ordered.",
+        "Nursing: skin warm and dry; no new rashes documented.",
+        "Nursing: pain score reviewed; analgesia as needed.",
+        "Provider: reviewed overnight events with bedside nurse.",
+        "Provider: active problems list updated in the chart.",
+        "Provider: medication reconciliation performed.",
+        "Provider: code status confirmed with patient or surrogate.",
+        "Labs: pending studies reviewed when available.",
+        "Plan: continue current monitoring and supportive care. Synthetic volume-test variant sepsis_068; no real patient data."
+      ]
+    }
+  ],
+  "labs": [
+    {
+      "name": "lactate",
+      "value": 1.2,
+      "unit": "mmol/L",
+      "datetime": "2022-04-23T08:00"
+    },
+    {
+      "name": "lactate",
+      "value": 1.1,
+      "unit": "mmol/L",
+      "datetime": "2022-04-24T08:00"
+    },
+    {
+      "name": "creatinine",
+      "value": 1.0,
+      "unit": "mg/dL",
+      "datetime": "2022-04-23T08:00"
+    },
+    {
+      "name": "creatinine",
+      "value": 1.1,
+      "unit": "mg/dL",
+      "datetime": "2022-04-24T08:00"
+    },
+    {
+      "name": "platelets",
+      "value": 200.0,
+      "unit": "10^9/L",
+      "datetime": "2022-04-23T08:00"
+    },
+    {
+      "name": "platelets",
+      "value": 220.0,
+      "unit": "10^9/L",
+      "datetime": "2022-04-24T08:00"
+    }
+  ],
+  "vitals": [
+    {
+      "name": "map",
+      "value": 80.0,
+      "unit": "mmHg",
+      "datetime": "2022-04-23T08:00"
+    },
+    {
+      "name": "map",
+      "value": 80.0,
+      "unit": "mmHg",
+      "datetime": "2022-04-24T08:00"
+    },
+    {
+      "name": "temp",
+      "value": 38.5,
+      "unit": "C",
+      "datetime": "2022-04-23T08:00"
+    },
+    {
+      "name": "temp",
+      "value": 38.2,
+      "unit": "C",
+      "datetime": "2022-04-24T08:00"
+    }
+  ],
+  "dataset_role": "volume_test",
+  "source_case_id": "sepsis_008"
+}

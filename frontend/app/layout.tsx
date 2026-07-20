@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "ChartProof",
   description:
     "Auditor-assist clinical chart validation demo on synthetic data only.",
+  icons: { icon: "/favicon.svg" },
 };
 
 export default function RootLayout({

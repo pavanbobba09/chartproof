@@ -60,20 +60,23 @@ Chart generator (Groq)          Reference corpus (guidelines)
 
 ## Eval results (latest full bank)
 
-Suite: **full** (10 sepsis cases, precomputed pipeline). Smoke suite (5 fixed cases) is enforced in CI.
+Suite: **full** (100 synthetic sepsis records, precomputed pipeline). The bank contains 15 independently generated scenarios and 85 deterministic volume-test variants for UI, API, and load testing. Smoke suite (5 fixed cases) is enforced in CI. A per-case evidence-recall floor (0.50) prevents aggregates from hiding local misses.
 
 | Metric | Full bank | Smoke (CI) | Threshold |
 |--------|----------:|-----------:|----------:|
-| Determination accuracy | 0.700 | 1.000 | >= 0.80 |
-| Evidence recall | 0.872 | 1.000 | >= 0.70 |
+| Determination accuracy | 1.000 | 1.000 | >= 0.80 |
+| Evidence recall | 0.946 | 1.000 | >= 0.70 (>= 0.50 per case) |
 | Citation faithfulness | 1.000 | 1.000 | >= 0.95 |
-| Deferral rate (`needs_review`) | 0.300 | 0.000 | tracked |
+| Deferral rate (`needs_review`) | 0.060 | 0.000 | tracked |
 
-Smoke suite **passes** thresholds. Full-bank accuracy is below 0.80 because three cases correctly defer to human review (`needs_review` counts as wrong for accuracy). Citation faithfulness is perfect on the deterministic check. See `evals/out/results.md`.
+The nonzero deferral rate is by design: `sepsis_011` is ambiguous on purpose (clear infection, incomplete organ-dysfunction workup) and the volume bank includes variants derived from it. The correct pipeline behavior, scored as correct by the evals, is routing these records to a human with explicit review reasons.
+
+Smoke and full suites **pass** thresholds. Citation faithfulness is a strict grounded check covering exact chart spans, criterion-specific evidence sides, determination support, evidence-table IDs, and guideline source/section pairs. See `evals/out/results.md`.
 
 ```bash
 python -m evals.run --suite smoke --enforce-thresholds
 python -m evals.run --suite full
+cd frontend && npm run test:e2e  # requires the local API/UI and Chrome
 ```
 
 ---
@@ -87,7 +90,7 @@ git clone https://github.com/pavanbobba09/chartproof.git ChartProof
 cd ChartProof
 python3.11 -m venv .venv && source .venv/bin/activate
 pip install -r backend/requirements.txt -r backend/requirements-dev.txt
-cp .env.example .env   # GROQ only needed for generation / live LLM paths
+cp .env.example .env   # GROQ is only needed for synthetic case generation
 
 # Optional: rebuild index if you will run live audits
 python -m backend.index.build --data data --out .chroma
@@ -126,13 +129,14 @@ python -m evals.run --suite smoke --enforce-thresholds
 
 ## Features (shipped)
 
-- Synthetic sepsis case bank (10) + answer keys + guidelines corpus
+- Synthetic sepsis case bank (100) + answer keys + guidelines corpus. Fifteen scenarios are independently generated and 85 are deterministic volume-test variants. The bank includes ambiguous-by-design records that correctly defer to a human.
 - Deterministic rules engine (no LLM in `backend/rules/`)
-- Chroma retrieval + narrative evidence agents
-- Citation-enforced rationale letter + QA `needs_review`
+- Chroma retrieval + narrative evidence agents (shared lexicon with the faithfulness oracle)
+- Citation-enforced rationale letter + QA `needs_review` with reviewer-readable force reasons
+- Optional LLM composer (`CHARTPROOF_LLM_COMPOSE=1` + `GROQ_API_KEY`): independent Groq draft verdict and prose, filtered through the same citation gate, deterministic fallback on any failure
 - Precomputed audits for instant demo
-- Eval harness (smoke/full) with CI smoke job
-- Next.js audit mode (chart, evidence click-to-highlight, letter, fresh run)
+- Eval harness (smoke/full) with CI smoke job, per-case recall floor, and deferral-correctness scoring
+- Next.js audit mode (chart, criteria checklist, evidence click-to-highlight, review reasons, letter, fresh run)
 - Next.js training mode (verdict + line select + graded feedback)
 
 Inventory: [project_memory/FEATURES.md](project_memory/FEATURES.md)
@@ -165,7 +169,7 @@ See [scripts/demo_day_checklist.md](scripts/demo_day_checklist.md) and [project_
 
 - No auth or multi-tenancy (public demo)
 - Sepsis only; criteria are simplified educational encodings
-- Full-bank determination accuracy still below smoke threshold due to deliberate deferrals
+- Faithfulness validation is deterministic and tailored to the encoded demo criteria; external clinical adjudication remains out of scope
 - Case notes include some pad lines for schema length compliance
 - Live public URLs require HF_TOKEN + Vercel project (not bound in CI without secrets)
 

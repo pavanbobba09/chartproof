@@ -1,0 +1,300 @@
+{
+  "case_id": "sepsis_095",
+  "status": "completed",
+  "verdict": "supported",
+  "confidence": 0.85,
+  "rules_verdict": "supported",
+  "draft_verdict": "supported",
+  "criteria_results": [
+    {
+      "criterion_id": "infection",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ]
+    },
+    {
+      "criterion_id": "lactate_elevated",
+      "result": "met",
+      "method": "structured",
+      "evidence_ids": [
+        "E11",
+        "E12",
+        "E13"
+      ]
+    },
+    {
+      "criterion_id": "hypotension",
+      "result": "met",
+      "method": "structured",
+      "evidence_ids": [
+        "E14",
+        "E15",
+        "E16"
+      ]
+    },
+    {
+      "criterion_id": "vasopressors",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E5",
+        "E6",
+        "E7",
+        "E8"
+      ]
+    },
+    {
+      "criterion_id": "creatinine_rise",
+      "result": "met",
+      "method": "structured",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "thrombocytopenia",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E17",
+        "E18",
+        "E19"
+      ]
+    },
+    {
+      "criterion_id": "altered_mentation",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E9",
+        "E10"
+      ]
+    },
+    {
+      "criterion_id": "organ_dysfunction",
+      "result": "met",
+      "method": "any_of",
+      "evidence_ids": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E1",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "Labs: lactate 2.2 mmol/L, creatinine 1.2 mg/dL, platelets 120 10^9/L. Patient is being treated with antibiotics for a suspected pneumonia. Chest X-ray shows bilateral infiltrates. Patient is being closely monitored for signs of sepsis."
+    },
+    {
+      "evidence_id": "E2",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient was diagnosed with sepsis due to pneumonia. Patient was treated with antibiotics and vasopressors. Patient's condition improved with treatment. Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 150 10^9/L."
+    },
+    {
+      "evidence_id": "E3",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "He presents with a 2-day history of fever, chills, and cough."
+    },
+    {
+      "evidence_id": "E4",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "Patient is being treated with antibiotics for a suspected pneumonia."
+    },
+    {
+      "evidence_id": "E5",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "Patient is being started on vasopressors to support blood pressure. Patient's mental status is altered, with a Glasgow Coma Scale score of 12. Patient is being evaluated for sepsis. Patient's family is being updated on his condition."
+    },
+    {
+      "evidence_id": "E6",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient's condition has not improved with antibiotics. Labs: lactate 2.5 mmol/L, creatinine 1.5 mg/dL, platelets 100 10^9/L. Vital signs: temperature 39 C, MAP 60 mmHg, HR 120 bpm. Patient is being started on vasopressors to support blood pressure."
+    },
+    {
+      "evidence_id": "E7",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient was diagnosed with sepsis due to pneumonia. Patient was treated with antibiotics and vasopressors. Patient's condition improved with treatment. Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 150 10^9/L."
+    },
+    {
+      "evidence_id": "E8",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Patient is being started on vasopressors to support blood pressure."
+    },
+    {
+      "evidence_id": "E9",
+      "side": "for",
+      "criterion_id": "altered_mentation",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "Patient is being started on vasopressors to support blood pressure. Patient's mental status is altered, with a Glasgow Coma Scale score of 12. Patient is being evaluated for sepsis. Patient's family is being updated on his condition."
+    },
+    {
+      "evidence_id": "E10",
+      "side": "for",
+      "criterion_id": "altered_mentation",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "Patient's mental status is altered, with a Glasgow Coma Scale score of 12."
+    },
+    {
+      "evidence_id": "E11",
+      "side": "for",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Labs: lactate 2.2 mmol/L, creatinine 1.2 mg/dL, platelets 120 10^9/L."
+    },
+    {
+      "evidence_id": "E12",
+      "side": "for",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Labs: lactate 2.5 mmol/L, creatinine 1.5 mg/dL, platelets 100 10^9/L."
+    },
+    {
+      "evidence_id": "E13",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 150 10^9/L."
+    },
+    {
+      "evidence_id": "E14",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Vital signs: temperature 38.5 C, MAP 70 mmHg, HR 110 bpm."
+    },
+    {
+      "evidence_id": "E15",
+      "side": "for",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Vital signs: temperature 39 C, MAP 60 mmHg, HR 120 bpm."
+    },
+    {
+      "evidence_id": "E16",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "Vital signs: temperature 37 C, MAP 80 mmHg, HR 90 bpm."
+    },
+    {
+      "evidence_id": "E17",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Labs: lactate 2.2 mmol/L, creatinine 1.2 mg/dL, platelets 120 10^9/L."
+    },
+    {
+      "evidence_id": "E18",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Labs: lactate 2.5 mmol/L, creatinine 1.5 mg/dL, platelets 100 10^9/L."
+    },
+    {
+      "evidence_id": "E19",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 150 10^9/L."
+    }
+  ],
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_095 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is supported, primarily based on E5 (vasopressors): Patient is being started on vasopressors to support blood pressure\n\n## Evidence\n| # | For/Against | Criterion | Source | Lines | Excerpt |\n|---|-------------|-----------|--------|-------|---------|\n| E1 | for | infection | history_and_physical 2022-06-18 | 4-7 | Labs: lactate 2.2 mmol/L, creatinine 1.2 mg/dL, platelets 120 10^9/L. Patient is being treated with antibiotics for a su |\n| E2 | for | infection | discharge_summary 2022-06-22 | 1-4 | Patient was diagnosed with sepsis due to pneumonia. Patient was treated with antibiotics and vasopressors. Patient's con |\n| E3 | for | infection | history_and_physical 2022-06-18 | 2-2 | He presents with a 2-day history of fever, chills, and cough. |\n| E4 | for | infection | history_and_physical 2022-06-18 | 5-5 | Patient is being treated with antibiotics for a suspected pneumonia. |\n| E5 | for | vasopressors | progress_note 2022-06-19 | 4-7 | Patient is being started on vasopressors to support blood pressure. Patient's mental status is altered, with a Glasgow C |\n| E6 | for | vasopressors | progress_note 2022-06-19 | 1-4 | Patient's condition has not improved with antibiotics. Labs: lactate 2.5 mmol/L, creatinine 1.5 mg/dL, platelets 100 10^ |\n| E7 | for | vasopressors | discharge_summary 2022-06-22 | 1-4 | Patient was diagnosed with sepsis due to pneumonia. Patient was treated with antibiotics and vasopressors. Patient's con |\n| E8 | for | vasopressors | progress_note 2022-06-19 | 4-4 | Patient is being started on vasopressors to support blood pressure. |\n| E9 | for | altered_mentation | progress_note 2022-06-19 | 4-7 | Patient is being started on vasopressors to support blood pressure. Patient's mental status is altered, with a Glasgow C |\n| E10 | for | altered_mentation | progress_note 2022-06-19 | 5-5 | Patient's mental status is altered, with a Glasgow Coma Scale score of 12. |\n| E11 | for | lactate_elevated | history_and_physical 2022-06-18 | 4-4 | Labs: lactate 2.2 mmol/L, creatinine 1.2 mg/dL, platelets 120 10^9/L. |\n| E12 | for | lactate_elevated | progress_note 2022-06-19 | 2-2 | Labs: lactate 2.5 mmol/L, creatinine 1.5 mg/dL, platelets 100 10^9/L. |\n| E13 | against | lactate_elevated | discharge_summary 2022-06-22 | 4-4 | Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 150 10^9/L. |\n| E14 | against | hypotension | history_and_physical 2022-06-18 | 3-3 | Vital signs: temperature 38.5 C, MAP 70 mmHg, HR 110 bpm. |\n| E15 | for | hypotension | progress_note 2022-06-19 | 3-3 | Vital signs: temperature 39 C, MAP 60 mmHg, HR 120 bpm. |\n| E16 | against | hypotension | discharge_summary 2022-06-22 | 5-5 | Vital signs: temperature 37 C, MAP 80 mmHg, HR 90 bpm. |\n| E17 | against | thrombocytopenia | history_and_physical 2022-06-18 | 4-4 | Labs: lactate 2.2 mmol/L, creatinine 1.2 mg/dL, platelets 120 10^9/L. |\n| E18 | against | thrombocytopenia | progress_note 2022-06-19 | 2-2 | Labs: lactate 2.5 mmol/L, creatinine 1.5 mg/dL, platelets 100 10^9/L. |\n| E19 | against | thrombocytopenia | discharge_summary 2022-06-22 | 4-4 | Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 150 10^9/L. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). Findings that affect payment grouping must be supported by chart indicators (icd10cm_guidelines_fy2026_summary, Section: Sepsis coding notes (high level)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E11, E12, E13, E14, E15, E16, E17, E18, E19, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "dropped_sentences": 0,
+  "force_reasons": [],
+  "composer": "deterministic",
+  "source": "precomputed",
+  "trace_id": "run_sepsis_095_20260720T154711200126Z_277de7"
+}

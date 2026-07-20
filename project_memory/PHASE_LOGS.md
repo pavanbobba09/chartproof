@@ -29,10 +29,10 @@
 | Phase 0 | **No** (until generator) | Scaffold is local-only |
 | Phase 1 (rules only) | **Yes** for case generation | `data/generate.py` uses Groq free tier |
 | Phase 1 (full) | Optional for Phase 2 index | Index/retrieval offline; evidence agents may use LLM |
-| Phase 2 | **Yes** for Phase 3 | Composer + LLM verdict use Groq |
-| Phase 3 | **Yes** for Phase 4 | Smoke/full eval + LLM-judge faithfulness |
-| Phase 4 | **Yes** for Phase 5 demo | Live "run fresh analysis" on HF Space |
-| Phase 5 | **Yes** ongoing | Deployed Space secret + CI smoke-eval secret |
+| Phase 2 | **No** for the current Phase 3 path | Composer and draft verdict are deterministic |
+| Phase 3 | **No** for the current Phase 4 path | Smoke/full evals use deterministic checks |
+| Phase 4 | **No** for the current Phase 5 demo | Live audit uses local retrieval and rules |
+| Phase 5 | Optional | Groq is required only when generating more synthetic cases |
 
 **Setup (never commit the real key):**
 
@@ -57,3 +57,7 @@ Default model: `GROQ_MODEL=llama-3.3-70b-versatile` (verify still free-tier when
 | Features inventory | Living | [FEATURES.md](./FEATURES.md) |
 | 4 UI + evals | Complete | [PHASE_4_COMPLETE.md](./PHASE_4_COMPLETE.md) |
 | 5 Deploy + demo | Engineering complete | [PHASE_5_COMPLETE.md](./PHASE_5_COMPLETE.md) |
+| Trust loop 1 | Complete | [TRUST_LOOP_1_COMPLETE.md](./TRUST_LOOP_1_COMPLETE.md) |
+| Trust loop 2 | Complete | [TRUST_LOOP_2_COMPLETE.md](./TRUST_LOOP_2_COMPLETE.md) |
+| Trust loop 3 | Complete | [TRUST_LOOP_3_COMPLETE.md](./TRUST_LOOP_3_COMPLETE.md) |
+| Trust loop 4 | Complete | [TRUST_LOOP_4_COMPLETE.md](./TRUST_LOOP_4_COMPLETE.md) |

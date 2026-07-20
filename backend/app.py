@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import logging
 import os
+import uuid
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query
@@ -19,6 +21,8 @@ from backend.schemas import (
     TrainingGradeRequest,
     TrainingGradeResponse,
 )
+
+logger = logging.getLogger("chartproof.api")
 
 app = FastAPI(
     title="ChartProof API",
@@ -116,7 +120,13 @@ def post_audit(
                     f"/audit/{case_id}. Rebuild index or wait for the Space to finish booting."
                 ),
             ) from e
-        raise HTTPException(status_code=500, detail=f"audit failed: {e}") from e
+        # Never leak internal exception text (paths, config, provider messages).
+        error_id = uuid.uuid4().hex[:12]
+        logger.exception("audit failed for %s (error_id=%s)", case_id, error_id)
+        raise HTTPException(
+            status_code=500,
+            detail=f"audit failed; reference error_id={error_id}",
+        ) from e
 
 
 @app.post("/training/{case_id}/grade", response_model=TrainingGradeResponse)
@@ -131,3 +141,6 @@ def post_training_grade(case_id: str, body: TrainingGradeRequest) -> TrainingGra
         return grade_submission(case_id, body)
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e)) from e
+    except ValueError as e:
+        # Invalid span selections (unknown document, out of range, oversized)
+        raise HTTPException(status_code=422, detail=str(e)) from e

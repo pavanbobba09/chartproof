@@ -10,7 +10,9 @@ smoke:
   determination_accuracy: 0.80
   evidence_recall: 0.70
   citation_faithfulness: 0.95
+  per_case_evidence_recall: 0.50
 full:
   determination_accuracy: 0.80
   evidence_recall: 0.70
   citation_faithfulness: 0.95
+  per_case_evidence_recall: 0.50

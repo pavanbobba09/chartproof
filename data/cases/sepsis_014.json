@@ -1,0 +1,232 @@
+{
+  "case_id": "sepsis_014",
+  "target_dx": "sepsis",
+  "billed": {
+    "icd10": [
+      "A41.9"
+    ],
+    "drg": "871"
+  },
+  "patient": {
+    "age": 65,
+    "sex": "M"
+  },
+  "documents": [
+    {
+      "doc_id": "hp",
+      "doc_type": "history_and_physical",
+      "date": "2022-01-01",
+      "lines": [
+        "Patient is a 65 year old male with a history of hypertension and diabetes.",
+        "He presents with a 2 day history of fever, chills, and cough.",
+        "Vital signs: temperature 38.5 C, blood pressure 90/60 mmHg, heart rate 110 bpm.",
+        "Physical exam reveals lung crackles and wheezing.",
+        "Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L.",
+        "Chest X-ray shows bilateral infiltrates.",
+        "Patient is being treated with antibiotics and fluids.",
+        "Differential diagnosis includes pneumonia and sepsis.",
+        "Plan is to continue antibiotics and monitor labs and vitals closely.",
+        "Patient is being considered for ICU admission.",
+        "Will re-evaluate in 24 hours.",
+        "Labs and vitals will be monitored closely.",
+        "Patient's condition is being closely monitored.",
+        "Will consider vasopressors if blood pressure does not improve.",
+        "Patient's family has been informed of the situation.",
+        "Patient is being treated with oxygen therapy.",
+        "Patient's oxygen saturation is being monitored closely."
+      ]
+    },
+    {
+      "doc_id": "pn_01",
+      "doc_type": "progress_note",
+      "date": "2022-01-02",
+      "lines": [
+        "Patient's condition has not improved.",
+        "Labs: lactate 3.0 mmol/L, creatinine 1.5 mg/dL, platelets 70 10^9/L.",
+        "Vital signs: temperature 39.0 C, blood pressure 80/50 mmHg, heart rate 120 bpm.",
+        "Patient is being treated with vasopressors.",
+        "Patient's oxygen saturation is 90% on 2L NC.",
+        "Patient's family is concerned about his condition.",
+        "Plan is to continue antibiotics and vasopressors.",
+        "Will re-evaluate in 24 hours.",
+        "Patient's condition is being closely monitored.",
+        "Labs and vitals will be monitored closely.",
+        "Patient is being considered for further testing.",
+        "Patient's condition is critical.",
+        "Patient's family has been informed of the situation.",
+        "Patient is being treated with fluids and electrolytes.",
+        "Patient's electrolyte levels are being monitored closely.",
+        "Patient's condition is being closely monitored."
+      ]
+    },
+    {
+      "doc_id": "ds",
+      "doc_type": "discharge_summary",
+      "date": "2022-01-05",
+      "lines": [
+        "Patient was admitted with pneumonia and sepsis.",
+        "Patient was treated with antibiotics and vasopressors.",
+        "Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L.",
+        "Vital signs: temperature 37.0 C, blood pressure 100/60 mmHg, heart rate 90 bpm.",
+        "Patient's condition improved with treatment.",
+        "Patient was discharged to a rehabilitation facility.",
+        "Patient's family is relieved that his condition has improved.",
+        "Plan is to follow up with primary care physician in 1 week.",
+        "Patient's condition is being closely monitored.",
+        "Labs and vitals will be monitored closely.",
+        "Patient is being treated with oxygen therapy.",
+        "Patient's oxygen saturation is being monitored closely.",
+        "Patient's condition is stable.",
+        "Patient's family has been informed of the situation.",
+        "Patient is being treated with fluids and electrolytes.",
+        "Patient's electrolyte levels are being monitored closely."
+      ]
+    },
+    {
+      "doc_id": "pn_02",
+      "doc_type": "progress_note",
+      "date": "2022-01-03",
+      "lines": [
+        "Patient's condition is improving.",
+        "Labs: lactate 2.0 mmol/L, creatinine 1.2 mg/dL, platelets 90 10^9/L.",
+        "Vital signs: temperature 38.0 C, blood pressure 90/60 mmHg, heart rate 100 bpm.",
+        "Patient is being weaned off vasopressors.",
+        "Patient's oxygen saturation is 95% on 1L NC.",
+        "Patient's family is relieved that his condition is improving.",
+        "Plan is to continue antibiotics and monitor labs and vitals closely.",
+        "Will re-evaluate in 24 hours.",
+        "Patient's condition is being closely monitored.",
+        "Labs and vitals will be monitored closely.",
+        "Patient is being treated with fluids and electrolytes.",
+        "Patient's electrolyte levels are being monitored closely.",
+        "Patient's condition is being closely monitored.",
+        "Patient's family has been informed of the situation.",
+        "Patient is being treated with oxygen therapy.",
+        "Patient's oxygen saturation is being monitored closely."
+      ]
+    },
+    {
+      "doc_id": "pn_03",
+      "doc_type": "progress_note",
+      "date": "2022-01-04",
+      "lines": [
+        "Patient's condition is stable.",
+        "Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 110 10^9/L.",
+        "Vital signs: temperature 37.0 C, blood pressure 100/60 mmHg, heart rate 90 bpm.",
+        "Patient is being treated with antibiotics and fluids.",
+        "Patient's oxygen saturation is 98% on room air.",
+        "Patient's family is relieved that his condition is stable.",
+        "Plan is to continue antibiotics and monitor labs and vitals closely.",
+        "Will re-evaluate in 24 hours.",
+        "Patient's condition is being closely monitored.",
+        "Labs and vitals will be monitored closely.",
+        "Patient is being treated with fluids and electrolytes.",
+        "Patient's electrolyte levels are being monitored closely.",
+        "Patient's condition is being closely monitored.",
+        "Patient's family has been informed of the situation.",
+        "Patient is being treated with oxygen therapy.",
+        "Patient's oxygen saturation is being monitored closely."
+      ]
+    }
+  ],
+  "labs": [
+    {
+      "name": "lactate",
+      "value": 2.5,
+      "unit": "mmol/L",
+      "datetime": "2022-01-01T08:00"
+    },
+    {
+      "name": "lactate",
+      "value": 3.0,
+      "unit": "mmol/L",
+      "datetime": "2022-01-02T08:00"
+    },
+    {
+      "name": "lactate",
+      "value": 2.0,
+      "unit": "mmol/L",
+      "datetime": "2022-01-03T08:00"
+    },
+    {
+      "name": "lactate",
+      "value": 1.5,
+      "unit": "mmol/L",
+      "datetime": "2022-01-04T08:00"
+    },
+    {
+      "name": "creatinine",
+      "value": 1.2,
+      "unit": "mg/dL",
+      "datetime": "2022-01-01T08:00"
+    },
+    {
+      "name": "creatinine",
+      "value": 1.5,
+      "unit": "mg/dL",
+      "datetime": "2022-01-02T08:00"
+    },
+    {
+      "name": "creatinine",
+      "value": 1.0,
+      "unit": "mg/dL",
+      "datetime": "2022-01-04T08:00"
+    },
+    {
+      "name": "platelets",
+      "value": 80.0,
+      "unit": "10^9/L",
+      "datetime": "2022-01-01T08:00"
+    },
+    {
+      "name": "platelets",
+      "value": 70.0,
+      "unit": "10^9/L",
+      "datetime": "2022-01-02T08:00"
+    },
+    {
+      "name": "platelets",
+      "value": 100.0,
+      "unit": "10^9/L",
+      "datetime": "2022-01-04T08:00"
+    }
+  ],
+  "vitals": [
+    {
+      "name": "map",
+      "value": 90.0,
+      "unit": "mmHg",
+      "datetime": "2022-01-01T08:00"
+    },
+    {
+      "name": "map",
+      "value": 80.0,
+      "unit": "mmHg",
+      "datetime": "2022-01-02T08:00"
+    },
+    {
+      "name": "map",
+      "value": 100.0,
+      "unit": "mmHg",
+      "datetime": "2022-01-04T08:00"
+    },
+    {
+      "name": "temp",
+      "value": 38.5,
+      "unit": "C",
+      "datetime": "2022-01-01T08:00"
+    },
+    {
+      "name": "temp",
+      "value": 39.0,
+      "unit": "C",
+      "datetime": "2022-01-02T08:00"
+    },
+    {
+      "name": "temp",
+      "value": 37.0,
+      "unit": "C",
+      "datetime": "2022-01-04T08:00"
+    }
+  ]
+}

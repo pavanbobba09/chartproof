@@ -58,7 +58,8 @@ cd frontend && npm install && npm run dev           # expects NEXT_PUBLIC_API_BA
 
 ## Environment variables
 
-- `GROQ_API_KEY` (required for generation, compose, LLM-judge evals)
+- `GROQ_API_KEY` (required for generation and the opt-in LLM composer)
+- `CHARTPROOF_LLM_COMPOSE` (set to `1` with `GROQ_API_KEY` to enable the LLM composer on live audits; default off so CI, evals, and precompute stay deterministic)
 - `GROQ_MODEL` (default `llama-3.3-70b-versatile`; verify it is still on Groq's free tier when starting Phase 1 and keep the default in one config module so a model swap is a one-line change)
 - `CHROMA_DIR` (default `.chroma`)
 - `ALLOWED_ORIGINS` (comma separated, see DEPLOYMENT.md)

@@ -11,12 +11,14 @@ from __future__ import annotations
 import argparse
 import json
 from datetime import UTC, datetime
+from pathlib import Path
 
 import yaml
 
 from backend.config import CASES_DIR, KEYS_DIR, REPO_ROOT
 from backend.pipeline.audit_service import load_cached_result, run_audit
-from backend.schemas import AnswerKey, AuditResult
+from backend.rules.loader import load_criteria
+from backend.schemas import AnswerKey, AuditResult, Case
 from evals.metrics import CaseMetrics, aggregate, score_case
 
 THRESHOLDS_PATH = REPO_ROOT / "evals" / "thresholds.yaml"
@@ -52,6 +54,7 @@ def run_suite(
     *,
     live: bool = False,
     enforce: bool = False,
+    out_dir: Path | None = None,
 ) -> dict:
     thr = load_thresholds()
     if suite == "smoke":
@@ -69,7 +72,11 @@ def run_suite(
         try:
             result = load_result(case_id, live=live)
             key = load_key(case_id)
-            rows.append(score_case(result, key))
+            case = Case.model_validate_json(
+                (CASES_DIR / f"{case_id}.json").read_text(encoding="utf-8")
+            )
+            criteria = load_criteria(case.target_dx)
+            rows.append(score_case(result, key, case, criteria))
         except Exception as e:  # noqa: BLE001
             errors.append(f"{case_id}: {e}")
 
@@ -82,11 +89,24 @@ def run_suite(
 
     passed = True
     failures: list[str] = []
+    per_case_floor = limits.get("per_case_evidence_recall")
     for name, minimum in limits.items():
+        if name == "per_case_evidence_recall":
+            continue  # enforced per case below, not on the aggregate
         actual = metrics.get(name, 0.0)
         if actual < float(minimum):
             passed = False
             failures.append(f"{name}: {actual:.3f} < {float(minimum):.3f}")
+
+    # Per-case floor: aggregates must not hide a severe local recall miss.
+    if per_case_floor is not None:
+        for r in rows:
+            if r.evidence_recall < float(per_case_floor):
+                passed = False
+                failures.append(
+                    f"per_case_evidence_recall: {r.case_id} "
+                    f"{r.evidence_recall:.3f} < {float(per_case_floor):.3f}"
+                )
 
     if errors:
         passed = False
@@ -110,14 +130,16 @@ def run_suite(
                 "deferred": r.deferred,
                 "evidence_recall": r.evidence_recall,
                 "citation_faithfulness": r.citation_faithfulness,
+                "faithfulness_issues": r.faithfulness_issues,
             }
             for r in rows
         ],
     }
 
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    json_path = OUT_DIR / f"{suite}_results.json"
-    md_path = OUT_DIR / "results.md"
+    destination = out_dir or OUT_DIR
+    destination.mkdir(parents=True, exist_ok=True)
+    json_path = destination / f"{suite}_results.json"
+    md_path = destination / "results.md"
     json_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     md_path.write_text(_render_markdown(report), encoding="utf-8")
     print(_render_markdown(report))
@@ -169,6 +191,14 @@ def _render_markdown(report: dict) -> str:
             f"{c['predicted_verdict']} | {c['determination_correct']} | "
             f"{c['evidence_recall']:.2f} | {c['citation_faithfulness']:.2f} |"
         )
+    faithfulness_failures = [
+        (case["case_id"], issue)
+        for case in report["cases"]
+        for issue in case.get("faithfulness_issues", [])
+    ]
+    if faithfulness_failures:
+        lines += ["", "## Citation faithfulness issues", ""]
+        lines.extend(f"- {case_id}: {issue}" for case_id, issue in faithfulness_failures)
     if report.get("failures"):
         lines += ["", "## Threshold failures", ""]
         lines.extend(f"- {f}" for f in report["failures"])
@@ -192,8 +222,19 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="run live pipeline instead of precomputed cache",
     )
+    parser.add_argument(
+        "--out-dir",
+        type=Path,
+        default=OUT_DIR,
+        help="directory for JSON and Markdown reports",
+    )
     args = parser.parse_args(argv)
-    report = run_suite(args.suite, live=args.live, enforce=args.enforce_thresholds)
+    report = run_suite(
+        args.suite,
+        live=args.live,
+        enforce=args.enforce_thresholds,
+        out_dir=args.out_dir,
+    )
     return int(report["exit_code"])
 
 

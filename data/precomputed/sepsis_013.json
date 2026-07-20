@@ -1,0 +1,347 @@
+{
+  "case_id": "sepsis_013",
+  "status": "completed",
+  "verdict": "not_supported",
+  "confidence": 0.85,
+  "rules_verdict": "not_supported",
+  "draft_verdict": "not_supported",
+  "criteria_results": [
+    {
+      "criterion_id": "infection",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ]
+    },
+    {
+      "criterion_id": "lactate_elevated",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E9",
+        "E10",
+        "E11",
+        "E12",
+        "E13"
+      ]
+    },
+    {
+      "criterion_id": "hypotension",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E14",
+        "E15",
+        "E16",
+        "E17",
+        "E18"
+      ]
+    },
+    {
+      "criterion_id": "vasopressors",
+      "result": "not_met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E5",
+        "E6",
+        "E7",
+        "E8"
+      ]
+    },
+    {
+      "criterion_id": "creatinine_rise",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "thrombocytopenia",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E19",
+        "E20",
+        "E21",
+        "E22",
+        "E23"
+      ]
+    },
+    {
+      "criterion_id": "altered_mentation",
+      "result": "not_met",
+      "method": "narrative",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "organ_dysfunction",
+      "result": "not_met",
+      "method": "any_of",
+      "evidence_ids": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E1",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient was treated with antibiotics and oxygen therapy for a respiratory infection. The patient's condition improved significantly during the hospital stay. Vital signs at discharge are temperature 37.5 C, blood pressure 100/60 mmHg, and heart rate 80 bpm. Laboratory results at discharge show a white blood cell count of 8,000 cells per microliter."
+    },
+    {
+      "evidence_id": "E2",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 1
+      },
+      "text": "Patient was treated with antibiotics and oxygen therapy for a respiratory infection."
+    },
+    {
+      "evidence_id": "E3",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient is being treated with antibiotics and oxygen therapy. Vital signs are temperature 38.0 C, blood pressure 105/65 mmHg, and heart rate 85 bpm. Laboratory results show a white blood cell count of 10,000 cells per microliter. Lactate level is 1.6 mmol/L."
+    },
+    {
+      "evidence_id": "E4",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "pn_03",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient is being treated with antibiotics and oxygen therapy. Vital signs are temperature 37.8 C, blood pressure 100/60 mmHg, and heart rate 80 bpm. Laboratory results show a white blood cell count of 9,000 cells per microliter. Lactate level is 1.4 mmol/L."
+    },
+    {
+      "evidence_id": "E5",
+      "side": "against",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 13,
+        "line_end": 16
+      },
+      "text": "The patient is not on vasopressors. The patient's temperature is being monitored closely. The patient's oxygen saturation is 92% on room air. The patient's respiratory rate is 24 breaths per minute."
+    },
+    {
+      "evidence_id": "E6",
+      "side": "against",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 7,
+        "line_end": 10
+      },
+      "text": "Patient's condition is stable. The patient's MAP is 80 mmHg. The patient is not on vasopressors. The patient's temperature is being monitored closely."
+    },
+    {
+      "evidence_id": "E7",
+      "side": "against",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 7,
+        "line_end": 10
+      },
+      "text": "Patient's condition is stable. The patient's MAP is 75 mmHg. The patient is not on vasopressors. The patient's temperature is being monitored closely."
+    },
+    {
+      "evidence_id": "E8",
+      "side": "against",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_03",
+        "line_start": 7,
+        "line_end": 10
+      },
+      "text": "Patient's condition is stable. The patient's MAP is 85 mmHg. The patient is not on vasopressors. The patient's temperature is being monitored closely."
+    },
+    {
+      "evidence_id": "E9",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "text": "Lactate level is 1.8 mmol/L."
+    },
+    {
+      "evidence_id": "E10",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Lactate level is 1.5 mmol/L."
+    },
+    {
+      "evidence_id": "E11",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "Lactate level is 1.2 mmol/L."
+    },
+    {
+      "evidence_id": "E12",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Lactate level is 1.6 mmol/L."
+    },
+    {
+      "evidence_id": "E13",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_03",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Lactate level is 1.4 mmol/L."
+    },
+    {
+      "evidence_id": "E14",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 12,
+        "line_end": 12
+      },
+      "text": "The patient's MAP is 80 mmHg."
+    },
+    {
+      "evidence_id": "E15",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 8,
+        "line_end": 8
+      },
+      "text": "The patient's MAP is 75 mmHg."
+    },
+    {
+      "evidence_id": "E16",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 8,
+        "line_end": 8
+      },
+      "text": "The patient's MAP is 85 mmHg."
+    },
+    {
+      "evidence_id": "E17",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 8,
+        "line_end": 8
+      },
+      "text": "The patient's MAP is 80 mmHg."
+    },
+    {
+      "evidence_id": "E18",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "pn_03",
+        "line_start": 8,
+        "line_end": 8
+      },
+      "text": "The patient's MAP is 85 mmHg."
+    },
+    {
+      "evidence_id": "E19",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 8,
+        "line_end": 8
+      },
+      "text": "Platelet count is 150,000 cells per microliter."
+    },
+    {
+      "evidence_id": "E20",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "text": "Platelet count is 140,000 cells per microliter."
+    },
+    {
+      "evidence_id": "E21",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 7,
+        "line_end": 7
+      },
+      "text": "Platelet count is 160,000 cells per microliter."
+    },
+    {
+      "evidence_id": "E22",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "text": "Platelet count is 145,000 cells per microliter."
+    },
+    {
+      "evidence_id": "E23",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_03",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "text": "Platelet count is 155,000 cells per microliter."
+    }
+  ],
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_013 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is not_supported, primarily based on E5 (vasopressors): The patient is not on vasopressors\n\n## Evidence\n| # | For/Against | Criterion | Source | Lines | Excerpt |\n|---|-------------|-----------|--------|-------|---------|\n| E1 | for | infection | discharge_summary 2022-01-05 | 1-4 | Patient was treated with antibiotics and oxygen therapy for a respiratory infection. The patient's condition improved si |\n| E2 | for | infection | discharge_summary 2022-01-05 | 1-1 | Patient was treated with antibiotics and oxygen therapy for a respiratory infection. |\n| E3 | for | infection | progress_note 2022-01-03 | 1-4 | Patient is being treated with antibiotics and oxygen therapy. Vital signs are temperature 38.0 C, blood pressure 105/65  |\n| E4 | for | infection | progress_note 2022-01-04 | 1-4 | Patient is being treated with antibiotics and oxygen therapy. Vital signs are temperature 37.8 C, blood pressure 100/60  |\n| E5 | against | vasopressors | history_and_physical 2022-01-01 | 13-16 | The patient is not on vasopressors. The patient's temperature is being monitored closely. The patient's oxygen saturatio |\n| E6 | against | vasopressors | progress_note 2022-01-03 | 7-10 | Patient's condition is stable. The patient's MAP is 80 mmHg. The patient is not on vasopressors. The patient's temperatu |\n| E7 | against | vasopressors | progress_note 2022-01-02 | 7-10 | Patient's condition is stable. The patient's MAP is 75 mmHg. The patient is not on vasopressors. The patient's temperatu |\n| E8 | against | vasopressors | progress_note 2022-01-04 | 7-10 | Patient's condition is stable. The patient's MAP is 85 mmHg. The patient is not on vasopressors. The patient's temperatu |\n| E9 | against | lactate_elevated | history_and_physical 2022-01-01 | 6-6 | Lactate level is 1.8 mmol/L. |\n| E10 | against | lactate_elevated | progress_note 2022-01-02 | 4-4 | Lactate level is 1.5 mmol/L. |\n| E11 | against | lactate_elevated | discharge_summary 2022-01-05 | 5-5 | Lactate level is 1.2 mmol/L. |\n| E12 | against | lactate_elevated | progress_note 2022-01-03 | 4-4 | Lactate level is 1.6 mmol/L. |\n| E13 | against | lactate_elevated | progress_note 2022-01-04 | 4-4 | Lactate level is 1.4 mmol/L. |\n| E14 | against | hypotension | history_and_physical 2022-01-01 | 12-12 | The patient's MAP is 80 mmHg. |\n| E15 | against | hypotension | progress_note 2022-01-02 | 8-8 | The patient's MAP is 75 mmHg. |\n| E16 | against | hypotension | discharge_summary 2022-01-05 | 8-8 | The patient's MAP is 85 mmHg. |\n| E17 | against | hypotension | progress_note 2022-01-03 | 8-8 | The patient's MAP is 80 mmHg. |\n| E18 | against | hypotension | progress_note 2022-01-04 | 8-8 | The patient's MAP is 85 mmHg. |\n| E19 | against | thrombocytopenia | history_and_physical 2022-01-01 | 8-8 | Platelet count is 150,000 cells per microliter. |\n| E20 | against | thrombocytopenia | progress_note 2022-01-02 | 6-6 | Platelet count is 140,000 cells per microliter. |\n| E21 | against | thrombocytopenia | discharge_summary 2022-01-05 | 7-7 | Platelet count is 160,000 cells per microliter. |\n| E22 | against | thrombocytopenia | progress_note 2022-01-03 | 6-6 | Platelet count is 145,000 cells per microliter. |\n| E23 | against | thrombocytopenia | progress_note 2022-01-04 | 6-6 | Platelet count is 155,000 cells per microliter. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). Findings that affect payment grouping must be supported by chart indicators (icd10cm_guidelines_fy2026_summary, Section: Sepsis coding notes (high level)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E11, E12, E13, E14, E15, E16, E17, E18, E19, E2, E20, E21, E22, E23, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "dropped_sentences": 0,
+  "force_reasons": [],
+  "composer": "deterministic",
+  "source": "precomputed",
+  "trace_id": "run_sepsis_013_20260720T154705467502Z_26d6ea"
+}

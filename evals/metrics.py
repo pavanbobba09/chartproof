@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-from backend.schemas import AnswerKey, AuditResult, PlantedEvidence
+from backend.pipeline.faithfulness import evaluate_citation_faithfulness
+from backend.schemas import AnswerKey, AuditResult, Case, CriteriaFile, PlantedEvidence
 
 
 @dataclass
@@ -17,10 +18,17 @@ class CaseMetrics:
     predicted_verdict: str | None
     key_verdict: str
     status: str
+    faithfulness_issues: list[str] = field(default_factory=list)
 
 
 def determination_correct(result: AuditResult, key: AnswerKey) -> bool:
-    """needs_review counts as wrong for accuracy (tracked separately as deferral)."""
+    """needs_review counts as wrong for accuracy (tracked separately as deferral).
+
+    Exception: when the key marks deferral as the expected behavior
+    (ambiguous-by-design cases), routing to a human IS the correct output.
+    """
+    if key.deferral_expected:
+        return result.status == "needs_review"
     if result.status == "needs_review":
         return False
     return result.verdict == key.verdict
@@ -56,41 +64,28 @@ def evidence_recall(result: AuditResult, key: AnswerKey) -> float:
     return hits / len(targets)
 
 
-def citation_faithfulness_deterministic(result: AuditResult) -> float:
-    """Pre-check: each evidence item has valid id, non-empty text, valid span.
-
-    Optional LLM judge can refine later; CI uses this deterministic check.
-    """
-    if not result.evidence:
-        # No citations: vacuously faithful but poor recall; score 1.0 on empty set
-        # of claims. PROJECT says "for each output claim" — zero claims → 1.0.
-        return 1.0
-    ok = 0
-    for item in result.evidence:
-        if not item.evidence_id or not item.evidence_id.startswith("E"):
-            continue
-        if not (item.text and item.text.strip()):
-            continue
-        span = item.span
-        if span.line_start < 1 or span.line_end < span.line_start:
-            continue
-        if not span.doc_id:
-            continue
-        ok += 1
-    return ok / len(result.evidence)
-
-
-def score_case(result: AuditResult, key: AnswerKey) -> CaseMetrics:
+def score_case(
+    result: AuditResult,
+    key: AnswerKey,
+    case: Case,
+    criteria: CriteriaFile,
+) -> CaseMetrics:
     deferred = result.status == "needs_review"
+    faithfulness = evaluate_citation_faithfulness(result, case, criteria)
     return CaseMetrics(
         case_id=result.case_id,
         determination_correct=determination_correct(result, key),
         deferred=deferred,
         evidence_recall=evidence_recall(result, key),
-        citation_faithfulness=citation_faithfulness_deterministic(result),
+        citation_faithfulness=faithfulness.score,
         predicted_verdict=result.verdict,
         key_verdict=key.verdict,
         status=result.status,
+        faithfulness_issues=[
+            f"{issue.code}{f' ({issue.evidence_id})' if issue.evidence_id else ''}: "
+            f"{issue.message}"
+            for issue in faithfulness.issues
+        ],
     )
 
 

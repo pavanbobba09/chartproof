@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import pytest
@@ -10,6 +9,7 @@ from fastapi.testclient import TestClient
 
 from backend.app import app
 from backend.index.build import build_case_collection, build_guidelines_collection, get_client
+from backend.pipeline import audit_service
 from backend.pipeline.graph import run_full_pipeline
 from backend.schemas import AuditResult, Case
 
@@ -17,9 +17,15 @@ client = TestClient(app)
 REPO = Path(__file__).resolve().parents[2]
 
 
+@pytest.fixture(autouse=True)
+def isolated_runtime_cache(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Keep API tests independent from fresh audits run in a developer session."""
+    monkeypatch.setattr(audit_service, "RUNTIME_CACHE_DIR", tmp_path / "runtime-cache")
+
+
 @pytest.fixture(scope="module")
 def precomputed_sepsis_001(tmp_path_factory: pytest.TempPathFactory):
-    """Build tiny index and one precomputed audit result in repo precomputed dir."""
+    """Run one live audit against a temporary index without modifying the case bank."""
     chroma = tmp_path_factory.mktemp("chroma_api")
     case = Case.model_validate_json((REPO / "data/cases/sepsis_001.json").read_text())
     cli = get_client(chroma)
@@ -27,14 +33,7 @@ def precomputed_sepsis_001(tmp_path_factory: pytest.TempPathFactory):
     build_guidelines_collection(cli, REPO / "data/guidelines")
     raw = run_full_pipeline("sepsis_001", persist_trace=False, chroma_dir=chroma)
     result = AuditResult.model_validate(raw["audit_result"])
-    # Write to real precomputed path for GET/POST cache tests
-    path = REPO / "data" / "precomputed" / "sepsis_001.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    payload = result.model_dump(mode="json")
-    payload["source"] = "precomputed"
-    path.write_text(json.dumps(payload, indent=2) + "\n")
     yield result
-    # keep precomputed for bank (Phase 3 ships these)
 
 
 def test_list_cases_no_keys() -> None:
@@ -46,6 +45,10 @@ def test_list_cases_no_keys() -> None:
     assert "case_id" in body[0]
     assert "key_rationale" not in body[0]
     assert "planted_evidence" not in body[0]
+    assert {row["dataset_role"] for row in body} == {
+        "clinical_scenario",
+        "volume_test",
+    }
 
 
 def test_get_audit_precomputed(precomputed_sepsis_001: AuditResult) -> None:

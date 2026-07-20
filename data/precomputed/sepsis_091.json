@@ -1,0 +1,289 @@
+{
+  "case_id": "sepsis_091",
+  "status": "completed",
+  "verdict": "supported",
+  "confidence": 0.85,
+  "rules_verdict": "supported",
+  "draft_verdict": "supported",
+  "criteria_results": [
+    {
+      "criterion_id": "infection",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ]
+    },
+    {
+      "criterion_id": "lactate_elevated",
+      "result": "met",
+      "method": "structured",
+      "evidence_ids": [
+        "E9",
+        "E10",
+        "E11"
+      ]
+    },
+    {
+      "criterion_id": "hypotension",
+      "result": "met",
+      "method": "structured",
+      "evidence_ids": [
+        "E12"
+      ]
+    },
+    {
+      "criterion_id": "vasopressors",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E5",
+        "E6",
+        "E7",
+        "E8"
+      ]
+    },
+    {
+      "criterion_id": "creatinine_rise",
+      "result": "met",
+      "method": "structured",
+      "evidence_ids": [
+        "E13"
+      ]
+    },
+    {
+      "criterion_id": "thrombocytopenia",
+      "result": "met",
+      "method": "structured",
+      "evidence_ids": [
+        "E14",
+        "E15",
+        "E16"
+      ]
+    },
+    {
+      "criterion_id": "altered_mentation",
+      "result": "not_met",
+      "method": "narrative",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "organ_dysfunction",
+      "result": "met",
+      "method": "any_of",
+      "evidence_ids": [
+        "E17",
+        "E18"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E1",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 7,
+        "line_end": 10
+      },
+      "text": "Patient is being treated with broad-spectrum antibiotics and vasopressors for hypotension. A diagnosis of sepsis is suspected due to the presence of infection and organ dysfunction. The patient will be closely monitored for any changes in his condition. Nursing: patient tolerating oral intake as ordered."
+    },
+    {
+      "evidence_id": "E2",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient was diagnosed with sepsis due to a urinary tract infection. He was treated with broad-spectrum antibiotics and vasopressors for hypotension. The patient's condition improved, and he was discharged to a rehabilitation facility. Laboratory results at discharge: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L."
+    },
+    {
+      "evidence_id": "E3",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "Creatinine level has risen to 1.5 mg/dL, indicating a significant increase in the past 24 hours. Platelet count has decreased to 70 10^9/L, indicating thrombocytopenia. Patient is being evaluated for potential sources of infection, including the lungs and abdomen. Broad-spectrum antibiotics are being continued, and the patient is being closely monitored for any changes in his condition."
+    },
+    {
+      "evidence_id": "E4",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "He presents with a 2-day history of fever, chills, and cough."
+    },
+    {
+      "evidence_id": "E5",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient remains hypotensive with a mean arterial pressure of 60 mmHg. Vasopressors are being titrated to maintain adequate blood pressure. Lactate level has increased to 3.0 mmol/L, indicating worsening organ dysfunction. Creatinine level has risen to 1.5 mg/dL, indicating a significant increase in the past 24 hours."
+    },
+    {
+      "evidence_id": "E6",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Vasopressors are being titrated to maintain adequate blood pressure."
+    },
+    {
+      "evidence_id": "E7",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 7,
+        "line_end": 10
+      },
+      "text": "Patient is being treated with broad-spectrum antibiotics and vasopressors for hypotension. A diagnosis of sepsis is suspected due to the presence of infection and organ dysfunction. The patient will be closely monitored for any changes in his condition. Nursing: patient tolerating oral intake as ordered."
+    },
+    {
+      "evidence_id": "E8",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient was diagnosed with sepsis due to a urinary tract infection. He was treated with broad-spectrum antibiotics and vasopressors for hypotension. The patient's condition improved, and he was discharged to a rehabilitation facility. Laboratory results at discharge: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L."
+    },
+    {
+      "evidence_id": "E9",
+      "side": "for",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "text": "Laboratory results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L."
+    },
+    {
+      "evidence_id": "E10",
+      "side": "for",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Lactate level has increased to 3.0 mmol/L, indicating worsening organ dysfunction."
+    },
+    {
+      "evidence_id": "E11",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Laboratory results at discharge: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L."
+    },
+    {
+      "evidence_id": "E12",
+      "side": "for",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 1,
+        "line_end": 1
+      },
+      "text": "Patient remains hypotensive with a mean arterial pressure of 60 mmHg."
+    },
+    {
+      "evidence_id": "E13",
+      "side": "for",
+      "criterion_id": "creatinine_rise",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Creatinine level has risen to 1.5 mg/dL, indicating a significant increase in the past 24 hours."
+    },
+    {
+      "evidence_id": "E14",
+      "side": "for",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "text": "Laboratory results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L."
+    },
+    {
+      "evidence_id": "E15",
+      "side": "for",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "Platelet count has decreased to 70 10^9/L, indicating thrombocytopenia."
+    },
+    {
+      "evidence_id": "E16",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Laboratory results at discharge: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L."
+    },
+    {
+      "evidence_id": "E17",
+      "side": "for",
+      "criterion_id": "organ_dysfunction",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 8,
+        "line_end": 8
+      },
+      "text": "A diagnosis of sepsis is suspected due to the presence of infection and organ dysfunction."
+    },
+    {
+      "evidence_id": "E18",
+      "side": "for",
+      "criterion_id": "organ_dysfunction",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Lactate level has increased to 3.0 mmol/L, indicating worsening organ dysfunction."
+    }
+  ],
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_091 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is supported, primarily based on E5 (vasopressors): Patient remains hypotensive with a mean arterial pressure of 60 mmHg\n\n## Evidence\n| # | For/Against | Criterion | Source | Lines | Excerpt |\n|---|-------------|-----------|--------|-------|---------|\n| E1 | for | infection | history_and_physical 2022-06-18 | 7-10 | Patient is being treated with broad-spectrum antibiotics and vasopressors for hypotension. A diagnosis of sepsis is susp |\n| E2 | for | infection | discharge_summary 2022-06-27 | 1-4 | Patient was diagnosed with sepsis due to a urinary tract infection. He was treated with broad-spectrum antibiotics and v |\n| E3 | for | infection | progress_note 2022-06-19 | 4-7 | Creatinine level has risen to 1.5 mg/dL, indicating a significant increase in the past 24 hours. Platelet count has decr |\n| E4 | for | infection | history_and_physical 2022-06-18 | 2-2 | He presents with a 2-day history of fever, chills, and cough. |\n| E5 | for | vasopressors | progress_note 2022-06-19 | 1-4 | Patient remains hypotensive with a mean arterial pressure of 60 mmHg. Vasopressors are being titrated to maintain adequa |\n| E6 | for | vasopressors | progress_note 2022-06-19 | 2-2 | Vasopressors are being titrated to maintain adequate blood pressure. |\n| E7 | for | vasopressors | history_and_physical 2022-06-18 | 7-10 | Patient is being treated with broad-spectrum antibiotics and vasopressors for hypotension. A diagnosis of sepsis is susp |\n| E8 | for | vasopressors | discharge_summary 2022-06-27 | 1-4 | Patient was diagnosed with sepsis due to a urinary tract infection. He was treated with broad-spectrum antibiotics and v |\n| E9 | for | lactate_elevated | history_and_physical 2022-06-18 | 6-6 | Laboratory results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L. |\n| E10 | for | lactate_elevated | progress_note 2022-06-19 | 3-3 | Lactate level has increased to 3.0 mmol/L, indicating worsening organ dysfunction. |\n| E11 | against | lactate_elevated | discharge_summary 2022-06-27 | 4-4 | Laboratory results at discharge: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L. |\n| E12 | for | hypotension | progress_note 2022-06-19 | 1-1 | Patient remains hypotensive with a mean arterial pressure of 60 mmHg. |\n| E13 | for | creatinine_rise | progress_note 2022-06-19 | 4-4 | Creatinine level has risen to 1.5 mg/dL, indicating a significant increase in the past 24 hours. |\n| E14 | for | thrombocytopenia | history_and_physical 2022-06-18 | 6-6 | Laboratory results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L. |\n| E15 | for | thrombocytopenia | progress_note 2022-06-19 | 5-5 | Platelet count has decreased to 70 10^9/L, indicating thrombocytopenia. |\n| E16 | against | thrombocytopenia | discharge_summary 2022-06-27 | 4-4 | Laboratory results at discharge: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L. |\n| E17 | for | organ_dysfunction | history_and_physical 2022-06-18 | 8-8 | A diagnosis of sepsis is suspected due to the presence of infection and organ dysfunction. |\n| E18 | for | organ_dysfunction | progress_note 2022-06-19 | 3-3 | Lactate level has increased to 3.0 mmol/L, indicating worsening organ dysfunction. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). Findings that affect payment grouping must be supported by chart indicators (icd10cm_guidelines_fy2026_summary, Section: Sepsis coding notes (high level)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E11, E12, E13, E14, E15, E16, E17, E18, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "dropped_sentences": 0,
+  "force_reasons": [],
+  "composer": "deterministic",
+  "source": "precomputed",
+  "trace_id": "run_sepsis_091_20260720T154710946739Z_28f908"
+}

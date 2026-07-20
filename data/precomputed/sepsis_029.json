@@ -1,0 +1,322 @@
+{
+  "case_id": "sepsis_029",
+  "status": "completed",
+  "verdict": "supported",
+  "confidence": 0.85,
+  "rules_verdict": "supported",
+  "draft_verdict": "supported",
+  "criteria_results": [
+    {
+      "criterion_id": "infection",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ]
+    },
+    {
+      "criterion_id": "lactate_elevated",
+      "result": "met",
+      "method": "structured",
+      "evidence_ids": [
+        "E12",
+        "E13",
+        "E14",
+        "E15",
+        "E16"
+      ]
+    },
+    {
+      "criterion_id": "hypotension",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "vasopressors",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E5",
+        "E6",
+        "E7",
+        "E8",
+        "E9",
+        "E10",
+        "E11"
+      ]
+    },
+    {
+      "criterion_id": "creatinine_rise",
+      "result": "met",
+      "method": "structured",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "thrombocytopenia",
+      "result": "met",
+      "method": "structured",
+      "evidence_ids": [
+        "E17",
+        "E18",
+        "E19",
+        "E20",
+        "E21"
+      ]
+    },
+    {
+      "criterion_id": "altered_mentation",
+      "result": "not_met",
+      "method": "narrative",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "organ_dysfunction",
+      "result": "met",
+      "method": "any_of",
+      "evidence_ids": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E1",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 7,
+        "line_end": 10
+      },
+      "text": "Patient is being treated with antibiotics and fluids. Differential diagnosis includes pneumonia and sepsis. Plan is to continue antibiotics and monitor labs and vitals closely. Patient is being considered for ICU admission."
+    },
+    {
+      "evidence_id": "E2",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient was admitted with pneumonia and sepsis. Patient was treated with antibiotics and vasopressors. Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L. Vital signs: temperature 37.0 C, blood pressure 100/60 mmHg, heart rate 90 bpm."
+    },
+    {
+      "evidence_id": "E3",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "He presents with a 2 day history of fever, chills, and cough."
+    },
+    {
+      "evidence_id": "E4",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 7,
+        "line_end": 10
+      },
+      "text": "Plan is to continue antibiotics and monitor labs and vitals closely. Will re-evaluate in 24 hours. Patient's condition is being closely monitored. Labs and vitals will be monitored closely."
+    },
+    {
+      "evidence_id": "E5",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "Patient is being treated with vasopressors. Patient's oxygen saturation is 90% on 2L NC. Patient's family is concerned about his condition. Plan is to continue antibiotics and vasopressors."
+    },
+    {
+      "evidence_id": "E6",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient's condition has not improved. Labs: lactate 3.0 mmol/L, creatinine 1.5 mg/dL, platelets 70 10^9/L. Vital signs: temperature 39.0 C, blood pressure 80/50 mmHg, heart rate 120 bpm. Patient is being treated with vasopressors."
+    },
+    {
+      "evidence_id": "E7",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient was admitted with pneumonia and sepsis. Patient was treated with antibiotics and vasopressors. Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L. Vital signs: temperature 37.0 C, blood pressure 100/60 mmHg, heart rate 90 bpm."
+    },
+    {
+      "evidence_id": "E8",
+      "side": "for",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Patient is being treated with vasopressors."
+    },
+    {
+      "evidence_id": "E9",
+      "side": "against",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "Patient is being weaned off vasopressors. Patient's oxygen saturation is 95% on 1L NC. Patient's family is relieved that his condition is improving. Plan is to continue antibiotics and monitor labs and vitals closely."
+    },
+    {
+      "evidence_id": "E10",
+      "side": "against",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient's condition is improving. Labs: lactate 2.0 mmol/L, creatinine 1.2 mg/dL, platelets 90 10^9/L. Vital signs: temperature 38.0 C, blood pressure 90/60 mmHg, heart rate 100 bpm. Patient is being weaned off vasopressors."
+    },
+    {
+      "evidence_id": "E11",
+      "side": "against",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Patient is being weaned off vasopressors."
+    },
+    {
+      "evidence_id": "E12",
+      "side": "for",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L."
+    },
+    {
+      "evidence_id": "E13",
+      "side": "for",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Labs: lactate 3.0 mmol/L, creatinine 1.5 mg/dL, platelets 70 10^9/L."
+    },
+    {
+      "evidence_id": "E14",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L."
+    },
+    {
+      "evidence_id": "E15",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Labs: lactate 2.0 mmol/L, creatinine 1.2 mg/dL, platelets 90 10^9/L."
+    },
+    {
+      "evidence_id": "E16",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_03",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 110 10^9/L."
+    },
+    {
+      "evidence_id": "E17",
+      "side": "for",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L."
+    },
+    {
+      "evidence_id": "E18",
+      "side": "for",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Labs: lactate 3.0 mmol/L, creatinine 1.5 mg/dL, platelets 70 10^9/L."
+    },
+    {
+      "evidence_id": "E19",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L."
+    },
+    {
+      "evidence_id": "E20",
+      "side": "for",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Labs: lactate 2.0 mmol/L, creatinine 1.2 mg/dL, platelets 90 10^9/L."
+    },
+    {
+      "evidence_id": "E21",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_03",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 110 10^9/L."
+    }
+  ],
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_029 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is supported, primarily based on E5 (vasopressors): Patient is being treated with vasopressors\n\n## Evidence\n| # | For/Against | Criterion | Source | Lines | Excerpt |\n|---|-------------|-----------|--------|-------|---------|\n| E1 | for | infection | history_and_physical 2022-01-29 | 7-10 | Patient is being treated with antibiotics and fluids. Differential diagnosis includes pneumonia and sepsis. Plan is to c |\n| E2 | for | infection | discharge_summary 2022-02-02 | 1-4 | Patient was admitted with pneumonia and sepsis. Patient was treated with antibiotics and vasopressors. Labs: lactate 1.5 |\n| E3 | for | infection | history_and_physical 2022-01-29 | 2-2 | He presents with a 2 day history of fever, chills, and cough. |\n| E4 | for | infection | progress_note 2022-01-31 | 7-10 | Plan is to continue antibiotics and monitor labs and vitals closely. Will re-evaluate in 24 hours. Patient's condition i |\n| E5 | for | vasopressors | progress_note 2022-01-30 | 4-7 | Patient is being treated with vasopressors. Patient's oxygen saturation is 90% on 2L NC. Patient's family is concerned a |\n| E6 | for | vasopressors | progress_note 2022-01-30 | 1-4 | Patient's condition has not improved. Labs: lactate 3.0 mmol/L, creatinine 1.5 mg/dL, platelets 70 10^9/L. Vital signs:  |\n| E7 | for | vasopressors | discharge_summary 2022-02-02 | 1-4 | Patient was admitted with pneumonia and sepsis. Patient was treated with antibiotics and vasopressors. Labs: lactate 1.5 |\n| E8 | for | vasopressors | progress_note 2022-01-30 | 4-4 | Patient is being treated with vasopressors. |\n| E9 | against | vasopressors | progress_note 2022-01-31 | 4-7 | Patient is being weaned off vasopressors. Patient's oxygen saturation is 95% on 1L NC. Patient's family is relieved that |\n| E10 | against | vasopressors | progress_note 2022-01-31 | 1-4 | Patient's condition is improving. Labs: lactate 2.0 mmol/L, creatinine 1.2 mg/dL, platelets 90 10^9/L. Vital signs: temp |\n| E11 | against | vasopressors | progress_note 2022-01-31 | 4-4 | Patient is being weaned off vasopressors. |\n| E12 | for | lactate_elevated | history_and_physical 2022-01-29 | 5-5 | Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L. |\n| E13 | for | lactate_elevated | progress_note 2022-01-30 | 2-2 | Labs: lactate 3.0 mmol/L, creatinine 1.5 mg/dL, platelets 70 10^9/L. |\n| E14 | against | lactate_elevated | discharge_summary 2022-02-02 | 3-3 | Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L. |\n| E15 | against | lactate_elevated | progress_note 2022-01-31 | 2-2 | Labs: lactate 2.0 mmol/L, creatinine 1.2 mg/dL, platelets 90 10^9/L. |\n| E16 | against | lactate_elevated | progress_note 2022-02-01 | 2-2 | Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 110 10^9/L. |\n| E17 | for | thrombocytopenia | history_and_physical 2022-01-29 | 5-5 | Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L. |\n| E18 | for | thrombocytopenia | progress_note 2022-01-30 | 2-2 | Labs: lactate 3.0 mmol/L, creatinine 1.5 mg/dL, platelets 70 10^9/L. |\n| E19 | against | thrombocytopenia | discharge_summary 2022-02-02 | 3-3 | Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 100 10^9/L. |\n| E20 | for | thrombocytopenia | progress_note 2022-01-31 | 2-2 | Labs: lactate 2.0 mmol/L, creatinine 1.2 mg/dL, platelets 90 10^9/L. |\n| E21 | against | thrombocytopenia | progress_note 2022-02-01 | 2-2 | Labs: lactate 1.5 mmol/L, creatinine 1.0 mg/dL, platelets 110 10^9/L. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). Findings that affect payment grouping must be supported by chart indicators (icd10cm_guidelines_fy2026_summary, Section: Sepsis coding notes (high level)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E11, E12, E13, E14, E15, E16, E17, E18, E19, E2, E20, E21, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "dropped_sentences": 0,
+  "force_reasons": [],
+  "composer": "deterministic",
+  "source": "precomputed",
+  "trace_id": "run_sepsis_029_20260720T154706782157Z_21a02c"
+}

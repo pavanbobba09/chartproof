@@ -1,21 +1,27 @@
 """Composer: determination draft + rationale letter with citation enforcement.
 
 Hard rule: only numbered evidence IDs may be referenced. Uncited claim sentences
-are dropped in code (not prompt-only). Default path is deterministic so tests and
-free-tier demos stay offline-friendly; optional Groq can draft prose that is then
-filtered through the same citation gate.
+are dropped in code (not prompt-only). The default path is deterministic so
+tests and free-tier demos stay offline-friendly. Setting CHARTPROOF_LLM_COMPOSE=1
+with GROQ_API_KEY enables an LLM draft (verdict + determination prose) that is
+filtered through the same citation gate; any failure falls back to the
+deterministic path.
 """
 
 from __future__ import annotations
 
+import json
+import os
 import re
 from typing import Any, Literal
 
 from backend.index.retrieve import retrieve_guidelines
+from backend.pipeline.lexicon import narrative_side
 from backend.schemas import Case, CriteriaFile, EvidenceItem, EvidenceSpan
 
 Verdict = Literal["supported", "not_supported"]
 TriState = Literal["met", "not_met", "unclear"]
+Side = Literal["for", "against"]
 
 _EVIDENCE_ID_RE = re.compile(r"\bE(\d+)\b")
 _SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
@@ -28,12 +34,12 @@ def build_evidence_catalog(
 ) -> list[EvidenceItem]:
     """Flatten findings + structured rule hits into numbered evidence items."""
     items: list[EvidenceItem] = []
-    seen: set[tuple[str, int, int, str]] = set()
+    seen: set[tuple[str, int, int, str, str]] = set()
     eid = 1
 
     def _add(side: str, criterion_id: str, span: EvidenceSpan, text: str) -> None:
         nonlocal eid
-        key = (span.doc_id, span.line_start, span.line_end, side)
+        key = (span.doc_id, span.line_start, span.line_end, side, criterion_id)
         if key in seen:
             return
         seen.add(key)
@@ -55,106 +61,160 @@ def build_evidence_catalog(
             span = EvidenceSpan.model_validate(side_item["span"])
             _add(side_item["side"], cid, span, side_item.get("text") or "")
 
-    # Structured criteria: cite labs/vitals tables as synthetic "spans" on hp line 1 if needed
-    # Prefer citing document lines that mention the metric name
-    breakdown = rules_result.get("breakdown") or {}
+    # Structured criteria: classify each documented observation independently.
+    # This prevents a later normal value from relabeling an earlier abnormal line.
     for crit in rules_result.get("criteria") or []:
         if crit.get("method") != "structured":
             continue
-        cid = crit["criterion_id"]
-        result = crit["result"]
-        if result == "unclear":
-            continue
-        side = "for" if result == "met" else "against"
-        span, text = _find_metric_mention(case, cid)
-        _add(side, cid, span, text)
-
-    # Ensure at least one item when organ dysfunction is clear from structured only
-    if not items and breakdown:
-        for cid, res in breakdown.items():
-            if res in ("met", "not_met"):
-                span, text = _find_metric_mention(case, cid)
-                _add("for" if res == "met" else "against", cid, span, text)
-                if len(items) >= 3:
-                    break
-
-    # Extra keyword scan: surface more chart lines for recall (still real spans)
-    for cid, res in breakdown.items():
-        if res not in ("met", "not_met"):
-            continue
-        side = "for" if res == "met" else "against"
-        for span, text in _find_all_metric_mentions(case, cid, limit=3):
+        cid = str(crit["criterion_id"])
+        for span, text, side in _find_structured_metric_mentions(case, crit):
             _add(side, cid, span, text)
+
+    # Composite criteria: cite explicit chart statements about the composite
+    # itself ("no evidence of organ dysfunction"). Each line is side-classified
+    # by the shared lexicon, so sides cannot be inherited incorrectly.
+    for crit in rules_result.get("criteria") or []:
+        if crit.get("method") not in ("any_of", "all_of"):
+            continue
+        cid = str(crit["criterion_id"])
+        added = 0
+        for doc in case.documents:
+            for line_number, line in enumerate(doc.lines, start=1):
+                side = narrative_side(cid, line)
+                if side is None:
+                    continue
+                _add(
+                    side,
+                    cid,
+                    EvidenceSpan(
+                        doc_id=doc.doc_id,
+                        line_start=line_number,
+                        line_end=line_number,
+                    ),
+                    line,
+                )
+                added += 1
+                if added >= 4:
+                    break
+            if added >= 4:
+                break
 
     return items
 
 
-def _find_all_metric_mentions(
-    case: Case, criterion_id: str, *, limit: int = 3
-) -> list[tuple[EvidenceSpan, str]]:
-    keywords = {
-        "lactate_elevated": ("lactate",),
-        "hypotension": ("map", "hypotens", "blood pressure", "mmhg"),
-        "creatinine_rise": ("creatinine",),
-        "thrombocytopenia": ("platelet",),
-        "infection": (
-            "infection",
-            "antibiotic",
-            "uti",
-            "pneumonia",
-            "culture",
-            "sepsis",
-        ),
-        "vasopressors": ("vasopressor", "pressor", "norepinephrine", "levophed"),
-        "organ_dysfunction": ("organ dysfunction", "lactate", "map"),
-        "altered_mentation": ("mental", "confused", "gcs", "alert and oriented"),
-    }
-    kws = keywords.get(criterion_id, (criterion_id.replace("_", " "),))
-    found: list[tuple[EvidenceSpan, str]] = []
+_METRIC_VALUE_PATTERNS: dict[str, re.Pattern[str]] = {
+    "lactate_elevated": re.compile(
+        r"\blactate(?:\s+level)?\D{0,35}?([0-9]+(?:\.[0-9]+)?)",
+        re.IGNORECASE,
+    ),
+    "hypotension": re.compile(
+        r"\b(?:map|mean arterial pressure)\D{0,20}?([0-9]+(?:\.[0-9]+)?)",
+        re.IGNORECASE,
+    ),
+    "creatinine_rise": re.compile(
+        r"\bcreatinine(?:\s+level)?\D{0,35}?([0-9]+(?:\.[0-9]+)?)",
+        re.IGNORECASE,
+    ),
+    "thrombocytopenia": re.compile(
+        r"\bplatelets?(?:\s+count)?\D{0,35}?([0-9]+(?:\.[0-9]+)?)",
+        re.IGNORECASE,
+    ),
+}
+
+
+def _point_observation_side(value: float, op: str, threshold: float) -> Side:
+    met = {
+        "gt": value > threshold,
+        "gte": value >= threshold,
+        "lt": value < threshold,
+        "lte": value <= threshold,
+    }.get(op)
+    if met is None:
+        raise ValueError(f"unsupported point op for evidence: {op}")
+    return "for" if met else "against"
+
+
+def _trend_observation_side(text: str) -> Side | None:
+    lower = text.lower()
+    against_markers = (
+        "stable",
+        "unchanged",
+        "not changed",
+        "no significant",
+        "decreas",
+        "returned to baseline",
+        "at baseline",
+    )
+    if any(marker in lower for marker in against_markers):
+        return "against"
+    for_markers = ("rise", "risen", "rose", "increas", "worsen")
+    if any(marker in lower for marker in for_markers):
+        return "for"
+    return None
+
+
+def classify_structured_observation_side(
+    criterion_id: str,
+    text: str,
+    op: str,
+    threshold: float,
+) -> Side | None:
+    """Classify one structured chart excerpt against its encoded criterion."""
+    pattern = _METRIC_VALUE_PATTERNS.get(criterion_id)
+    if pattern is None:
+        return None
+    match = pattern.search(text)
+    if match is None:
+        return None
+    if op == "rise_gte":
+        return _trend_observation_side(text)
+    return _point_observation_side(float(match.group(1)), op, threshold)
+
+
+def _find_structured_metric_mentions(
+    case: Case,
+    criterion: dict[str, Any],
+    *,
+    limit: int = 6,
+) -> list[tuple[EvidenceSpan, str, Side]]:
+    criterion_id = str(criterion["criterion_id"])
+    op = criterion.get("op")
+    threshold = criterion.get("threshold")
+    if not op or threshold is None or criterion_id not in _METRIC_VALUE_PATTERNS:
+        return []
+
+    found: list[tuple[EvidenceSpan, str, Side]] = []
     for doc in case.documents:
-        for i, line in enumerate(doc.lines, start=1):
-            low = line.lower()
-            if any(k in low for k in kws):
-                found.append(
-                    (
-                        EvidenceSpan(doc_id=doc.doc_id, line_start=i, line_end=i),
-                        line,
-                    )
+        for line_number, line in enumerate(doc.lines, start=1):
+            side = classify_structured_observation_side(
+                criterion_id,
+                line,
+                str(op),
+                float(threshold),
+            )
+            if side is None:
+                continue
+            found.append(
+                (
+                    EvidenceSpan(
+                        doc_id=doc.doc_id,
+                        line_start=line_number,
+                        line_end=line_number,
+                    ),
+                    line,
+                    side,
                 )
-                if len(found) >= limit:
-                    return found
+            )
+            if len(found) >= limit:
+                return found
     return found
 
 
-def _find_metric_mention(case: Case, criterion_id: str) -> tuple[EvidenceSpan, str]:
-    keywords = {
-        "lactate_elevated": ("lactate",),
-        "hypotension": ("map", "hypotens", "blood pressure"),
-        "creatinine_rise": ("creatinine",),
-        "thrombocytopenia": ("platelet",),
-        "infection": ("infection", "antibiotic", "uti", "pneumonia"),
-        "vasopressors": ("vasopressor", "pressor"),
-        "organ_dysfunction": ("organ dysfunction", "lactate", "map"),
-    }
-    kws = keywords.get(criterion_id, (criterion_id.replace("_", " "),))
-    for doc in case.documents:
-        for i, line in enumerate(doc.lines, start=1):
-            low = line.lower()
-            if any(k in low for k in kws):
-                return EvidenceSpan(doc_id=doc.doc_id, line_start=i, line_end=i), line
-    # Fallback: first line of first document
-    doc = case.documents[0]
-    return (
-        EvidenceSpan(doc_id=doc.doc_id, line_start=1, line_end=1),
-        doc.lines[0] if doc.lines else "",
-    )
-
-
-def derive_llm_verdict(
+def derive_draft_verdict(
     rules_verdict: str | None,
     evidence: list[EvidenceItem],
 ) -> Verdict | None:
-    """Heuristic LLM-side verdict from evidence balance (deterministic demo path)."""
+    """Draft verdict from evidence balance (deterministic heuristic, not an LLM)."""
     if rules_verdict in ("supported", "not_supported"):
         # Slightly independent signal: count for vs against on organ-related criteria
         for_n = sum(1 for e in evidence if e.side == "for")
@@ -174,6 +234,72 @@ def derive_llm_verdict(
     if against_n > for_n:
         return "not_supported"
     return None
+
+
+def llm_compose_enabled() -> bool:
+    """LLM compose is strictly opt-in so CI, evals, and precompute stay deterministic."""
+    return (
+        os.environ.get("CHARTPROOF_LLM_COMPOSE") == "1"
+        and bool(os.environ.get("GROQ_API_KEY"))
+    )
+
+
+def _llm_compose(
+    case: Case,
+    criteria: CriteriaFile,
+    evidence: list[EvidenceItem],
+) -> tuple[Verdict | None, str | None]:
+    """Ask Groq for an independent draft verdict + determination prose.
+
+    Returns (verdict, determination_text). The prompt deliberately excludes the
+    rules verdict so the second opinion stays independent, and the caller runs
+    the returned text through the same citation gate as the deterministic
+    letter; the prompt is not trusted.
+    """
+    import httpx
+
+    from backend.config import GROQ_API_KEY, GROQ_API_URL, GROQ_MODEL
+
+    catalog = "\n".join(
+        f"{e.evidence_id} [{e.side}, {e.criterion_id}] "
+        f"({e.span.doc_id}:{e.span.line_start}-{e.span.line_end}) {e.text}"
+        for e in evidence
+    )
+    prompt = (
+        "You are drafting a clinical validation determination for an auditor. "
+        f"Billed diagnosis: {criteria.display_name}. "
+        "You may reference ONLY the numbered evidence IDs listed below. "
+        "Every claim sentence must cite at least one evidence ID like E3. "
+        "Do not invent evidence, values, or IDs. "
+        "Respond with JSON only: "
+        '{"verdict": "supported" | "not_supported", '
+        '"determination": "2-3 sentences citing evidence IDs"}\n\n'
+        f"Evidence catalog:\n{catalog}"
+    )
+    response = httpx.post(
+        GROQ_API_URL,
+        headers={"Authorization": f"Bearer {GROQ_API_KEY}"},
+        json={
+            "model": GROQ_MODEL,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.2,
+            "max_tokens": 400,
+        },
+        timeout=30.0,
+    )
+    response.raise_for_status()
+    content = response.json()["choices"][0]["message"]["content"]
+    match = re.search(r"\{.*\}", content, re.DOTALL)
+    if match is None:
+        return None, None
+    data = json.loads(match.group(0))
+    verdict = data.get("verdict")
+    determination = data.get("determination")
+    if verdict not in ("supported", "not_supported"):
+        verdict = None
+    if not isinstance(determination, str) or not determination.strip():
+        determination = None
+    return verdict, determination
 
 
 def filter_uncited_sentences(text: str, valid_ids: set[str]) -> tuple[str, int]:
@@ -247,8 +373,14 @@ def compose_letter(
     evidence: list[EvidenceItem],
     rules_verdict: str | None,
     guideline_bits: list[tuple[str, str]] | None = None,
+    determination_override: str | None = None,
 ) -> tuple[str, int]:
-    """Build DATA_SPEC section 9 letter; enforce citations. Returns (markdown, dropped)."""
+    """Build DATA_SPEC section 9 letter; enforce citations. Returns (markdown, dropped).
+
+    determination_override replaces the deterministic determination prose (used
+    by the LLM compose path); it passes through the same citation gate, so
+    uncited claim sentences are still dropped.
+    """
     display = criteria.display_name
     valid_ids = {e.evidence_id for e in evidence}
 
@@ -259,7 +391,10 @@ def compose_letter(
 
     # Strongest reason from top for/against item (must include evidence_id)
     if verdict == "supported":
-        top = next((e for e in evidence if e.side == "for"), None)
+        top = next(
+            (e for e in evidence if e.side == "for" and e.criterion_id != "infection"),
+            next((e for e in evidence if e.side == "for"), None),
+        )
         reason = (
             f"Draft determination is supported, primarily based on {top.evidence_id} "
             f"({top.criterion_id}): {_excerpt(top.text)}"
@@ -286,11 +421,16 @@ def compose_letter(
                 f"criteria evaluation was incomplete or conflicting."
             )
 
-    # Evidence table
+    if determination_override:
+        reason = determination_override.replace("\n", " ").strip()
+
+    # Evidence table. One row per evidence ID; the same chart span can appear
+    # under several criteria, so the Criterion column makes each row's
+    # attribution explicit instead of looking like a duplicate.
     doc_lookup = {d.doc_id: d for d in case.documents}
     rows = [
-        "| # | For/Against | Source | Lines | Excerpt |",
-        "|---|-------------|--------|-------|---------|",
+        "| # | For/Against | Criterion | Source | Lines | Excerpt |",
+        "|---|-------------|-----------|--------|-------|---------|",
     ]
     for e in evidence:
         doc = doc_lookup.get(e.span.doc_id)
@@ -299,20 +439,22 @@ def compose_letter(
         )
         excerpt = e.text.replace("|", "/").replace("\n", " ")[:120]
         rows.append(
-            f"| {e.evidence_id} | {e.side} | {source} | "
+            f"| {e.evidence_id} | {e.side} | {e.criterion_id} | {source} | "
             f"{e.span.line_start}-{e.span.line_end} | {excerpt} |"
         )
     if len(rows) == 2:
-        rows.append("| - | - | - | - | No evidence spans collected |")
+        rows.append("| - | - | - | - | - | No evidence spans collected |")
 
-    # Coding rationale with guideline citations
+    # Coding rationale with guideline citations. Fallback pairs must be real
+    # manifest source_ids with real section headings so the offline path still
+    # passes the grounded faithfulness gate.
     g_bits = guideline_bits or [
         ("sepsis3_summary", "Section: Definition"),
-        ("icd10cm_coding_summary", "Section: Clinical validation context"),
+        ("icd10cm_guidelines_fy2026_summary", "Section: Clinical validation context"),
     ]
     coding = (
         f"Clinical validation of billed {display} should rest on documented infection "
-        f"plus organ dysfunction indicators (sepsis3_summary, {g_bits[0][1]}). "
+        f"plus organ dysfunction indicators ({g_bits[0][0]}, {g_bits[0][1]}). "
         f"Findings that affect payment grouping must be supported by chart indicators "
         f"({g_bits[1][0]}, {g_bits[1][1]}). "
         f"This draft is for auditor review only and is not a payment decision. "
@@ -350,7 +492,22 @@ def compose_from_state(
     """Full compose step output for the pipeline."""
     evidence = build_evidence_catalog(case, evidence_findings, rules_result)
     rules_verdict = rules_result.get("verdict")
-    llm_verdict = derive_llm_verdict(rules_verdict, evidence)
+    draft_verdict = derive_draft_verdict(rules_verdict, evidence)
+
+    # Optional LLM draft (opt-in): an independent second opinion whose prose
+    # still passes the citation gate. Any failure falls back to deterministic.
+    composer = "deterministic"
+    determination_override: str | None = None
+    if llm_compose_enabled():
+        try:
+            llm_verdict, llm_text = _llm_compose(case, criteria, evidence)
+            if llm_verdict is not None and llm_text is not None:
+                draft_verdict = llm_verdict
+                determination_override = llm_text
+                composer = "llm"
+        except Exception:  # noqa: BLE001 - never let the LLM path break an audit
+            composer = "deterministic"
+            determination_override = None
 
     guideline_bits: list[tuple[str, str]] = []
     if use_guidelines:
@@ -360,19 +517,36 @@ def compose_from_state(
             client = get_client(chroma_dir) if chroma_dir else None
             hits = retrieve_guidelines(
                 f"{criteria.display_name} clinical validation coding",
-                n_results=2,
+                n_results=8,
                 client=client,
                 persist_dir=chroma_dir,
             )
-            for h in hits:
-                if h.source_id and h.section:
-                    guideline_bits.append((h.source_id, h.section))
+            clinical = next(
+                (
+                    (h.source_id, h.section)
+                    for h in hits
+                    if h.source_id
+                    and h.section
+                    and criteria.dx.lower() in h.source_id.lower()
+                ),
+                None,
+            )
+            coding = next(
+                (
+                    (h.source_id, h.section)
+                    for h in hits
+                    if h.source_id and h.section and h.source_id.startswith("icd10cm_")
+                ),
+                None,
+            )
+            if clinical and coding:
+                guideline_bits = [clinical, coding]
         except Exception:  # noqa: BLE001 - offline compose still works
             guideline_bits = []
 
     # Temporary status for letter header; QA may override
     status = "completed"
-    verdict_for_letter: str | None = llm_verdict or (
+    verdict_for_letter: str | None = draft_verdict or (
         rules_verdict if rules_verdict in ("supported", "not_supported") else None
     )
     letter, dropped = compose_letter(
@@ -383,11 +557,14 @@ def compose_from_state(
         evidence=evidence,
         rules_verdict=rules_verdict,
         guideline_bits=guideline_bits or None,
+        determination_override=determination_override,
     )
 
     return {
         "evidence": [e.model_dump(mode="json") for e in evidence],
-        "llm_verdict": llm_verdict,
+        "draft_verdict": draft_verdict,
         "letter_markdown": letter,
         "dropped_sentences": dropped,
+        "guideline_bits": guideline_bits,
+        "composer": composer,
     }

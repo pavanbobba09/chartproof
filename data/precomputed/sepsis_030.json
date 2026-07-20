@@ -1,0 +1,298 @@
+{
+  "case_id": "sepsis_030",
+  "status": "completed",
+  "verdict": "not_supported",
+  "confidence": 0.85,
+  "rules_verdict": "not_supported",
+  "draft_verdict": "not_supported",
+  "criteria_results": [
+    {
+      "criterion_id": "infection",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ]
+    },
+    {
+      "criterion_id": "lactate_elevated",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E5",
+        "E6",
+        "E7",
+        "E8",
+        "E9"
+      ]
+    },
+    {
+      "criterion_id": "hypotension",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E10",
+        "E11",
+        "E12",
+        "E13",
+        "E14"
+      ]
+    },
+    {
+      "criterion_id": "vasopressors",
+      "result": "not_met",
+      "method": "narrative",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "creatinine_rise",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "thrombocytopenia",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E15",
+        "E16",
+        "E17",
+        "E18",
+        "E19"
+      ]
+    },
+    {
+      "criterion_id": "altered_mentation",
+      "result": "not_met",
+      "method": "narrative",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "organ_dysfunction",
+      "result": "not_met",
+      "method": "any_of",
+      "evidence_ids": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E1",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 7,
+        "line_end": 10
+      },
+      "text": "The patient was started on antibiotics and oxygen therapy. Urinalysis was negative for infection. Blood cultures were sent and are pending. The patient's creatinine level was 1.0 mg/dL on admission."
+    },
+    {
+      "evidence_id": "E2",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient is a 65 year old male with a history of hypertension and diabetes. He was admitted to the hospital with a suspected pneumonia. The patient was treated with antibiotics and oxygen therapy. The patient's condition improved during his hospital stay."
+    },
+    {
+      "evidence_id": "E3",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 13,
+        "line_end": 16
+      },
+      "text": "The patient was instructed to follow up with his primary care physician in one week. The patient was given a prescription for antibiotics to complete at home. The patient's condition is expected to continue to improve. The patient's prognosis is good."
+    },
+    {
+      "evidence_id": "E4",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 10,
+        "line_end": 13
+      },
+      "text": "The patient is being closely monitored for signs of sepsis. The patient's condition has been stable since admission. The patient's antibiotics are being continued. The patient's oxygen therapy is being continued."
+    },
+    {
+      "evidence_id": "E5",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "Laboratory results showed a white blood cell count of 15,000 cells/microliter and a lactate level of 1.5 mmol/L."
+    },
+    {
+      "evidence_id": "E6",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 8,
+        "line_end": 8
+      },
+      "text": "The patient's lactate level was 1.2 mmol/L this morning."
+    },
+    {
+      "evidence_id": "E7",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 10,
+        "line_end": 10
+      },
+      "text": "The patient's lactate level was 1.0 mmol/L on discharge."
+    },
+    {
+      "evidence_id": "E8",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 8,
+        "line_end": 8
+      },
+      "text": "The patient's lactate level was 1.1 mmol/L this morning."
+    },
+    {
+      "evidence_id": "E9",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_03",
+        "line_start": 8,
+        "line_end": 8
+      },
+      "text": "The patient's lactate level was 1.0 mmol/L this morning."
+    },
+    {
+      "evidence_id": "E10",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 12,
+        "line_end": 12
+      },
+      "text": "The patient's MAP was 80 mmHg on admission."
+    },
+    {
+      "evidence_id": "E11",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 9,
+        "line_end": 9
+      },
+      "text": "The patient's MAP was 85 mmHg this morning."
+    },
+    {
+      "evidence_id": "E12",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 11,
+        "line_end": 11
+      },
+      "text": "The patient's MAP was 90 mmHg on discharge."
+    },
+    {
+      "evidence_id": "E13",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 9,
+        "line_end": 9
+      },
+      "text": "The patient's MAP was 85 mmHg this morning."
+    },
+    {
+      "evidence_id": "E14",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "pn_03",
+        "line_start": 9,
+        "line_end": 9
+      },
+      "text": "The patient's MAP was 90 mmHg this morning."
+    },
+    {
+      "evidence_id": "E15",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 11,
+        "line_end": 11
+      },
+      "text": "Platelet count was 150,000 cells/microliter."
+    },
+    {
+      "evidence_id": "E16",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 7,
+        "line_end": 7
+      },
+      "text": "The patient's platelet count was 140,000 cells/microliter this morning."
+    },
+    {
+      "evidence_id": "E17",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 9,
+        "line_end": 9
+      },
+      "text": "The patient's platelet count was 160,000 cells/microliter on discharge."
+    },
+    {
+      "evidence_id": "E18",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_02",
+        "line_start": 7,
+        "line_end": 7
+      },
+      "text": "The patient's platelet count was 150,000 cells/microliter this morning."
+    },
+    {
+      "evidence_id": "E19",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_03",
+        "line_start": 7,
+        "line_end": 7
+      },
+      "text": "The patient's platelet count was 160,000 cells/microliter this morning."
+    }
+  ],
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_030 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is not_supported, primarily based on E5 (lactate_elevated): Laboratory results showed a white blood cell count of 15,000 cells/microliter and a lactate level of 1\n\n## Evidence\n| # | For/Against | Criterion | Source | Lines | Excerpt |\n|---|-------------|-----------|--------|-------|---------|\n| E1 | for | infection | history_and_physical 2022-01-29 | 7-10 | The patient was started on antibiotics and oxygen therapy. Urinalysis was negative for infection. Blood cultures were se |\n| E2 | for | infection | discharge_summary 2022-02-02 | 1-4 | Patient is a 65 year old male with a history of hypertension and diabetes. He was admitted to the hospital with a suspec |\n| E3 | for | infection | discharge_summary 2022-02-02 | 13-16 | The patient was instructed to follow up with his primary care physician in one week. The patient was given a prescriptio |\n| E4 | for | infection | progress_note 2022-01-31 | 10-13 | The patient is being closely monitored for signs of sepsis. The patient's condition has been stable since admission. The |\n| E5 | against | lactate_elevated | history_and_physical 2022-01-29 | 5-5 | Laboratory results showed a white blood cell count of 15,000 cells/microliter and a lactate level of 1.5 mmol/L. |\n| E6 | against | lactate_elevated | progress_note 2022-01-30 | 8-8 | The patient's lactate level was 1.2 mmol/L this morning. |\n| E7 | against | lactate_elevated | discharge_summary 2022-02-02 | 10-10 | The patient's lactate level was 1.0 mmol/L on discharge. |\n| E8 | against | lactate_elevated | progress_note 2022-01-31 | 8-8 | The patient's lactate level was 1.1 mmol/L this morning. |\n| E9 | against | lactate_elevated | progress_note 2022-02-01 | 8-8 | The patient's lactate level was 1.0 mmol/L this morning. |\n| E10 | against | hypotension | history_and_physical 2022-01-29 | 12-12 | The patient's MAP was 80 mmHg on admission. |\n| E11 | against | hypotension | progress_note 2022-01-30 | 9-9 | The patient's MAP was 85 mmHg this morning. |\n| E12 | against | hypotension | discharge_summary 2022-02-02 | 11-11 | The patient's MAP was 90 mmHg on discharge. |\n| E13 | against | hypotension | progress_note 2022-01-31 | 9-9 | The patient's MAP was 85 mmHg this morning. |\n| E14 | against | hypotension | progress_note 2022-02-01 | 9-9 | The patient's MAP was 90 mmHg this morning. |\n| E15 | against | thrombocytopenia | history_and_physical 2022-01-29 | 11-11 | Platelet count was 150,000 cells/microliter. |\n| E16 | against | thrombocytopenia | progress_note 2022-01-30 | 7-7 | The patient's platelet count was 140,000 cells/microliter this morning. |\n| E17 | against | thrombocytopenia | discharge_summary 2022-02-02 | 9-9 | The patient's platelet count was 160,000 cells/microliter on discharge. |\n| E18 | against | thrombocytopenia | progress_note 2022-01-31 | 7-7 | The patient's platelet count was 150,000 cells/microliter this morning. |\n| E19 | against | thrombocytopenia | progress_note 2022-02-01 | 7-7 | The patient's platelet count was 160,000 cells/microliter this morning. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). Findings that affect payment grouping must be supported by chart indicators (icd10cm_guidelines_fy2026_summary, Section: Sepsis coding notes (high level)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E11, E12, E13, E14, E15, E16, E17, E18, E19, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "dropped_sentences": 0,
+  "force_reasons": [],
+  "composer": "deterministic",
+  "source": "precomputed",
+  "trace_id": "run_sepsis_030_20260720T154706868228Z_891f99"
+}

@@ -24,9 +24,11 @@ def _runtime_cache_path(case_id: str) -> Path:
 def load_cached_result(case_id: str, *, fresh: bool = False) -> AuditResult | None:
     if fresh:
         return None
+    # Runtime cache first: a fresh run must not be shadowed by an older
+    # committed precomputed result on the next normal load.
     for path, source in (
-        (_precomputed_path(case_id), "precomputed"),
         (_runtime_cache_path(case_id), "cached"),
+        (_precomputed_path(case_id), "precomputed"),
     ):
         if path.is_file():
             data = json.loads(path.read_text(encoding="utf-8"))
@@ -91,6 +93,7 @@ def list_case_summaries() -> list[CaseSummary]:
             CaseSummary(
                 case_id=case_id,
                 target_dx=data.get("target_dx", "unknown"),
+                dataset_role=data.get("dataset_role", "clinical_scenario"),
                 difficulty=difficulty,
                 has_precomputed=_precomputed_path(case_id).is_file(),
             )

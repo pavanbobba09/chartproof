@@ -1,10 +1,10 @@
 {
   "case_id": "sepsis_009",
-  "status": "needs_review",
-  "verdict": null,
-  "confidence": 0.5,
+  "status": "completed",
+  "verdict": "supported",
+  "confidence": 0.85,
   "rules_verdict": "supported",
-  "llm_verdict": "not_supported",
+  "draft_verdict": "supported",
   "criteria_results": [
     {
       "criterion_id": "infection",
@@ -13,39 +13,40 @@
       "evidence_ids": [
         "E1",
         "E2",
-        "E8",
-        "E9"
+        "E3",
+        "E4"
       ]
     },
     {
       "criterion_id": "lactate_elevated",
-      "result": "not_met",
+      "result": "met",
       "method": "structured",
       "evidence_ids": [
-        "E5",
-        "E12",
-        "E13"
+        "E14",
+        "E15",
+        "E16"
       ]
     },
     {
       "criterion_id": "hypotension",
-      "result": "not_met",
+      "result": "met",
       "method": "structured",
       "evidence_ids": [
-        "E6",
-        "E14",
-        "E15"
+        "E17"
       ]
     },
     {
       "criterion_id": "vasopressors",
-      "result": "not_met",
+      "result": "met",
       "method": "narrative",
       "evidence_ids": [
-        "E3",
-        "E4",
-        "E16",
-        "E17"
+        "E5",
+        "E6",
+        "E7",
+        "E8",
+        "E9",
+        "E10",
+        "E11"
       ]
     },
     {
@@ -53,37 +54,50 @@
       "result": "met",
       "method": "structured",
       "evidence_ids": [
-        "E7",
-        "E18"
-      ]
-    },
-    {
-      "criterion_id": "thrombocytopenia",
-      "result": "not_met",
-      "method": "structured",
-      "evidence_ids": [
+        "E18",
         "E19"
       ]
     },
     {
+      "criterion_id": "thrombocytopenia",
+      "result": "met",
+      "method": "structured",
+      "evidence_ids": [
+        "E20",
+        "E21",
+        "E22"
+      ]
+    },
+    {
       "criterion_id": "altered_mentation",
-      "result": "not_met",
+      "result": "met",
       "method": "narrative",
-      "evidence_ids": []
+      "evidence_ids": [
+        "E12",
+        "E13"
+      ]
     },
     {
       "criterion_id": "organ_dysfunction",
       "result": "met",
       "method": "any_of",
-      "evidence_ids": [
-        "E10",
-        "E11"
-      ]
+      "evidence_ids": []
     }
   ],
   "evidence": [
     {
       "evidence_id": "E1",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "He presents with a 2-day history of fever, chills, and cough."
+    },
+    {
+      "evidence_id": "E2",
       "side": "for",
       "criterion_id": "infection",
       "span": {
@@ -94,7 +108,7 @@
       "text": "Patient was admitted with suspected sepsis and was started on broad-spectrum antibiotics. Patient's condition improved with treatment, with lactate levels decreasing to 1.5 mmol/L and creatinine decreasing to 1.0 mg/dL. Patient's platelet count increased to 100 10^9/L, and blood pressure improved to 100/60 mmHg. Patient was weaned off vasopressors and was able to be extubated."
     },
     {
-      "evidence_id": "E2",
+      "evidence_id": "E3",
       "side": "for",
       "criterion_id": "infection",
       "span": {
@@ -105,62 +119,7 @@
       "text": "Physical exam reveals lung crackles and wheezing. Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L. Patient is suspected to have sepsis and will be started on broad-spectrum antibiotics. Will monitor vital signs and lab results closely."
     },
     {
-      "evidence_id": "E3",
-      "side": "against",
-      "criterion_id": "vasopressors",
-      "span": {
-        "doc_id": "ds",
-        "line_start": 4,
-        "line_end": 7
-      },
-      "text": "Patient was weaned off vasopressors and was able to be extubated. Patient's altered mentation improved, with a Glasgow Coma Scale score of 15. Patient was discharged home with follow-up appointments with primary care and infectious disease specialists. Nursing: patient tolerating oral intake as ordered."
-    },
-    {
       "evidence_id": "E4",
-      "side": "against",
-      "criterion_id": "vasopressors",
-      "span": {
-        "doc_id": "ds",
-        "line_start": 1,
-        "line_end": 4
-      },
-      "text": "Patient was admitted with suspected sepsis and was started on broad-spectrum antibiotics. Patient's condition improved with treatment, with lactate levels decreasing to 1.5 mmol/L and creatinine decreasing to 1.0 mg/dL. Patient's platelet count increased to 100 10^9/L, and blood pressure improved to 100/60 mmHg. Patient was weaned off vasopressors and was able to be extubated."
-    },
-    {
-      "evidence_id": "E5",
-      "side": "against",
-      "criterion_id": "lactate_elevated",
-      "span": {
-        "doc_id": "hp",
-        "line_start": 5,
-        "line_end": 5
-      },
-      "text": "Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L."
-    },
-    {
-      "evidence_id": "E6",
-      "side": "against",
-      "criterion_id": "hypotension",
-      "span": {
-        "doc_id": "hp",
-        "line_start": 3,
-        "line_end": 3
-      },
-      "text": "Vital signs: temperature 38.5 C, blood pressure 90/60 mmHg, heart rate 110 bpm."
-    },
-    {
-      "evidence_id": "E7",
-      "side": "for",
-      "criterion_id": "creatinine_rise",
-      "span": {
-        "doc_id": "hp",
-        "line_start": 5,
-        "line_end": 5
-      },
-      "text": "Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L."
-    },
-    {
-      "evidence_id": "E8",
       "side": "for",
       "criterion_id": "infection",
       "span": {
@@ -171,75 +130,31 @@
       "text": "Patient is suspected to have sepsis and will be started on broad-spectrum antibiotics."
     },
     {
-      "evidence_id": "E9",
+      "evidence_id": "E5",
       "side": "for",
-      "criterion_id": "infection",
-      "span": {
-        "doc_id": "ds",
-        "line_start": 1,
-        "line_end": 1
-      },
-      "text": "Patient was admitted with suspected sepsis and was started on broad-spectrum antibiotics."
-    },
-    {
-      "evidence_id": "E10",
-      "side": "for",
-      "criterion_id": "organ_dysfunction",
-      "span": {
-        "doc_id": "hp",
-        "line_start": 8,
-        "line_end": 8
-      },
-      "text": "Patient's MAP is 60 mmHg, which is concerning for hypotension."
-    },
-    {
-      "evidence_id": "E11",
-      "side": "for",
-      "criterion_id": "organ_dysfunction",
+      "criterion_id": "vasopressors",
       "span": {
         "doc_id": "pn_01",
-        "line_start": 3,
-        "line_end": 3
+        "line_start": 4,
+        "line_end": 7
       },
-      "text": "Lactate level has increased to 3.0 mmol/L, creatinine has risen to 1.5 mg/dL, and platelets have decreased to 60 10^9/L."
+      "text": "Patient is requiring increasing amounts of oxygen and is being considered for intubation. Vasopressors have been started to support blood pressure. Patient's altered mentation is a concern, with a Glasgow Coma Scale score of 12. Will continue to monitor patient's condition closely and adjust treatment as needed."
     },
     {
-      "evidence_id": "E12",
-      "side": "against",
-      "criterion_id": "lactate_elevated",
-      "span": {
-        "doc_id": "pn_01",
-        "line_start": 3,
-        "line_end": 3
-      },
-      "text": "Lactate level has increased to 3.0 mmol/L, creatinine has risen to 1.5 mg/dL, and platelets have decreased to 60 10^9/L."
-    },
-    {
-      "evidence_id": "E13",
-      "side": "against",
-      "criterion_id": "lactate_elevated",
-      "span": {
-        "doc_id": "ds",
-        "line_start": 2,
-        "line_end": 2
-      },
-      "text": "Patient's condition improved with treatment, with lactate levels decreasing to 1.5 mmol/L and creatinine decreasing to 1.0 mg/dL."
-    },
-    {
-      "evidence_id": "E14",
-      "side": "against",
-      "criterion_id": "hypotension",
+      "evidence_id": "E6",
+      "side": "for",
+      "criterion_id": "vasopressors",
       "span": {
         "doc_id": "hp",
-        "line_start": 8,
-        "line_end": 8
+        "line_start": 7,
+        "line_end": 10
       },
-      "text": "Patient's MAP is 60 mmHg, which is concerning for hypotension."
+      "text": "Will monitor vital signs and lab results closely. Patient's MAP is 60 mmHg, which is concerning for hypotension. Will consider starting vasopressors if blood pressure does not improve. Nursing: patient tolerating oral intake as ordered."
     },
     {
-      "evidence_id": "E15",
-      "side": "against",
-      "criterion_id": "hypotension",
+      "evidence_id": "E7",
+      "side": "for",
+      "criterion_id": "vasopressors",
       "span": {
         "doc_id": "hp",
         "line_start": 9,
@@ -248,8 +163,8 @@
       "text": "Will consider starting vasopressors if blood pressure does not improve."
     },
     {
-      "evidence_id": "E16",
-      "side": "against",
+      "evidence_id": "E8",
+      "side": "for",
       "criterion_id": "vasopressors",
       "span": {
         "doc_id": "pn_01",
@@ -259,7 +174,29 @@
       "text": "Vasopressors have been started to support blood pressure."
     },
     {
-      "evidence_id": "E17",
+      "evidence_id": "E9",
+      "side": "against",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "Patient was weaned off vasopressors and was able to be extubated. Patient's altered mentation improved, with a Glasgow Coma Scale score of 15. Patient was discharged home with follow-up appointments with primary care and infectious disease specialists. Nursing: patient tolerating oral intake as ordered."
+    },
+    {
+      "evidence_id": "E10",
+      "side": "against",
+      "criterion_id": "vasopressors",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient was admitted with suspected sepsis and was started on broad-spectrum antibiotics. Patient's condition improved with treatment, with lactate levels decreasing to 1.5 mmol/L and creatinine decreasing to 1.0 mg/dL. Patient's platelet count increased to 100 10^9/L, and blood pressure improved to 100/60 mmHg. Patient was weaned off vasopressors and was able to be extubated."
+    },
+    {
+      "evidence_id": "E11",
       "side": "against",
       "criterion_id": "vasopressors",
       "span": {
@@ -270,8 +207,85 @@
       "text": "Patient was weaned off vasopressors and was able to be extubated."
     },
     {
-      "evidence_id": "E18",
+      "evidence_id": "E12",
       "side": "for",
+      "criterion_id": "altered_mentation",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "Patient is requiring increasing amounts of oxygen and is being considered for intubation. Vasopressors have been started to support blood pressure. Patient's altered mentation is a concern, with a Glasgow Coma Scale score of 12. Will continue to monitor patient's condition closely and adjust treatment as needed."
+    },
+    {
+      "evidence_id": "E13",
+      "side": "for",
+      "criterion_id": "altered_mentation",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "text": "Patient's altered mentation is a concern, with a Glasgow Coma Scale score of 12."
+    },
+    {
+      "evidence_id": "E14",
+      "side": "for",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L."
+    },
+    {
+      "evidence_id": "E15",
+      "side": "for",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Lactate level has increased to 3.0 mmol/L, creatinine has risen to 1.5 mg/dL, and platelets have decreased to 60 10^9/L."
+    },
+    {
+      "evidence_id": "E16",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Patient's condition improved with treatment, with lactate levels decreasing to 1.5 mmol/L and creatinine decreasing to 1.0 mg/dL."
+    },
+    {
+      "evidence_id": "E17",
+      "side": "for",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 8,
+        "line_end": 8
+      },
+      "text": "Patient's MAP is 60 mmHg, which is concerning for hypotension."
+    },
+    {
+      "evidence_id": "E18",
+      "side": "against",
+      "criterion_id": "creatinine_rise",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Lactate level has increased to 3.0 mmol/L, creatinine has risen to 1.5 mg/dL, and platelets have decreased to 60 10^9/L."
+    },
+    {
+      "evidence_id": "E19",
+      "side": "against",
       "criterion_id": "creatinine_rise",
       "span": {
         "doc_id": "ds",
@@ -281,7 +295,29 @@
       "text": "Patient's condition improved with treatment, with lactate levels decreasing to 1.5 mmol/L and creatinine decreasing to 1.0 mg/dL."
     },
     {
-      "evidence_id": "E19",
+      "evidence_id": "E20",
+      "side": "for",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L."
+    },
+    {
+      "evidence_id": "E21",
+      "side": "for",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Lactate level has increased to 3.0 mmol/L, creatinine has risen to 1.5 mg/dL, and platelets have decreased to 60 10^9/L."
+    },
+    {
+      "evidence_id": "E22",
       "side": "against",
       "criterion_id": "thrombocytopenia",
       "span": {
@@ -292,8 +328,10 @@
       "text": "Patient's platelet count increased to 100 10^9/L, and blood pressure improved to 100/60 mmHg."
     }
   ],
-  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_009 | Status: needs_review | Draft for auditor review\n\n## Determination\nDraft determination is not_supported, primarily based on E3 (vasopressors): Patient was weaned off vasopressors and was able to be extubated\n\n## Evidence\n| # | For/Against | Source | Lines | Excerpt |\n|---|-------------|--------|-------|---------|\n| E1 | for | discharge_summary 2022-01-05 | 1-4 | Patient was admitted with suspected sepsis and was started on broad-spectrum antibiotics. Patient's condition improved w |\n| E2 | for | history_and_physical 2022-01-01 | 4-7 | Physical exam reveals lung crackles and wheezing. Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10 |\n| E3 | against | discharge_summary 2022-01-05 | 4-7 | Patient was weaned off vasopressors and was able to be extubated. Patient's altered mentation improved, with a Glasgow C |\n| E4 | against | discharge_summary 2022-01-05 | 1-4 | Patient was admitted with suspected sepsis and was started on broad-spectrum antibiotics. Patient's condition improved w |\n| E5 | against | history_and_physical 2022-01-01 | 5-5 | Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L. |\n| E6 | against | history_and_physical 2022-01-01 | 3-3 | Vital signs: temperature 38.5 C, blood pressure 90/60 mmHg, heart rate 110 bpm. |\n| E7 | for | history_and_physical 2022-01-01 | 5-5 | Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L. |\n| E8 | for | history_and_physical 2022-01-01 | 6-6 | Patient is suspected to have sepsis and will be started on broad-spectrum antibiotics. |\n| E9 | for | discharge_summary 2022-01-05 | 1-1 | Patient was admitted with suspected sepsis and was started on broad-spectrum antibiotics. |\n| E10 | for | history_and_physical 2022-01-01 | 8-8 | Patient's MAP is 60 mmHg, which is concerning for hypotension. |\n| E11 | for | progress_note 2022-01-02 | 3-3 | Lactate level has increased to 3.0 mmol/L, creatinine has risen to 1.5 mg/dL, and platelets have decreased to 60 10^9/L. |\n| E12 | against | progress_note 2022-01-02 | 3-3 | Lactate level has increased to 3.0 mmol/L, creatinine has risen to 1.5 mg/dL, and platelets have decreased to 60 10^9/L. |\n| E13 | against | discharge_summary 2022-01-05 | 2-2 | Patient's condition improved with treatment, with lactate levels decreasing to 1.5 mmol/L and creatinine decreasing to 1 |\n| E14 | against | history_and_physical 2022-01-01 | 8-8 | Patient's MAP is 60 mmHg, which is concerning for hypotension. |\n| E15 | against | history_and_physical 2022-01-01 | 9-9 | Will consider starting vasopressors if blood pressure does not improve. |\n| E16 | against | progress_note 2022-01-02 | 5-5 | Vasopressors have been started to support blood pressure. |\n| E17 | against | discharge_summary 2022-01-05 | 4-4 | Patient was weaned off vasopressors and was able to be extubated. |\n| E18 | for | discharge_summary 2022-01-05 | 2-2 | Patient's condition improved with treatment, with lactate levels decreasing to 1.5 mmol/L and creatinine decreasing to 1 |\n| E19 | against | discharge_summary 2022-01-05 | 3-3 | Patient's platelet count increased to 100 10^9/L, and blood pressure improved to 100/60 mmHg. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Sepsis coding notes (high level)). Findings that affect payment grouping must be supported by chart indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E11, E12, E13, E14, E15, E16, E17, E18, E19, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_009 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is supported, primarily based on E5 (vasopressors): Patient is requiring increasing amounts of oxygen and is being considered for intubation\n\n## Evidence\n| # | For/Against | Criterion | Source | Lines | Excerpt |\n|---|-------------|-----------|--------|-------|---------|\n| E1 | for | infection | history_and_physical 2022-01-01 | 2-2 | He presents with a 2-day history of fever, chills, and cough. |\n| E2 | for | infection | discharge_summary 2022-01-05 | 1-4 | Patient was admitted with suspected sepsis and was started on broad-spectrum antibiotics. Patient's condition improved w |\n| E3 | for | infection | history_and_physical 2022-01-01 | 4-7 | Physical exam reveals lung crackles and wheezing. Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10 |\n| E4 | for | infection | history_and_physical 2022-01-01 | 6-6 | Patient is suspected to have sepsis and will be started on broad-spectrum antibiotics. |\n| E5 | for | vasopressors | progress_note 2022-01-02 | 4-7 | Patient is requiring increasing amounts of oxygen and is being considered for intubation. Vasopressors have been started |\n| E6 | for | vasopressors | history_and_physical 2022-01-01 | 7-10 | Will monitor vital signs and lab results closely. Patient's MAP is 60 mmHg, which is concerning for hypotension. Will co |\n| E7 | for | vasopressors | history_and_physical 2022-01-01 | 9-9 | Will consider starting vasopressors if blood pressure does not improve. |\n| E8 | for | vasopressors | progress_note 2022-01-02 | 5-5 | Vasopressors have been started to support blood pressure. |\n| E9 | against | vasopressors | discharge_summary 2022-01-05 | 4-7 | Patient was weaned off vasopressors and was able to be extubated. Patient's altered mentation improved, with a Glasgow C |\n| E10 | against | vasopressors | discharge_summary 2022-01-05 | 1-4 | Patient was admitted with suspected sepsis and was started on broad-spectrum antibiotics. Patient's condition improved w |\n| E11 | against | vasopressors | discharge_summary 2022-01-05 | 4-4 | Patient was weaned off vasopressors and was able to be extubated. |\n| E12 | for | altered_mentation | progress_note 2022-01-02 | 4-7 | Patient is requiring increasing amounts of oxygen and is being considered for intubation. Vasopressors have been started |\n| E13 | for | altered_mentation | progress_note 2022-01-02 | 6-6 | Patient's altered mentation is a concern, with a Glasgow Coma Scale score of 12. |\n| E14 | for | lactate_elevated | history_and_physical 2022-01-01 | 5-5 | Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L. |\n| E15 | for | lactate_elevated | progress_note 2022-01-02 | 3-3 | Lactate level has increased to 3.0 mmol/L, creatinine has risen to 1.5 mg/dL, and platelets have decreased to 60 10^9/L. |\n| E16 | against | lactate_elevated | discharge_summary 2022-01-05 | 2-2 | Patient's condition improved with treatment, with lactate levels decreasing to 1.5 mmol/L and creatinine decreasing to 1 |\n| E17 | for | hypotension | history_and_physical 2022-01-01 | 8-8 | Patient's MAP is 60 mmHg, which is concerning for hypotension. |\n| E18 | against | creatinine_rise | progress_note 2022-01-02 | 3-3 | Lactate level has increased to 3.0 mmol/L, creatinine has risen to 1.5 mg/dL, and platelets have decreased to 60 10^9/L. |\n| E19 | against | creatinine_rise | discharge_summary 2022-01-05 | 2-2 | Patient's condition improved with treatment, with lactate levels decreasing to 1.5 mmol/L and creatinine decreasing to 1 |\n| E20 | for | thrombocytopenia | history_and_physical 2022-01-01 | 5-5 | Lab results: lactate 2.5 mmol/L, creatinine 1.2 mg/dL, platelets 80 10^9/L. |\n| E21 | for | thrombocytopenia | progress_note 2022-01-02 | 3-3 | Lactate level has increased to 3.0 mmol/L, creatinine has risen to 1.5 mg/dL, and platelets have decreased to 60 10^9/L. |\n| E22 | against | thrombocytopenia | discharge_summary 2022-01-05 | 3-3 | Patient's platelet count increased to 100 10^9/L, and blood pressure improved to 100/60 mmHg. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). Findings that affect payment grouping must be supported by chart indicators (icd10cm_guidelines_fy2026_summary, Section: Sepsis coding notes (high level)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E11, E12, E13, E14, E15, E16, E17, E18, E19, E2, E20, E21, E22, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
   "dropped_sentences": 0,
+  "force_reasons": [],
+  "composer": "deterministic",
   "source": "precomputed",
-  "trace_id": "run_sepsis_009_20260718T181342Z"
+  "trace_id": "run_sepsis_009_20260719T194039681164Z_ccccb1"
 }

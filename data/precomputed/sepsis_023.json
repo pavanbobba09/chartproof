@@ -1,0 +1,191 @@
+{
+  "case_id": "sepsis_023",
+  "status": "completed",
+  "verdict": "not_supported",
+  "confidence": 0.85,
+  "rules_verdict": "not_supported",
+  "draft_verdict": "not_supported",
+  "criteria_results": [
+    {
+      "criterion_id": "infection",
+      "result": "met",
+      "method": "narrative",
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ]
+    },
+    {
+      "criterion_id": "lactate_elevated",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E5",
+        "E6"
+      ]
+    },
+    {
+      "criterion_id": "hypotension",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E7"
+      ]
+    },
+    {
+      "criterion_id": "vasopressors",
+      "result": "not_met",
+      "method": "narrative",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "creatinine_rise",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "thrombocytopenia",
+      "result": "not_met",
+      "method": "structured",
+      "evidence_ids": [
+        "E8",
+        "E9"
+      ]
+    },
+    {
+      "criterion_id": "altered_mentation",
+      "result": "not_met",
+      "method": "narrative",
+      "evidence_ids": []
+    },
+    {
+      "criterion_id": "organ_dysfunction",
+      "result": "not_met",
+      "method": "any_of",
+      "evidence_ids": [
+        "E10"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E1",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 4,
+        "line_end": 7
+      },
+      "text": "Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. Physical exam reveals bilateral lung crackles and wheezing. Patient is started on empiric antibiotics for suspected pneumonia. Sepsis is considered in the differential diagnosis."
+    },
+    {
+      "evidence_id": "E2",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "ds",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient was treated for pneumonia with empiric antibiotics. Labs and vitals were monitored closely, and no signs of organ dysfunction were noted. Patient's condition improved, and he was discharged home. Final diagnosis: pneumonia, not sepsis."
+    },
+    {
+      "evidence_id": "E3",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 1,
+        "line_end": 4
+      },
+      "text": "Patient remains febrile with a temperature of 38.2 C. Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9/L. Vitals: MAP 80 mmHg, temperature 38.2 C. Patient's condition is stable, and antibiotics are continued."
+    },
+    {
+      "evidence_id": "E4",
+      "side": "for",
+      "criterion_id": "infection",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "He presents with a 2-day history of fever, chills, and cough."
+    },
+    {
+      "evidence_id": "E5",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L."
+    },
+    {
+      "evidence_id": "E6",
+      "side": "against",
+      "criterion_id": "lactate_elevated",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9/L."
+    },
+    {
+      "evidence_id": "E7",
+      "side": "against",
+      "criterion_id": "hypotension",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "text": "Vitals: MAP 80 mmHg, temperature 38.2 C."
+    },
+    {
+      "evidence_id": "E8",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "hp",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "text": "Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L."
+    },
+    {
+      "evidence_id": "E9",
+      "side": "against",
+      "criterion_id": "thrombocytopenia",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "text": "Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9/L."
+    },
+    {
+      "evidence_id": "E10",
+      "side": "against",
+      "criterion_id": "organ_dysfunction",
+      "span": {
+        "doc_id": "pn_01",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "text": "No signs of organ dysfunction are noted at this time."
+    }
+  ],
+  "letter_markdown": "# Clinical validation finding: Sepsis\nCase sepsis_023 | Status: completed | Draft for auditor review\n\n## Determination\nDraft determination is not_supported, primarily based on E5 (lactate_elevated): Labs - lactate 1\n\n## Evidence\n| # | For/Against | Criterion | Source | Lines | Excerpt |\n|---|-------------|-----------|--------|-------|---------|\n| E1 | for | infection | history_and_physical 2022-01-29 | 4-7 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. Physical exam reveals bilateral lung crackles and  |\n| E2 | for | infection | discharge_summary 2022-02-02 | 1-4 | Patient was treated for pneumonia with empiric antibiotics. Labs and vitals were monitored closely, and no signs of orga |\n| E3 | for | infection | progress_note 2022-01-30 | 1-4 | Patient remains febrile with a temperature of 38.2 C. Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9 |\n| E4 | for | infection | history_and_physical 2022-01-29 | 2-2 | He presents with a 2-day history of fever, chills, and cough. |\n| E5 | against | lactate_elevated | history_and_physical 2022-01-29 | 4-4 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. |\n| E6 | against | lactate_elevated | progress_note 2022-01-30 | 2-2 | Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9/L. |\n| E7 | against | hypotension | progress_note 2022-01-30 | 3-3 | Vitals: MAP 80 mmHg, temperature 38.2 C. |\n| E8 | against | thrombocytopenia | history_and_physical 2022-01-29 | 4-4 | Labs: lactate 1.2 mmol/L, creatinine 1.0 mg/dL, platelets 200 10^9/L. |\n| E9 | against | thrombocytopenia | progress_note 2022-01-30 | 2-2 | Labs: lactate 1.1 mmol/L, creatinine 1.1 mg/dL, platelets 220 10^9/L. |\n| E10 | against | organ_dysfunction | progress_note 2022-01-30 | 5-5 | No signs of organ dysfunction are noted at this time. |\n\n## Coding rationale\nClinical validation of billed Sepsis should rest on documented infection plus organ dysfunction indicators (sepsis3_summary, Section: Organ dysfunction indicators (simplified for demo)). Findings that affect payment grouping must be supported by chart indicators (icd10cm_guidelines_fy2026_summary, Section: Sepsis coding notes (high level)). This draft is for auditor review only and is not a payment decision. Key evidence IDs considered: E1, E10, E2, E3, E4, E5, E6, E7, E8, E9.\n\n## Reviewer note\nMachine-drafted aid generated from synthetic data. A qualified auditor makes the final determination.",
+  "dropped_sentences": 0,
+  "force_reasons": [],
+  "composer": "deterministic",
+  "source": "precomputed",
+  "trace_id": "run_sepsis_023_20260720T154706236917Z_4d3d63"
+}

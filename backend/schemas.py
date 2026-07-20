@@ -45,6 +45,7 @@ EvidenceSide = Literal["for", "against"]
 CriterionResultKind = Literal["met", "not_met", "unclear"]
 AuditSource = Literal["precomputed", "cached", "live"]
 Difficulty = Literal["clear", "borderline"]
+DatasetRole = Literal["clinical_scenario", "volume_test"]
 
 
 class EvidenceSpan(BaseModel):
@@ -111,6 +112,8 @@ class VitalValue(BaseModel):
 class Case(BaseModel):
     case_id: str
     target_dx: str
+    dataset_role: DatasetRole = "clinical_scenario"
+    source_case_id: str | None = None
     billed: BilledCodes
     patient: Patient
     documents: list[Document]
@@ -121,6 +124,8 @@ class Case(BaseModel):
     def documents_nonempty(self) -> Case:
         if not self.documents:
             raise ValueError("case must have at least one document")
+        if self.dataset_role == "volume_test" and not self.source_case_id:
+            raise ValueError("volume-test cases must identify source_case_id")
         return self
 
 
@@ -151,6 +156,10 @@ class AnswerKey(BaseModel):
     difficulty: Difficulty
     planted_evidence: list[PlantedEvidence]
     key_rationale: str
+    # True when the correct pipeline behavior is to defer to a human
+    # (needs_review) rather than issue the verdict. Evals score deferral as
+    # correct for these cases; verdict remains the best forced answer.
+    deferral_expected: bool = False
 
 
 class EvidenceItem(BaseModel):
@@ -174,11 +183,19 @@ class AuditResult(BaseModel):
     verdict: Verdict | None
     confidence: float = Field(ge=0.0, le=1.0)
     rules_verdict: Verdict | None = None
-    llm_verdict: Verdict | None = None
+    # Composer's draft verdict. Deterministic evidence-balance heuristic by
+    # default (honest name: this is NOT an LLM output unless one is configured).
+    draft_verdict: Verdict | None = None
     criteria_results: list[CriterionResult] = Field(default_factory=list)
     evidence: list[EvidenceItem] = Field(default_factory=list)
     letter_markdown: str = ""
     dropped_sentences: int = 0
+    # Why QA forced needs_review (empty when status is completed). Reviewer-safe
+    # reason codes, e.g. rules_draft_disagreement, low_confidence.
+    force_reasons: list[str] = Field(default_factory=list)
+    # Which composer produced the letter: "deterministic" (default) or "llm"
+    # (Groq path, enabled via CHARTPROOF_LLM_COMPOSE=1 + GROQ_API_KEY).
+    composer: str = "deterministic"
     source: AuditSource = "live"
     trace_id: str | None = None
 
@@ -207,6 +224,7 @@ class CaseSummary(BaseModel):
 
     case_id: str
     target_dx: str
+    dataset_role: DatasetRole = "clinical_scenario"
     difficulty: Difficulty | None = None
     has_precomputed: bool = False
 
