@@ -364,6 +364,19 @@ def filter_uncited_sentences(text: str, valid_ids: set[str]) -> tuple[str, int]:
     return "\n".join(kept), dropped
 
 
+def _truncate_excerpt(text: str, limit: int = 120) -> str:
+    """Normalize a table excerpt and shorten it at a word boundary."""
+    normalized = text.replace("|", "/").replace("\n", " ").strip()
+    if len(normalized) <= limit:
+        return normalized
+
+    prefix = normalized[: limit - 1].rstrip()
+    word_boundary = prefix.rfind(" ")
+    if word_boundary > limit // 2:
+        prefix = prefix[:word_boundary].rstrip()
+    return f"{prefix}…"
+
+
 def compose_letter(
     *,
     case: Case,
@@ -437,7 +450,7 @@ def compose_letter(
         source = (
             f"{doc.doc_type} {doc.date}" if doc else e.span.doc_id
         )
-        excerpt = e.text.replace("|", "/").replace("\n", " ")[:120]
+        excerpt = _truncate_excerpt(e.text)
         rows.append(
             f"| {e.evidence_id} | {e.side} | {e.criterion_id} | {source} | "
             f"{e.span.line_start}-{e.span.line_end} | {excerpt} |"
