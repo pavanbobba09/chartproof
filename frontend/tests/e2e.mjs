@@ -74,6 +74,22 @@ try {
   await page.waitForURL("**/audit/sepsis_001");
   await page.getByRole("heading", { name: "Audit · sepsis_001" }).waitFor();
   await page.getByRole("heading", { name: "Evidence table" }).waitFor();
+  const rationaleTableScroll = page.getByTestId("rationale-table-scroll");
+  await rationaleTableScroll.waitFor();
+  const tableLayout = await rationaleTableScroll.evaluate((element) => ({
+    wrapperClientWidth: element.clientWidth,
+    wrapperScrollWidth: element.scrollWidth,
+    pageClientWidth: document.documentElement.clientWidth,
+    pageScrollWidth: document.documentElement.scrollWidth,
+  }));
+  assert.ok(
+    tableLayout.wrapperScrollWidth > tableLayout.wrapperClientWidth,
+    "the wide rationale table should scroll inside its own wrapper"
+  );
+  assert.ok(
+    tableLayout.pageScrollWidth <= tableLayout.pageClientWidth + 1,
+    "the rationale table must not create page-level horizontal overflow"
+  );
   const evidenceJump = page.getByRole("button", { name: /^Show E1 in chart/ });
   await evidenceJump.click();
   const highlighted = page.locator(".line-highlight");

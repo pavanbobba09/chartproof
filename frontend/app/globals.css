@@ -25,11 +25,34 @@ body {
   @apply text-lg font-semibold mt-4 mb-2 text-slate-800;
 }
 .prose-letter table {
-  @apply w-full text-sm border-collapse my-2;
+  @apply w-full min-w-[52rem] table-fixed border-collapse text-sm;
+}
+.prose-letter .rationale-table-scroll {
+  @apply my-2 max-w-full overflow-x-auto rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600;
 }
 .prose-letter th,
 .prose-letter td {
-  @apply border border-slate-200 px-2 py-1 text-left;
+  @apply break-words border border-slate-200 px-2 py-1 text-left align-top;
+}
+.prose-letter th:nth-child(1),
+.prose-letter td:nth-child(1) {
+  width: 4rem;
+}
+.prose-letter th:nth-child(2),
+.prose-letter td:nth-child(2) {
+  width: 7rem;
+}
+.prose-letter th:nth-child(3),
+.prose-letter td:nth-child(3) {
+  width: 9rem;
+}
+.prose-letter th:nth-child(4),
+.prose-letter td:nth-child(4) {
+  width: 13rem;
+}
+.prose-letter th:nth-child(5),
+.prose-letter td:nth-child(5) {
+  width: 5rem;
 }
 .prose-letter p {
   @apply my-2 leading-relaxed;

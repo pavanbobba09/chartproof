@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from backend.pipeline.compose import (
+    _truncate_excerpt,
     build_evidence_catalog,
     compose_letter,
     derive_draft_verdict,
@@ -94,6 +95,19 @@ def test_compose_letter_has_required_sections() -> None:
     assert "Machine-drafted aid generated from synthetic data" in letter
     assert "E1" in letter
     assert dropped == 0
+
+
+def test_evidence_excerpt_truncates_at_word_boundary() -> None:
+    text = (
+        "Patient is being treated with broad-spectrum antibiotics and vasopressors "
+        "for hypotension. A diagnosis of sepsis is suspected from the complete chart."
+    )
+    excerpt = _truncate_excerpt(text, limit=120)
+
+    assert len(excerpt) <= 120
+    assert excerpt.endswith("…")
+    assert text.startswith(excerpt[:-1])
+    assert not excerpt.endswith("susp…")
 
 
 def test_qa_disagreement_needs_review() -> None:

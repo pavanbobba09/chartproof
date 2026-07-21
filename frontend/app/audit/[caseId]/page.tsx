@@ -256,8 +256,23 @@ export default function AuditPage() {
                 <h2 className="mb-2 text-sm font-semibold text-slate-800">
                   Rationale letter (draft)
                 </h2>
-                <div className="prose-letter text-sm text-slate-800">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                <div className="prose-letter min-w-0 text-sm text-slate-800">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      table: ({ node: _node, ...props }) => (
+                        <div
+                          data-testid="rationale-table-scroll"
+                          role="region"
+                          aria-label="Rationale evidence table"
+                          tabIndex={0}
+                          className="rationale-table-scroll"
+                        >
+                          <table {...props} />
+                        </div>
+                      ),
+                    }}
+                  >
                     {audit.letter_markdown}
                   </ReactMarkdown>
                 </div>
